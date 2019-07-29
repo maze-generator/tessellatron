@@ -1,5 +1,4 @@
-# CS 2.2 Graph Modeling Project
-# CS 2.2 Graph Modeling Project
+# Graphs Modeling Project ([`source`](https://github.com/Make-School-Courses/CS-2.2-Advanced-Recursion-and-Graphs/blob/master/Assignments/Graph-Project.md))
 
 ## Project Description
 It's your turn to tackle a real world problem using your graph theory skills.  You will chose a problem and a set of solutions to implement, using a similar approach to the [Graph Modeling Tutorial]().  You will implement graph theory solutions in python for small amounts of data within your problem scope and then innovate towards solutions when working with data at scale.
