@@ -3,7 +3,8 @@ from block import *
 
 def main():
 	maze = Maze(2,6)
-	print(maze.get_row(3))
+	print(maze.maze)
+	print(maze.get_row(1))
 	print(maze.get_column(1))
 	print(maze.get_block(1,2))
 

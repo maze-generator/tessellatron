@@ -1,7 +1,5 @@
 class Block():
-	def __init__(self, id):
-		# take in parameters.
-		self.id = id
+	def __init__(self):
 		self.neighbors = {
 			'north': None,
 			'south': None,
