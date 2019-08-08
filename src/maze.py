@@ -7,8 +7,26 @@ class Maze():
 	def __init__(self, length, height):
 		self.length = length
 		self.height = height
-		self.maze = [None]*length*height
+		self.maze = [None] * length * height
 		self.generate_maze()
+
+	def __repr__(self):
+		visual_length = self.length + 1
+		visual_height = self.height + 1
+		visual_map = [None] * visual_length * visual_height
+		for location, character in enumerate(visual_map):
+			# TODO
+			y_pos = location // (visual_length)
+			x_pos = location - y_pos
+		return str(visual_map)
+
+	def get_block(self, row_id, column_id):
+		'''
+		returns the cell located at given coordinates.
+		'''
+		location = row_id * self.height + column_id
+		block = self.maze[location]
+		return block
 
 	def get_row(self, row_id):
 		'''
@@ -27,13 +45,23 @@ class Maze():
 		column = self.maze[column_id::num_columns]
 		return column
 
-	def get_block(self, row_id, column_id):
+	def get_each_row(self):
 		'''
-		returns the cell located at given coordinates.
+		returns an array arrays; a list of every row.
 		'''
-		location = row_id * self.height + column_id
-		block = self.maze[location]
-		return block
+		each_row = []
+		for row_id in range(0, self.height):
+			each_row.append(self.get_row(row_id))
+		return each_row
+
+	def get_each_column(self):
+		'''
+		returns an array arrays; a list of every column.
+		'''
+		each_column = []
+		for column_id in range(0, self.length):
+			each_column.append(self.get_column(column_id))
+		return each_column
 
 	def generate_maze(self, loc = None):
 		'''
