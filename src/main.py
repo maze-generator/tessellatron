@@ -2,11 +2,9 @@ from maze import *
 from block import *
 
 def main():
-	maze = Maze(2,6)
-	print(maze.maze)
-	print(maze.get_row(1))
-	print(maze.get_column(1))
-	print(maze.get_block(1,2))
+	maze = Maze(20,20)
+	for block in maze.maze:
+		print(block.neighbors)
 
 
 if __name__ == '__main__':

@@ -69,8 +69,8 @@ class Maze():
 		reverse_compass = {
 			'north': 'south',
 			'south': 'north',
-			'east': 'east',
-			'west': 'west',
+			'east': 'west',
+			'west': 'east',
 		}
 
 		# validate will remove indices that are out-of-bounds.
@@ -90,13 +90,14 @@ class Maze():
 			# rev reverses key, a cardinal direction.
 			rev = reverse_compass[key]
 			# nbr is empty, representing a maze boundary.
-			if nbr == None:
+			if nbr is None:
 				self.maze[loc].neighbors[key] = None
+				pass
 
-			# nbr is an int, representing spot in maze.
+			# nbr is an int, representing a spot in maze.
 			else:
 				# this spot is empty! fill it up!
-				if not self.maze[nbr]:
+				if self.maze[nbr] is None:
 					# generate a new maze block.
 					self.generate_maze(nbr)
 					# link up the net / graph / tree.

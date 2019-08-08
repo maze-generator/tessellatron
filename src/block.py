@@ -1,8 +1,8 @@
 class Block():
 	def __init__(self):
 		self.neighbors = {
-			'north': None,
-			'south': None,
-			'east': None,
-			'west': None,
+			'north': False,
+			'south': False,
+			'east': False,
+			'west': False,
 		}
