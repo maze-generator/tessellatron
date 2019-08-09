@@ -13,11 +13,13 @@ class Maze():
 
 	def __repr__(self):
 		result = ''
+
 		for index, block in enumerate(self.maze):
 			north = True
 			south = True
 			east = True
 			west = True
+
 			if (block.neighbors['north'] == False 
 			or block.neighbors['north'] is None):
 				north = False
@@ -30,10 +32,11 @@ class Maze():
 			if (block.neighbors['west'] == False 
 			or block.neighbors['west'] is None):
 				west = False
+
 			if index % self.length == 0:
 				result += '\n'
 			result += pick_symbol(north, south, east, west)
-				
+
 		return result
 
 	def get_block(self, row, column):
@@ -79,34 +82,34 @@ class Maze():
 			every_column.append(self.get_column(column))
 		return every_column
 
-	def generate_maze(self, loc = None):
+	def generate_maze(self, root_loc = None):
 		'''
 		generates a perfect maze.
 		its done recursively via a depth-first traversal tree.
 		this is a setter function; it does not return anything.
 		---
 		key = cardinal direction
-		rev = reversed cardinal direction
-		loc = root location
-		nbr = neighbor location
+		reverse = reversed cardinal direction
+		root_loc = root location
+		neighbor = neighbor location
 		'''
-		if loc is None:
-			# start the trees loc at a random point in the maze.
+		if root_loc is None:
+			# start the trees root_loc at a random point in the maze.
 			# this doesnt infer a start/exit in the finished maze.
 			# one can always find a path from any point A to B;
 			# the program will decide these points later.
-			loc = random.randint(0, len(self.maze) - 1)
+			root_loc = random.randint(0, len(self.maze) - 1)
 			# note our visited list exists as the maze property.
 
 		# first, fill the maze spot with an empty block.
-		self.maze[loc] = Block()
+		self.maze[root_loc] = Block()
 
 		# grab the location id from each cardinal direction.
 		neighbor_locations = {
-			'north': loc - self.length,
-			'south': loc + self.length,
-			'east': loc + 1,
-			'west': loc - 1,
+			'north': root_loc - self.length,
+			'south': root_loc + self.length,
+			'east': root_loc + 1,
+			'west': root_loc - 1,
 		}
 
 		# this is useful for doubly-linked vertices.
@@ -118,34 +121,34 @@ class Maze():
 		}
 
 		# validate will remove indices that are out-of-bounds.
-		def validate(location):
-			if len(self.maze) > location >= 0:
-				return location
+		def validate(neighbor):
+			if len(self.maze) > neighbor >= 0:
+				return neighbor
 			else:
 				return None
 
 		# update neighbors with validate.
-		for key, nbr in neighbor_locations.items():
-			# it is safe to update a key's value in this loop;
-			# it isnt safe to update a key in this loop.
-			neighbor_locations[key] = validate(nbr)
+		for compass, neighbor in neighbor_locations.items():
+			# it is safe to update a compass's value in this loop;
+			# it isnt safe to update a compass in this loop.
+			neighbor_locations[compass] = validate(neighbor)
 
-		for key, nbr in neighbor_locations.items():
-			# rev reverses key, a cardinal direction.
-			rev = reverse_compass[key]
-			# nbr is empty, representing a maze boundary.
-			if nbr is None:
-				self.maze[loc].neighbors[key] = None
+		for compass, neighbor in neighbor_locations.items():
+			# reverse reverses compass, a cardinal direction.
+			reverse = reverse_compass[compass]
+			# neighbor is empty, representing a maze boundary.
+			if neighbor is None:
+				self.maze[root_loc].neighbors[compass] = None
 
-			# nbr is an int, representing a spot in maze.
+			# neighbor is an int, representing a spot in maze.
 			else:
 				# this spot is empty! fill it up!
-				if self.maze[nbr] is None:
+				if self.maze[neighbor] is None:
 					# generate a new maze block.
-					self.generate_maze(nbr)
+					self.generate_maze(neighbor)
 					# link up the net / graph / tree.
-					self.maze[loc].neighbors[key] = self.maze[nbr]
-					self.maze[nbr].neighbors[rev] = self.maze[loc]
+					self.maze[root_loc].neighbors[compass] = self.maze[neighbor]
+					self.maze[neighbor].neighbors[reverse] = self.maze[root_loc]
 
 				# this spot is filled.
 				else:
