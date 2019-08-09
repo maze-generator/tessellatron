@@ -54,6 +54,7 @@ class Maze():
 			sw_loc = padded_maze[location + padded_length]
 			se_loc = padded_maze[location + padded_length + 1]
 
+
 			# initialize hallway passageways.
 			# if there is a passway, then its true, else false.
 			# none indicates an undeterminate value.
@@ -79,28 +80,28 @@ class Maze():
 			and sw_loc is None):
 				w_hall = True
 
-			if ne_loc and nw_loc and n_hall is None:
+			if ne_loc is not None and nw_loc is not None:
 				east = self.maze[ne_loc]
 				west = self.maze[nw_loc]
 				if (east.neighbors['west'] == west
 				and west.neighbors['east'] == east):
 					n_hall = True
 
-			if se_loc and sw_loc and s_hall is None:
+			if se_loc is not None and sw_loc is not None:
 				east = self.maze[se_loc]
 				west = self.maze[sw_loc]
 				if (east.neighbors['west'] == west
 				and west.neighbors['east'] == east):
 					s_hall = True
 
-			if ne_loc and se_loc and e_hall is None:
+			if ne_loc is not None and se_loc is not None:
 				north = self.maze[ne_loc]
 				south = self.maze[se_loc]
 				if (north.neighbors['south'] == south
 				and south.neighbors['north'] == north):
 					e_hall = True
 
-			if nw_loc and sw_loc and w_hall is None:
+			if nw_loc is not None and sw_loc is not None:
 				north = self.maze[nw_loc]
 				south = self.maze[sw_loc]
 				if (north.neighbors['south'] == south
@@ -111,7 +112,7 @@ class Maze():
 			if location % padded_length == 0 and location != 0:
 				text += '\n'
 			# get unicode glyph symbol box-drawing element
-			text += get_glyph(n_hall, s_hall, e_hall, w_hall)
+			text += get_glyph(n_hall, s_hall, e_hall, w_hall, location)
 		# return maze drawing
 		return text
 
@@ -205,8 +206,8 @@ class Maze():
 
 		# update neighbors with validate.
 		for key, nbr in neighbor_locations.items():
-			# it is safe to update a key's value in a loop;
-			# it isnt safe to update a key in a loop.
+			# it is safe to update a key's value in this loop;
+			# it isnt safe to update a key in this loop.
 			neighbor_locations[key] = validate(nbr)
 
 		for key, nbr in neighbor_locations.items():
@@ -215,7 +216,6 @@ class Maze():
 			# nbr is empty, representing a maze boundary.
 			if nbr is None:
 				self.maze[loc].neighbors[key] = None
-				pass
 
 			# nbr is an int, representing a spot in maze.
 			else:
@@ -233,7 +233,7 @@ class Maze():
 
 
 
-def get_glyph(north, south, east, west):
+def get_glyph(north, south, east, west, LOCATION):
 	'''
 	this function returns a maze drawing character.
 	'''
@@ -243,7 +243,13 @@ def get_glyph(north, south, east, west):
 	# == TODO ==
 	# these unicode characters must be converted!
 	# like emojis, its a code smell to have them.
-
+	print(
+		f'\nLOCATION: {LOCATION}'
+		f'\nnorth {north}'
+		f'\nsouth {south}'
+		f'\neast  {east}'
+		f'\nwest  {west}'
+	)
 	# four passages
 	if north and south and east and west:
 		glyph = ' '
