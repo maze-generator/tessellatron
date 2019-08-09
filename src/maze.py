@@ -12,7 +12,9 @@ class Maze():
 		self.generate_maze()
 
 	def __repr__(self):
-		amaze = ''
+		# store result item
+		text = ''
+
 		# the padding helps analyze corners and boundaries.
 		padded_length = self.length + 2
 		padded_height = self.height + 2
@@ -80,30 +82,22 @@ class Maze():
 			if ne_loc and nw_loc and n_hall is None:
 				east = self.maze[ne_loc]
 				west = self.maze[nw_loc]
-				# print(east, east.neighbors['west'])
-				# print(west.neighbors['east'], west)
 				if (east.neighbors['west'] == west
 				and west.neighbors['east'] == east):
-					# print("NORTH")
 					n_hall = True
 
 			if se_loc and sw_loc and s_hall is None:
 				east = self.maze[se_loc]
 				west = self.maze[sw_loc]
-				print(east, east.neighbors['west'])
-				print(west.neighbors['east'], west)
 				if (east.neighbors['west'] == west
 				and west.neighbors['east'] == east):
-					print("SOUTH")
 					s_hall = True
-
 
 			if ne_loc and se_loc and e_hall is None:
 				north = self.maze[ne_loc]
 				south = self.maze[se_loc]
 				if (north.neighbors['south'] == south
 				and south.neighbors['north'] == north):
-					# print("EAST")
 					e_hall = True
 
 			if nw_loc and sw_loc and w_hall is None:
@@ -111,19 +105,15 @@ class Maze():
 				south = self.maze[sw_loc]
 				if (north.neighbors['south'] == south
 				and south.neighbors['north'] == north):
-					# print("WEST")
 					w_hall = True
 
-			glyph = get_glyph(n_hall, s_hall, e_hall, w_hall)
-			print(location % graphic_length)
-			if location % padded_length == 0:
-				amaze += '\n'
-			amaze += glyph
-			print(amaze)
-
-		return 'WiP'
-
-
+			# add a line break if its an end-of-line
+			if location % padded_length == 0 and location != 0:
+				text += '\n'
+			# get unicode glyph symbol box-drawing element
+			text += get_glyph(n_hall, s_hall, e_hall, w_hall)
+		# return maze drawing
+		return text
 
 	def get_block(self, row, column):
 		'''
@@ -240,6 +230,7 @@ class Maze():
 				# this spot is filled.
 				else:
 					pass
+
 
 
 def get_glyph(north, south, east, west):
