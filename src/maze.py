@@ -43,12 +43,13 @@ class Maze():
 			# determine row and column
 			row = location // (graphic_length)
 			column = location % (graphic_length)
+			location = location + row
 
 			# determines locations of items in the padded_maze.
 			nw_loc = padded_maze[location]
 			ne_loc = padded_maze[location + 1]
-			sw_loc = padded_maze[location + graphic_length]
-			se_loc = padded_maze[location + graphic_length + 1]
+			sw_loc = padded_maze[location + padded_length]
+			se_loc = padded_maze[location + padded_length + 1]
 
 			# initialize hallway passageways.
 			# if there is a passway, then its true, else false.
@@ -75,106 +76,59 @@ class Maze():
 			and sw_loc is None):
 				w_hall = True
 
-			if not n_hall:
-				print(n_hall)
+			if ne_loc and nw_loc and n_hall is None:
+				east = self.maze[ne_loc]
+				west = self.maze[nw_loc]
+				# print(east, east.neighbors['west'])
+				# print(west.neighbors['east'], west)
+				if (east.neighbors['west'] == west
+				and west.neighbors['east'] == east):
+					# print("NORTH")
+					n_hall = True
 
-			print(
-				'---\n'
-				f'nw_loc {nw_loc}\n'
-				f'ne_loc {ne_loc}\n'
-				f'sw_loc {sw_loc}\n'
-				f'se_loc {se_loc}\n\n'
-				f'n_hall {n_hall}\n'
-				f's_hall {s_hall}\n'
-				f'e_hall {e_hall}\n'
-				f'w_hall {w_hall}\n'
-			)
+			if se_loc and sw_loc and s_hall is None:
+				east = self.maze[se_loc]
+				west = self.maze[sw_loc]
+				print(east, east.neighbors['west'])
+				print(west.neighbors['east'], west)
+				if (east.neighbors['west'] == west
+				and west.neighbors['east'] == east):
+					print("SOUTH")
+					s_hall = True
+
+
+			if ne_loc and se_loc and e_hall is None:
+				north = self.maze[ne_loc]
+				south = self.maze[se_loc]
+				if (north.neighbors['south'] == south
+				and south.neighbors['north'] == north):
+					# print("EAST")
+					e_hall = True
+
+			if nw_loc and sw_loc and w_hall is None:
+				north = self.maze[nw_loc]
+				south = self.maze[sw_loc]
+				if (north.neighbors['south'] == south
+				and south.neighbors['north'] == north):
+					# print("WEST")
+					w_hall = True
+
+			# print(
+			# 	'---\n'
+			# 	f'nw_loc {nw_loc}\n'
+			# 	f'ne_loc {ne_loc}\n'
+			# 	f'sw_loc {sw_loc}\n'
+			# 	f'se_loc {se_loc}\n\n'
+			# 	f'n_hall {n_hall}\n'
+			# 	f's_hall {s_hall}\n'
+			# 	f'e_hall {e_hall}\n'
+			# 	f'w_hall {w_hall}\n'
+			# )
+
 
 		return 'WiP'
 
 		'''
-			# this happens when quad is on a western boundary.
-			west = sw == se and sw is not None and se is not None
-			# this happens when quad is on a eastern boundary.
-			east = nw == ne
-			# this happens when quad is on a northern boundary.
-			north = nw < 0 or ne < 0
-			# this happens when quad is on a southern boundary.
-			south = sw >= len(self.maze) - 1 or se >= len(self.maze) - 1
-
-
-			# 00 01 02 02
-			# 03 04 05 05
-			# 06 07 08 08
-			# 09 10 11 11
-			# 12 13 14 14
-			
-
-			# check if quad is on the boundary
-			if west:
-				nw = None
-				sw = None
-
-			# check if quad is on the boundary
-			if east:
-				ne = None
-				se = None
-
-			# check if quad is on the boundary
-			if north:
-				nw = None
-				ne = None
-
-			# check if quad is on the boundary
-			if south:
-				sw = None
-				se = None
-
-
-			if not (west or north or south) and (nw and sw):
-				# grab quad nodes neighbors.
-				north_item = self.maze[sw].neighbors['north']
-				south_item = self.maze[nw].neighbors['south']
-				# affirm whether they share an edge.
-				north_bool = south_item == self.maze[sw]
-				south_bool = north_item == self.maze[nw]
-				# update variable if they do.
-				if north_bool and south_bool:
-					west = True
-
-			if not (east or north or south) and (ne and se):
-				# grab quad nodes neighbors.
-				north_item = self.maze[se].neighbors['north']
-				south_item = self.maze[ne].neighbors['south']
-				# affirm whether they share an edge.
-				north_bool = north_item == self.maze[ne]
-				south_bool = south_item == self.maze[se]
-				# update variable if they do.
-				if north_bool and south_bool:
-					east = True
-
-			if not (north or east or west) and (nw and ne):
-				# grab quad nodes neighbors.
-				east_item = self.maze[ne].neighbors['east']
-				west_item = self.maze[nw].neighbors['west']
-				# affirm whether they share an edge.
-				east_bool = east_item == self.maze[ne]
-				west_bool = west_item == self.maze[nw]
-				# update variable if they do.
-				if east_bool and west_bool:
-					north = True
-
-			if not (south or east or west) and (sw and se):
-				# grab quad nodes neighbors.
-				east_item = self.maze[se].neighbors['east']
-				west_item = self.maze[sw].neighbors['west']
-				# affirm whether they share an edge.
-				east_bool = east_item == self.maze[se]
-				west_bool = west_item == self.maze[sw]
-				# update variable if they do.
-				if east_bool and west_bool:
-					south = True
-
 			glyph = get_glyph(north, south, east, west)
 			if location % string_length == 0:
 				amaze += '\n'
