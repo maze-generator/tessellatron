@@ -88,13 +88,13 @@ class Maze():
 		its done recursively via a depth-first traversal tree.
 		this is a setter function; it does not return anything.
 		---
-		key = cardinal direction
+		compass = cardinal direction
 		reverse = reversed cardinal direction
 		root_pos = root position
 		neighbor = neighbor position
 		'''
 		if root_pos is None:
-			# start the trees root_pos at a random point in the maze.
+			# root_pos starts at a random point in the maze.
 			# this doesnt infer a start/exit in the finished maze.
 			# one can always find a path from any point A to B;
 			# the program will decide these points later.
@@ -124,8 +124,12 @@ class Maze():
 		root_pos_column = root_pos % self.length
 		root_pos_row = root_pos // self.length
 
-		# validate removes neighbors that are out-of-bounds.
 		def validate(neighbor):
+			'''
+			helper function.
+			removes neighbors that are invalid in some way,
+			such as being out of bounds or across the map.
+			'''
 			# calculate neighbors row and column position.
 			neighbor_column = neighbor % self.length
 			neighbor_row = neighbor // self.length
@@ -135,9 +139,8 @@ class Maze():
 
 				# the neighbor must share atleast a row or a column;
 				# otherwise it isnt really a neighbor, is it.
-				if root_pos_column == neighbor_column:
-					return neighbor
-				elif root_pos_row == neighbor_row:
+				if (root_pos_row == neighbor_row
+				or root_pos_column == neighbor_column):
 					return neighbor
 
 			# not a neighbor.
