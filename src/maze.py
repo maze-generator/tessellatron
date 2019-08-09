@@ -43,8 +43,8 @@ class Maze():
 		'''
 		returns the cell located at given coordinates.
 		'''
-		location = row * self.height + column
-		block = self.maze[location]
+		position = row * self.height + column
+		block = self.maze[position]
 		return block
 
 	def get_row(self, row):
@@ -82,7 +82,7 @@ class Maze():
 			every_column.append(self.get_column(column))
 		return every_column
 
-	def generate_maze(self, root_loc = None):
+	def generate_maze(self, root_pos = None):
 		'''
 		generates a perfect maze.
 		its done recursively via a depth-first traversal tree.
@@ -90,26 +90,26 @@ class Maze():
 		---
 		key = cardinal direction
 		reverse = reversed cardinal direction
-		root_loc = root location
-		neighbor = neighbor location
+		root_pos = root position
+		neighbor = neighbor position
 		'''
-		if root_loc is None:
-			# start the trees root_loc at a random point in the maze.
+		if root_pos is None:
+			# start the trees root_pos at a random point in the maze.
 			# this doesnt infer a start/exit in the finished maze.
 			# one can always find a path from any point A to B;
 			# the program will decide these points later.
-			root_loc = random.randint(0, len(self.maze) - 1)
+			root_pos = random.randint(0, len(self.maze) - 1)
 			# note our visited list exists as the maze property.
 
 		# first, fill the maze spot with an empty block.
-		self.maze[root_loc] = Block()
+		self.maze[root_pos] = Block()
 
-		# grab the location id from each cardinal direction.
-		neighbor_locations = {
-			'north': root_loc - self.length,
-			'south': root_loc + self.length,
-			'east': root_loc + 1,
-			'west': root_loc - 1,
+		# grab the position id from each cardinal direction.
+		neighbor_positions = {
+			'north': root_pos - self.length,
+			'south': root_pos + self.length,
+			'east': root_pos + 1,
+			'west': root_pos - 1,
 		}
 
 		# this is useful for doubly-linked vertices.
@@ -122,29 +122,29 @@ class Maze():
 
 		# validate will remove indices that are out-of-bounds.
 		def validate(neighbor):
-			root_loc_row = root_loc // self.length
-			root_loc_column = root_loc % self.length
+			root_pos_row = root_pos // self.length
+			root_pos_column = root_pos % self.length
 			neighbor_row = neighbor // self.length
 			neighbor_column = neighbor % self.length
-			if ((root_loc_row == neighbor_row
-			or root_loc_column == neighbor_column)
+			if ((root_pos_row == neighbor_row
+			or root_pos_column == neighbor_column)
 			and len(self.maze) > neighbor >= 0):
 				return neighbor
 			else:
 				return None
 
 		# update neighbors with validate.
-		for compass, neighbor in neighbor_locations.items():
+		for compass, neighbor in neighbor_positions.items():
 			# it is safe to update a compass's value in this loop;
 			# it isnt safe to update a compass in this loop.
-			neighbor_locations[compass] = validate(neighbor)
+			neighbor_positions[compass] = validate(neighbor)
 
-		for compass, neighbor in neighbor_locations.items():
+		for compass, neighbor in neighbor_positions.items():
 			# reverse reverses compass, a cardinal direction.
 			reverse = reverse_compass[compass]
 			# neighbor is empty, representing a maze boundary.
 			if neighbor is None:
-				self.maze[root_loc].neighbors[compass] = None
+				self.maze[root_pos].neighbors[compass] = None
 
 			# neighbor is an int, representing a spot in maze.
 			else:
@@ -153,8 +153,8 @@ class Maze():
 					# generate a new maze block.
 					self.generate_maze(neighbor)
 					# link up the net / graph / tree.
-					self.maze[root_loc].neighbors[compass] = self.maze[neighbor]
-					self.maze[neighbor].neighbors[reverse] = self.maze[root_loc]
+					self.maze[root_pos].neighbors[compass] = self.maze[neighbor]
+					self.maze[neighbor].neighbors[reverse] = self.maze[root_pos]
 
 				# this spot is filled.
 				else:
@@ -200,16 +200,5 @@ def pick_symbol(north, south, east, west):
 	# zero passages
 	elif not (north or south or east or west):
 		glyph = ' '
-
-	# if column == 1:
-	# 	print(glyph)
-	# 	print(
-	# 		f'LOCATION: {column}, {row}'
-	# 		f'\nnorth   {north}'
-	# 		f'\nsouth   {south}'
-	# 		f'\neast    {east}'
-	# 		f'\nwest    {west}'
-	# 		f'\n======\n\n'
-	# 	)
 
 	return glyph
