@@ -2,6 +2,7 @@
 import random
 # internal packages
 from block import *
+from unicode_graphic import UnicodeGraphic
 
 class Maze():
 	def __init__(self, length, height):
@@ -12,32 +13,14 @@ class Maze():
 		self.generate_maze()
 
 	def __repr__(self):
-		result = ''
-
-		for index, block in enumerate(self.maze):
-			north = True
-			south = True
-			east = True
-			west = True
-
-			if (block.neighbors['north'] == False 
-			or block.neighbors['north'] is None):
-				north = False
-			if (block.neighbors['south'] == False 
-			or block.neighbors['south'] is None):
-				south = False
-			if (block.neighbors['east'] == False 
-			or block.neighbors['east'] is None):
-				east = False
-			if (block.neighbors['west'] == False 
-			or block.neighbors['west'] is None):
-				west = False
-
-			if index % self.length == 0:
-				result += '\n'
-			result += pick_symbol(north, south, east, west)
-
-		return result
+		type = input('pipes[p] or edges[e]?   ')
+		graphic = UnicodeGraphic(self)
+		if type == 'p':
+			return graphic.pipe_maze()
+		if type == 'e':
+			return graphic.edge_maze()
+		else:
+			return self.__repr__()
 
 	def get_block(self, row, column):
 		'''
@@ -174,46 +157,3 @@ class Maze():
 				# this spot is filled.
 				else:
 					pass
-
-def pick_symbol(north, south, east, west):
-	'''
-	temporary function for drawing wall-maze.
-	'''
-	if north and south and east and west:
-		glyph = '┼'
-	# three passages
-	elif south and east and west and not (north):
-		glyph = '┬'
-	elif north and east and west and not (south):
-		glyph = '┴'
-	elif north and south and west and not (east):
-		glyph = '┤'
-	elif north and south and east and not (west):
-		glyph = '├'
-	# two passages
-	elif north and south and not (east or west):
-		glyph = '│'
-	elif north and east and not (south or west):
-		glyph = '└'
-	elif north and west and not (south or east):
-		glyph = '┘'
-	elif south and east and not (north or west):
-		glyph = '┌'
-	elif south and west and not (north or east):
-		glyph = '┐'
-	elif east and west and not (north or south):
-		glyph = '─'
-	# one passage
-	elif north and not (south or east or west):
-		glyph = '╵'
-	elif south and not (north or east or west):
-		glyph = '╷'
-	elif east and not (north or south or west):
-		glyph = '╶'
-	elif west and not (north or south or east):
-		glyph = '╴'
-	# zero passages
-	elif not (north or south or east or west):
-		glyph = ' '
-
-	return glyph

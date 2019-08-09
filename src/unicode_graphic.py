@@ -1,5 +1,38 @@
-class UnicodeGraphic(Maze):
-	def __repr__(self):
+class UnicodeGraphic():
+	def __init__(self, maze_object):
+		self.maze_object = maze_object
+
+	def pipe_maze(self):
+		self = self.maze_object
+		result = ''
+
+		for index, block in enumerate(self.maze):
+			north = True
+			south = True
+			east = True
+			west = True
+
+			if (block.neighbors['north'] == False 
+			or block.neighbors['north'] is None):
+				north = False
+			if (block.neighbors['south'] == False 
+			or block.neighbors['south'] is None):
+				south = False
+			if (block.neighbors['east'] == False 
+			or block.neighbors['east'] is None):
+				east = False
+			if (block.neighbors['west'] == False 
+			or block.neighbors['west'] is None):
+				west = False
+
+			if index % self.length == 0:
+				result += '\n'
+			result += get_glyph(north, south, east, west, 'pipe')
+
+		return result
+
+	def edge_maze(self):
+		self = self.maze_object
 		# store result item
 		text = ''
 
@@ -103,56 +136,80 @@ class UnicodeGraphic(Maze):
 			if location % padded_length == 0 and location != 0:
 				text += '\n'
 			# get unicode glyph symbol box-drawing element
-			text += get_glyph(n_hall, s_hall, e_hall, w_hall)
+			text += get_glyph(n_hall, s_hall, e_hall, w_hall, 'edge')
 		# return maze drawing
 		return text
 
-def get_glyph(north, south, east, west):
+def get_glyph(north, south, east, west, type):
 	'''
 	this function returns a maze drawing character.
+	== TODO ==
+	this is awkwardly large.
+	not sure where to put it semantically.
+	== FIXME ==
+	these unicode characters must be converted!
+	like emojis, its a code smell to have them.
 	'''
-	# == FIXME ==
-	# this function is awkwardly large.
-	# not sure where to put it semantically.
-	# == TODO ==
-	# these unicode characters must be converted!
-	# like emojis, its a code smell to have them.
+
 	# four passages
 	if north and south and east and west:
-		glyph = ' '
+		edge = ' '
+		pipe = '┼'
+
 	# three passages
 	elif south and east and west and not (north):
-		glyph = '╵'
+		edge = '╵'
+		pipe = '┬'
 	elif north and east and west and not (south):
-		glyph = '╷'
+		edge = '╷'
+		pipe = '┴'
 	elif north and south and west and not (east):
-		glyph = '╶'
+		edge = '╶'
+		pipe = '┤'
 	elif north and south and east and not (west):
-		glyph = '╴'
+		edge = '╴'
+		pipe = '├'
+
 	# two passages
 	elif north and south and not (east or west):
-		glyph = '─'
+		edge = '─'
+		pipe = '│'
 	elif north and east and not (south or west):
-		glyph = '┐'
+		edge = '┐'
+		pipe = '└'
 	elif north and west and not (south or east):
-		glyph = '┌'
+		edge = '┌'
+		pipe = '┘'
 	elif south and east and not (north or west):
-		glyph = '┘'
+		edge = '┘'
+		pipe = '┌'
 	elif south and west and not (north or east):
-		glyph = '└'
+		edge = '└'
+		pipe = '┐'
 	elif east and west and not (north or south):
-		glyph = '│'
+		edge = '│'
+		pipe = '─'
+
 	# one passage
 	elif north and not (south or east or west):
-		glyph = '┬'
+		edge = '┬'
+		pipe = '╵'
 	elif south and not (north or east or west):
-		glyph = '┴'
+		edge = '┴'
+		pipe = '╷'
 	elif east and not (north or south or west):
-		glyph = '┤'
+		edge = '┤'
+		pipe = '╶'
 	elif west and not (north or south or east):
-		glyph = '├'
+		edge = '├'
+		pipe = '╴'
+
 	# zero passages
 	elif not (north or south or east or west):
-		glyph = '┼'
+		edge = '┼'
+		pipe = ' '
 
-	return glyph
+	if type == 'edge':
+		return edge
+	if type == 'pipe':
+		return pipe
