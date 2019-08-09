@@ -28,27 +28,16 @@ class Maze():
 			se = se - (se // string_height)
 			print(string_height)
 
-
 			# this happens when quad is on a western boundary.
-			if sw == se:
-				west = True
-			else:
-				west = False
+			west = True if (sw == se) else False
 			# this happens when quad is on a eastern boundary.
-			if nw == ne:
-				east = True
-			else:
-				east = False
+			east = True if (nw == ne) else False
 			# this happens when quad is on a northern boundary.
-			if nw < 0 and ne < 0:
-				north = True
-			else:
-				north = False
+			north = True if (nw < 0
+			and ne < 0) else False
 			# this happens when quad is on a southern boundary.
-			if sw >= len(self.maze) and se >= len(self.maze):
-				south = True
-			else:
-				south = False
+			south = True if (sw >= len(self.maze)
+			and se >= len(self.maze)) else False
 
 			print(
 				'---\n'
