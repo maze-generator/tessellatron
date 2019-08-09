@@ -122,7 +122,13 @@ class Maze():
 
 		# validate will remove indices that are out-of-bounds.
 		def validate(neighbor):
-			if len(self.maze) > neighbor >= 0:
+			root_loc_row = root_loc // self.length
+			root_loc_column = root_loc % self.length
+			neighbor_row = neighbor // self.length
+			neighbor_column = neighbor % self.length
+			if ((root_loc_row == neighbor_row
+			or root_loc_column == neighbor_column)
+			and len(self.maze) > neighbor >= 0):
 				return neighbor
 			else:
 				return None
