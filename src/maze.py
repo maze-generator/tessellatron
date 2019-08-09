@@ -194,8 +194,8 @@ class Maze():
 		neighbor_locations = {
 			'north': loc - self.length,
 			'south': loc + self.length,
-			'east': loc - 1,
-			'west': loc + 1,
+			'east': loc + 1,
+			'west': loc - 1,
 		}
 
 		# this is useful for doubly-linked vertices.
