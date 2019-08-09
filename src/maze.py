@@ -11,7 +11,6 @@ class Maze():
 		# set up the maze
 		self.generate_maze()
 
-
 	def get_block(self, row_id, column_id):
 		'''
 		returns the cell located at given coordinates.

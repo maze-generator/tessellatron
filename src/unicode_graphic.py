@@ -1,4 +1,4 @@
-class UnicodeMaze(Maze):
+class UnicodeGraphic(Maze):
 	def __repr__(self):
 		string_length = self.length + 1
 		string_height = self.height + 1
@@ -11,7 +11,6 @@ class UnicodeMaze(Maze):
 		return str(string_map)
 
 3x4
-
 
  00 01 02
  03 04 05
