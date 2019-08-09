@@ -13,7 +13,7 @@ class Maze():
 
 	def __repr__(self):
 		# store result item
-		text = ''
+		text = '01234\n'
 
 		# the padding helps analyze corners and boundaries.
 		padded_length = self.length + 2
@@ -83,6 +83,9 @@ class Maze():
 			if ne_loc is not None and nw_loc is not None:
 				east = self.maze[ne_loc]
 				west = self.maze[nw_loc]
+				if column == 1:
+					print(east, east.neighbors['west'])
+					print(west, west.neighbors['east'])
 				if (east.neighbors['west'] == west
 				and west.neighbors['east'] == east):
 					n_hall = True
@@ -90,6 +93,9 @@ class Maze():
 			if se_loc is not None and sw_loc is not None:
 				east = self.maze[se_loc]
 				west = self.maze[sw_loc]
+				if column == 1:
+					print(east, east.neighbors['west'])
+					print(west, west.neighbors['east'])
 				if (east.neighbors['west'] == west
 				and west.neighbors['east'] == east):
 					s_hall = True
@@ -108,11 +114,14 @@ class Maze():
 				and south.neighbors['north'] == north):
 					w_hall = True
 
+			if column == 1:
+				print(n_hall, s_hall)
+
 			# add a line break if its an end-of-line
 			if location % padded_length == 0 and location != 0:
-				text += '\n'
+				text += f'{row - 1}\n'
 			# get unicode glyph symbol box-drawing element
-			text += get_glyph(n_hall, s_hall, e_hall, w_hall, location)
+			text += get_glyph(n_hall, s_hall, e_hall, w_hall, row, column)
 		# return maze drawing
 		return text
 
@@ -224,6 +233,9 @@ class Maze():
 					# generate a new maze block.
 					self.generate_maze(nbr)
 					# link up the net / graph / tree.
+					print(loc, key)
+					print(nbr, rev)
+					print()
 					self.maze[loc].neighbors[key] = self.maze[nbr]
 					self.maze[nbr].neighbors[rev] = self.maze[loc]
 
@@ -233,7 +245,7 @@ class Maze():
 
 
 
-def get_glyph(north, south, east, west, LOCATION):
+def get_glyph(north, south, east, west, row, column):
 	'''
 	this function returns a maze drawing character.
 	'''
@@ -243,13 +255,6 @@ def get_glyph(north, south, east, west, LOCATION):
 	# == TODO ==
 	# these unicode characters must be converted!
 	# like emojis, its a code smell to have them.
-	print(
-		f'\nLOCATION: {LOCATION}'
-		f'\nnorth {north}'
-		f'\nsouth {south}'
-		f'\neast  {east}'
-		f'\nwest  {west}'
-	)
 	# four passages
 	if north and south and east and west:
 		glyph = ' '
@@ -287,5 +292,16 @@ def get_glyph(north, south, east, west, LOCATION):
 	# zero passages
 	elif not (north or south or east or west):
 		glyph = '┼'
+
+	if column == 1:
+		print(glyph)
+		print(
+			f'LOCATION: {column}, {row}'
+			f'\nnorth   {north}'
+			f'\nsouth   {south}'
+			f'\neast    {east}'
+			f'\nwest    {west}'
+			f'\n======\n\n'
+		)
 
 	return glyph
