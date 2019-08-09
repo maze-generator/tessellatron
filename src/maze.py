@@ -12,6 +12,7 @@ class Maze():
 		self.generate_maze()
 
 	def __repr__(self):
+		amaze = ''
 		# the padding helps analyze corners and boundaries.
 		padded_length = self.length + 2
 		padded_height = self.height + 2
@@ -113,28 +114,14 @@ class Maze():
 					# print("WEST")
 					w_hall = True
 
-			# print(
-			# 	'---\n'
-			# 	f'nw_loc {nw_loc}\n'
-			# 	f'ne_loc {ne_loc}\n'
-			# 	f'sw_loc {sw_loc}\n'
-			# 	f'se_loc {se_loc}\n\n'
-			# 	f'n_hall {n_hall}\n'
-			# 	f's_hall {s_hall}\n'
-			# 	f'e_hall {e_hall}\n'
-			# 	f'w_hall {w_hall}\n'
-			# )
-
-
-		return 'WiP'
-
-		'''
-			glyph = get_glyph(north, south, east, west)
-			if location % string_length == 0:
+			glyph = get_glyph(n_hall, s_hall, e_hall, w_hall)
+			print(location % graphic_length)
+			if location % padded_length == 0:
 				amaze += '\n'
 			amaze += glyph
-			# print(amaze)
-		'''
+			print(amaze)
+
+		return 'WiP'
 
 
 

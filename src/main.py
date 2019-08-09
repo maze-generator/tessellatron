@@ -2,7 +2,7 @@ from maze import *
 from block import *
 
 def main():
-	maze = Maze(3,4)
+	maze = Maze(10,10)
 	# for block in maze.maze:
 	# 	print(block.neighbors)
 	print(maze)
