@@ -12,16 +12,52 @@ class Maze():
 		self.generate_maze()
 
 	def __repr__(self):
-		string_length = self.length + 2
-		string_height = self.height + 2
-		string_maze = [None] * string_length * string_height
+		# the padding helps analyze corners and boundaries.
+		padded_length = self.length + 2
+		padded_height = self.height + 2
+		padded_maze = [None] * padded_length * padded_height
+
+		# graphics are ultimately what we are aiming to find.
+		graphic_length = self.length + 1
+		graphic_height = self.height + 1
+		graphic_maze = [None] * graphic_length * graphic_height
 		
-		for location, character in enumerate(string_maze):
-			row_id = (location // string_length)
-			column_id = (location % string_length)
-			print(row_id, column_id)
-			# column_id = 
+		# this thing preps for calculations with graphics.
+		for location, reference in enumerate(padded_maze):
+			# determine row and column
+			row = location // (padded_length)
+			column = location % (padded_length)
+
+			# checks if the item is padding for the boundary.
+			if (row == 0
+			or column == 0
+			or row == padded_height - 1
+			or column == padded_length - 1):
+				pass
+			else:
+				reference = location - padded_length + 1 - row * 2
+				padded_maze[location] = reference
+
+		# this thing calculates the graphics.
+		for location, reference in enumerate(graphic_maze):
+			# determine row and column
+			row = location // (graphic_length)
+			column = location % (graphic_length)
+
+			# determines locations of items in the padded_maze.
+			nw_loc = location
+			ne_loc = location + 1
+			sw_loc = location + graphic_length
+			se_loc = location + graphic_length + 1
+
+			# elif row == 0:
+			# block_reference = 
+			# print(row, column)
+			# column = 
 			# print(location - string_length + 1 )
+
+			# break once nw item reaches last meaningful content
+			# break
 
 		return 'WiP'
 
@@ -158,48 +194,48 @@ class Maze():
 
 
 
-	def get_block(self, row_id, column_id):
+	def get_block(self, row, column):
 		'''
 		returns the cell located at given coordinates.
 		'''
-		location = row_id * self.height + column_id
+		location = row * self.height + column
 		block = self.maze[location]
 		return block
 
-	def get_row(self, row_id):
+	def get_row(self, row):
 		'''
 		returns the nth full row.
 		'''
-		east = row_id * self.height
+		east = row * self.height
 		west = east + self.length
 		row = self.maze[east:west]
 		return row
 
-	def get_column(self, column_id):
+	def get_column(self, column):
 		'''
 		returns the nth full column.
 		'''
 		num_columns = self.length
-		column = self.maze[column_id::num_columns]
+		column = self.maze[column::num_columns]
 		return column
 
-	def get_each_row(self):
+	def get_every_row(self):
 		'''
 		returns an array arrays; a list of every row.
 		'''
-		each_row = []
-		for row_id in range(0, self.height):
-			each_row.append(self.get_row(row_id))
-		return each_row
+		every_row = []
+		for row in range(0, self.height):
+			every_row.append(self.get_row(row))
+		return every_row
 
-	def get_each_column(self):
+	def get_every_column(self):
 		'''
 		returns an array arrays; a list of every column.
 		'''
-		each_column = []
-		for column_id in range(0, self.length):
-			each_column.append(self.get_column(column_id))
-		return each_column
+		every_column = []
+		for column in range(0, self.length):
+			every_column.append(self.get_column(column))
+		return every_column
 
 	def generate_maze(self, loc = None):
 		'''
