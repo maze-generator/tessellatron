@@ -1,34 +1,57 @@
 class UnicodeGraphic(Maze):
-	def __repr__(self):
+
+
+	def __repr__(self, Maze):
 		string_length = self.length + 1
 		string_height = self.height + 1
 		string_maze = [None] * string_length * string_height
-		
 		for location, character in enumerate(string_maze):
-			# TODO
-			y_pos = location // (string_length)
-			x_pos = location - y_pos
-		return str(string_map)
+			# get initial index
+			nw = location - string_length - 1
+			ne = location - string_length
+			sw = location - 1
+			se = location
+			# recalibrate to 'true self' indices
+			nw = nw - (nw // string_height)
+			ne = ne - (ne // string_height)
+			sw = sw - (sw // string_height)
+			se = se - (se // string_height)
+			print(
+				'---\n'
+				f'nw {nw}\n'
+				f'ne {ne}\n'
+				f'sw {sw}\n'
+				f'se {se}\n'
+			)
+			
+		return 'WiP'
 
-3x4
+'''
+00 01 02 03
+04 05 06 07
+08 09 10 11
+12 13 14 15
+16 17 18 19
 
- 00 01 02
- 03 04 05
- 06 07 08  
- 09 10 11
+-- -- -- -- 
+-- 00 01 02
+-- 03 04 05
+-- 06 07 08
+-- 09 10 11
 
- -4 -3 -2 -1
- 00 01 02 03
- 04 05 06 07
- 08 09 10 11
- 12 13 14 15
+-- -- -- --
+-- 05 06 07
+-- 09 10 11
+-- 13 14 15
+-- 17 18 19
 
-		# get initial index
-		nw = location - string_length - 1
-		ne = location - string_length
-		sw = location - 1
-		se = location
+5 5 5 # length of line + row #
+6 6 6 # length of line + row #
+7 7 7 # length of line + row #
+8 8 8 # length of line + row #
+'''
 
+'''
 		# check if quadrant is on a corner.
 		# nw_corner
 		if se == 0:
@@ -54,12 +77,12 @@ class UnicodeGraphic(Maze):
 		
 		else:
 			pass
-		
 
 		north = nw.neighbors['east'] and ne.neighbors['west']
 		south = sw.neighbors['east'] and se.neighbors['west']
 		east = se.neighbors['north'] and ne.neighbors['south']
 		west = nw.neighbors['north'] and sw.neighbors['south']
+'''
 
 def get_glyph(north, south, east, west):
 	'''
