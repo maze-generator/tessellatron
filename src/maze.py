@@ -26,6 +26,30 @@ class Maze():
 			ne = ne - (ne // string_height)
 			sw = sw - (sw // string_height)
 			se = se - (se // string_height)
+			print(string_height)
+
+
+			# this happens when quad is on a western boundary.
+			if sw == se:
+				west = True
+			else:
+				west = False
+			# this happens when quad is on a eastern boundary.
+			if nw == ne:
+				east = True
+			else:
+				east = False
+			# this happens when quad is on a northern boundary.
+			if nw < 0 and ne < 0:
+				north = True
+			else:
+				north = False
+			# this happens when quad is on a southern boundary.
+			if sw >= len(self.maze) and se >= len(self.maze):
+				south = True
+			else:
+				south = False
+
 			print(
 				'---\n'
 				f'nw {nw}\n'
@@ -33,7 +57,15 @@ class Maze():
 				f'sw {sw}\n'
 				f'se {se}\n'
 			)
-			
+
+			print(
+				'---\n'
+				f'north {north}\n'
+				f'south {south}\n'
+				f'east {east}\n'
+				f'west {west}\n'
+			)
+
 		return 'WiP'
 
 	def get_block(self, row_id, column_id):
