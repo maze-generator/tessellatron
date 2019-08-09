@@ -3,15 +3,20 @@ class UnicodeGraphic():
 		self.maze_object = maze_object
 
 	def pipe_maze(self):
+		# HACK reassigning self.
 		self = self.maze_object
-		result = ''
 
+		# initialize empty result string.
+		result = ''
+		# loop through maze.
 		for index, block in enumerate(self.maze):
+			# assumes there is a path in every direction.
 			north = True
 			south = True
 			east = True
 			west = True
 
+			# verify if there actually is a path each way.
 			if (block.neighbors['north'] == False 
 			or block.neighbors['north'] is None):
 				north = False
@@ -25,10 +30,11 @@ class UnicodeGraphic():
 			or block.neighbors['west'] is None):
 				west = False
 
+			# add line break if end of line is reached
 			if index % self.length == 0:
 				result += '\n'
+			# get the symbol to be added to the result string
 			result += get_glyph(north, south, east, west, 'pipe')
-
 		return result
 
 	def edge_maze(self):
@@ -101,6 +107,7 @@ class UnicodeGraphic():
 			and sw_loc is None):
 				w_hall = True
 
+			# verify if there is a path in any direction.
 			if ne_loc is not None and nw_loc is not None:
 				east = self.maze[ne_loc]
 				west = self.maze[nw_loc]
@@ -129,15 +136,12 @@ class UnicodeGraphic():
 				and south.neighbors['north'] == north):
 					w_hall = True
 
-			# if column == 1:
-			# 	print(n_hall, s_hall)
-
-			# add a line break if its an end-of-line
+			# add a line break if its an end-of-line.
 			if location % padded_length == 0 and location != 0:
 				text += '\n'
-			# get unicode glyph symbol box-drawing element
+			# get unicode glyph symbol box-drawing element.
 			text += get_glyph(n_hall, s_hall, e_hall, w_hall, 'edge')
-		# return maze drawing
+		# return maze drawing.
 		return text
 
 def get_glyph(north, south, east, west, type):
