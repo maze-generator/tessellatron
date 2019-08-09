@@ -135,7 +135,11 @@ class Maze():
 			# it isnt safe to update a compass in this loop.
 			root_neighbors[compass] = validate(neighbor)
 
-		for compass, neighbor in root_neighbors.items():
+		# randomize compass order
+		random_neighbors = list(root_neighbors.items())
+		random.shuffle(random_neighbors)
+
+		for compass, neighbor in random_neighbors:
 			# reverse reverses compass, a cardinal direction.
 			reverse = reverse_compass[compass]
 			# neighbor is empty, representing a maze boundary.
