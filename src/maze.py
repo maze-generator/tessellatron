@@ -105,7 +105,7 @@ class Maze():
 		self.maze[root_pos] = Block()
 
 		# grab the position id from each cardinal direction.
-		neighbor_positions = {
+		root_neighbors = {
 			'north': root_pos - self.length,
 			'south': root_pos + self.length,
 			'east': root_pos + 1,
@@ -120,26 +120,36 @@ class Maze():
 			'west': 'east',
 		}
 
-		# validate will remove indices that are out-of-bounds.
+		# this row and column will help validate neighbors.
+		root_pos_column = root_pos % self.length
+		root_pos_row = root_pos // self.length
+
+		# validate removes neighbors that are out-of-bounds.
 		def validate(neighbor):
-			root_pos_row = root_pos // self.length
-			root_pos_column = root_pos % self.length
-			neighbor_row = neighbor // self.length
+			# calculate neighbors row and column position.
 			neighbor_column = neighbor % self.length
-			if ((root_pos_row == neighbor_row
-			or root_pos_column == neighbor_column)
-			and len(self.maze) > neighbor >= 0):
-				return neighbor
-			else:
-				return None
+			neighbor_row = neighbor // self.length
+
+			# ensure neighbor's position lands within the grid.
+			if len(self.maze) > neighbor >= 0:
+
+				# the neighbor must share atleast a row or a column;
+				# otherwise it isnt really a neighbor, is it.
+				if root_pos_column == neighbor_column:
+					return neighbor
+				elif root_pos_row == neighbor_row:
+					return neighbor
+
+			# not a neighbor.
+			return None
 
 		# update neighbors with validate.
-		for compass, neighbor in neighbor_positions.items():
+		for compass, neighbor in root_neighbors.items():
 			# it is safe to update a compass's value in this loop;
 			# it isnt safe to update a compass in this loop.
-			neighbor_positions[compass] = validate(neighbor)
+			root_neighbors[compass] = validate(neighbor)
 
-		for compass, neighbor in neighbor_positions.items():
+		for compass, neighbor in root_neighbors.items():
 			# reverse reverses compass, a cardinal direction.
 			reverse = reverse_compass[compass]
 			# neighbor is empty, representing a maze boundary.
@@ -153,8 +163,10 @@ class Maze():
 					# generate a new maze block.
 					self.generate_maze(neighbor)
 					# link up the net / graph / tree.
-					self.maze[root_pos].neighbors[compass] = self.maze[neighbor]
-					self.maze[neighbor].neighbors[reverse] = self.maze[root_pos]
+					this_block = self.maze[root_pos]
+					that_block = self.maze[neighbor]
+					this_block.neighbors[compass] = that_block
+					that_block.neighbors[reverse] = this_block
 
 				# this spot is filled.
 				else:
