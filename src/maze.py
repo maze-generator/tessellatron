@@ -12,8 +12,33 @@ class Maze():
 		self.generate_maze()
 
 	def __repr__(self):
+		result = ''
+		for index, block in enumerate(self.maze):
+			north = True
+			south = True
+			east = True
+			west = True
+			if (block.neighbors['north'] == False 
+			or block.neighbors['north'] is None):
+				north = False
+			if (block.neighbors['south'] == False 
+			or block.neighbors['south'] is None):
+				south = False
+			if (block.neighbors['east'] == False 
+			or block.neighbors['east'] is None):
+				east = False
+			if (block.neighbors['west'] == False 
+			or block.neighbors['west'] is None):
+				west = False
+			if index % self.length == 0:
+				result += '\n'
+			result += pick_symbol(north, south, east, west)
+				
+		return result
+
+	def __block_repr__(self):
 		# store result item
-		text = '01234\n'
+		text = ''
 
 		# the padding helps analyze corners and boundaries.
 		padded_length = self.length + 2
@@ -84,8 +109,8 @@ class Maze():
 				east = self.maze[ne_loc]
 				west = self.maze[nw_loc]
 				if column == 1:
+					print(west.neighbors['east'], west)
 					print(east, east.neighbors['west'])
-					print(west, west.neighbors['east'])
 				if (east.neighbors['west'] == west
 				and west.neighbors['east'] == east):
 					n_hall = True
@@ -95,7 +120,7 @@ class Maze():
 				west = self.maze[sw_loc]
 				if column == 1:
 					print(east, east.neighbors['west'])
-					print(west, west.neighbors['east'])
+					print(west.neighbors['east'], west)
 				if (east.neighbors['west'] == west
 				and west.neighbors['east'] == east):
 					s_hall = True
@@ -114,12 +139,12 @@ class Maze():
 				and south.neighbors['north'] == north):
 					w_hall = True
 
-			if column == 1:
-				print(n_hall, s_hall)
+			# if column == 1:
+			# 	print(n_hall, s_hall)
 
 			# add a line break if its an end-of-line
 			if location % padded_length == 0 and location != 0:
-				text += f'{row - 1}\n'
+				text += '\n'
 			# get unicode glyph symbol box-drawing element
 			text += get_glyph(n_hall, s_hall, e_hall, w_hall, row, column)
 		# return maze drawing
@@ -233,15 +258,67 @@ class Maze():
 					# generate a new maze block.
 					self.generate_maze(nbr)
 					# link up the net / graph / tree.
-					print(loc, key)
-					print(nbr, rev)
-					print()
 					self.maze[loc].neighbors[key] = self.maze[nbr]
 					self.maze[nbr].neighbors[rev] = self.maze[loc]
 
 				# this spot is filled.
 				else:
 					pass
+
+def pick_symbol(north, south, east, west):
+	'''
+	temporary function for drawing wall-maze.
+	'''
+	if north and south and east and west:
+		glyph = '┼'
+	# three passages
+	elif south and east and west and not (north):
+		glyph = '┬'
+	elif north and east and west and not (south):
+		glyph = '┴'
+	elif north and south and west and not (east):
+		glyph = '┤'
+	elif north and south and east and not (west):
+		glyph = '├'
+	# two passages
+	elif north and south and not (east or west):
+		glyph = '│'
+	elif north and east and not (south or west):
+		glyph = '└'
+	elif north and west and not (south or east):
+		glyph = '┘'
+	elif south and east and not (north or west):
+		glyph = '┌'
+	elif south and west and not (north or east):
+		glyph = '┐'
+	elif east and west and not (north or south):
+		glyph = '─'
+	# one passage
+	elif north and not (south or east or west):
+		glyph = '╵'
+	elif south and not (north or east or west):
+		glyph = '╷'
+	elif east and not (north or south or west):
+		glyph = '╶'
+	elif west and not (north or south or east):
+		glyph = '╴'
+	# zero passages
+	elif not (north or south or east or west):
+		glyph = ' '
+
+	# if column == 1:
+	# 	print(glyph)
+	# 	print(
+	# 		f'LOCATION: {column}, {row}'
+	# 		f'\nnorth   {north}'
+	# 		f'\nsouth   {south}'
+	# 		f'\neast    {east}'
+	# 		f'\nwest    {west}'
+	# 		f'\n======\n\n'
+	# 	)
+
+	return glyph
+
 
 
 
@@ -293,15 +370,15 @@ def get_glyph(north, south, east, west, row, column):
 	elif not (north or south or east or west):
 		glyph = '┼'
 
-	if column == 1:
-		print(glyph)
-		print(
-			f'LOCATION: {column}, {row}'
-			f'\nnorth   {north}'
-			f'\nsouth   {south}'
-			f'\neast    {east}'
-			f'\nwest    {west}'
-			f'\n======\n\n'
-		)
+	# if column == 1:
+	# 	print(glyph)
+	# 	print(
+	# 		f'LOCATION: {column}, {row}'
+	# 		f'\nnorth   {north}'
+	# 		f'\nsouth   {south}'
+	# 		f'\neast    {east}'
+	# 		f'\nwest    {west}'
+	# 		f'\n======\n\n'
+	# 	)
 
 	return glyph
