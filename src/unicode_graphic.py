@@ -1,62 +1,111 @@
 class UnicodeGraphic(Maze):
+	def __repr__(self):
+		# store result item
+		text = ''
 
-'''
-00 01 02 03
-04 05 06 07
-08 09 10 11
-12 13 14 15
-16 17 18 19
+		# the padding helps analyze corners and boundaries.
+		padded_length = self.length + 2
+		padded_height = self.height + 2
+		padded_maze = [None] * padded_length * padded_height
 
--- -- -- -- 
--- 00 01 02
--- 03 04 05
--- 06 07 08
--- 09 10 11
-
--- -- -- --
--- 05 06 07
--- 09 10 11
--- 13 14 15
--- 17 18 19
-
-5 5 5 # length of line + row #
-6 6 6 # length of line + row #
-7 7 7 # length of line + row #
-8 8 8 # length of line + row #
-'''
-
-'''
-		# check if quadrant is on a corner.
-		# nw_corner
-		if se == 0:
-			
-		# ne_corner
-		elif sw == string_length:
-			
-		# sw_corner
-		elif ne == string_length * (string_height - 1):
-			
-		# se_corner
-		elif nw == string_length * string_height - 1:
-			
-		# check if quadrant is on a boundary.
-		# n_boundary
-		elif ne < 0 and nw < 0:
-			
-		# s_boundary
-		elif se >= string_length and sw >= string_length:
-
-		# e_boundary and w_boundary
-		elif 
+		# graphics are ultimately what we are aiming to find.
+		graphic_length = self.length + 1
+		graphic_height = self.height + 1
+		graphic_maze = [None] * graphic_length * graphic_height
 		
-		else:
-			pass
+		# this thing preps for calculations with graphics.
+		for location, reference in enumerate(padded_maze):
+			# determine row and column
+			row = location // (padded_length)
+			column = location % (padded_length)
 
-		north = nw.neighbors['east'] and ne.neighbors['west']
-		south = sw.neighbors['east'] and se.neighbors['west']
-		east = se.neighbors['north'] and ne.neighbors['south']
-		west = nw.neighbors['north'] and sw.neighbors['south']
-'''
+			# checks if the item is padding for the boundary.
+			if (row == 0
+			or column == 0
+			or row == padded_height - 1
+			or column == padded_length - 1):
+				pass
+			else:
+				reference = location - padded_length + 1 - row * 2
+				padded_maze[location] = reference
+
+		# this thing calculates the graphics.
+		for location, reference in enumerate(graphic_maze):
+			# determine row and column
+			row = location // (graphic_length)
+			column = location % (graphic_length)
+			location = location + row
+
+			# determines locations of items in the padded_maze.
+			nw_loc = padded_maze[location]
+			ne_loc = padded_maze[location + 1]
+			sw_loc = padded_maze[location + padded_length]
+			se_loc = padded_maze[location + padded_length + 1]
+
+
+			# initialize hallway passageways.
+			# if there is a passway, then its true, else false.
+			# none indicates an undeterminate value.
+			n_hall = None
+			s_hall = None
+			e_hall = None
+			w_hall = None
+
+			# north boundary
+			if (nw_loc is None
+			and ne_loc is None):
+				n_hall = True
+			# south boundary
+			if (sw_loc is None
+			and se_loc is None):
+				s_hall = True
+			# east boundary
+			if (ne_loc is None
+			and se_loc is None):
+				e_hall = True
+			# west boundary
+			if (nw_loc is None
+			and sw_loc is None):
+				w_hall = True
+
+			if ne_loc is not None and nw_loc is not None:
+				east = self.maze[ne_loc]
+				west = self.maze[nw_loc]
+				if (east.neighbors['west'] == west
+				and west.neighbors['east'] == east):
+					n_hall = True
+
+			if se_loc is not None and sw_loc is not None:
+				east = self.maze[se_loc]
+				west = self.maze[sw_loc]
+				if (east.neighbors['west'] == west
+				and west.neighbors['east'] == east):
+					s_hall = True
+
+			if ne_loc is not None and se_loc is not None:
+				north = self.maze[ne_loc]
+				south = self.maze[se_loc]
+				if (north.neighbors['south'] == south
+				and south.neighbors['north'] == north):
+					e_hall = True
+
+			if nw_loc is not None and sw_loc is not None:
+				north = self.maze[nw_loc]
+				south = self.maze[sw_loc]
+				if (north.neighbors['south'] == south
+				and south.neighbors['north'] == north):
+					w_hall = True
+
+			# if column == 1:
+			# 	print(n_hall, s_hall)
+
+			# add a line break if its an end-of-line
+			if location % padded_length == 0 and location != 0:
+				text += '\n'
+			# get unicode glyph symbol box-drawing element
+			text += get_glyph(n_hall, s_hall, e_hall, w_hall)
+		# return maze drawing
+		return text
 
 def get_glyph(north, south, east, west):
 	'''
@@ -68,7 +117,6 @@ def get_glyph(north, south, east, west):
 	# == TODO ==
 	# these unicode characters must be converted!
 	# like emojis, its a code smell to have them.
-
 	# four passages
 	if north and south and east and west:
 		glyph = ' '
