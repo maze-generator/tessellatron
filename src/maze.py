@@ -15,6 +15,8 @@ class Maze():
 		string_length = self.length + 1
 		string_height = self.height + 1
 		string_maze = [None] * string_length * string_height
+		
+		amaze = ''
 		for location, character in enumerate(string_maze):
 			# get initial index
 			nw = location - string_length - 1
@@ -22,38 +24,113 @@ class Maze():
 			sw = location - 1
 			se = location
 			# recalibrate to 'true self' indices
-			nw = nw - (nw // string_height)
-			ne = ne - (ne // string_height)
-			sw = sw - (sw // string_height)
-			se = se - (se // string_height)
-			print(string_height)
+			nw = nw - (nw // (string_length))  - 1
+			ne = ne - (ne // (string_length))  - 1
+			sw = sw - (sw // (string_length))  - 1
+			se = se - (se // (string_length))  - 1
 
 			# this happens when quad is on a western boundary.
-			west = True if (sw == se) else False
+			west = sw == se
 			# this happens when quad is on a eastern boundary.
-			east = True if (nw == ne) else False
+			east = nw == ne
 			# this happens when quad is on a northern boundary.
-			north = True if (nw < 0
-			and ne < 0) else False
+			north = nw < 0 or ne < 0
 			# this happens when quad is on a southern boundary.
-			south = True if (sw >= len(self.maze)
-			and se >= len(self.maze)) else False
+			south = sw >= len(self.maze) - 1 or se >= len(self.maze) - 1
 
-			print(
-				'---\n'
-				f'nw {nw}\n'
-				f'ne {ne}\n'
-				f'sw {sw}\n'
-				f'se {se}\n'
-			)
+			print(se)
 
-			print(
-				'---\n'
-				f'north {north}\n'
-				f'south {south}\n'
-				f'east {east}\n'
-				f'west {west}\n'
-			)
+
+			# 00 01 02 02
+			# 03 04 05 05
+			# 06 07 08 08
+			# 09 10 11 11
+			# 12 13 14 14
+			
+
+			# check if quad is on the boundary
+			if west:
+				nw = None
+				sw = None
+
+			# check if quad is on the boundary
+			if east:
+				ne = None
+				se = None
+
+			# check if quad is on the boundary
+			if north:
+				nw = None
+				ne = None
+
+			# check if quad is on the boundary
+			if south:
+				sw = None
+				se = None
+
+			# print(
+			# 	'---\n'
+			# 	f'nw {nw}\n'
+			# 	f'ne {ne}\n'
+			# 	f'sw {sw}\n'
+			# 	f'se {se}\n\n'
+			# 	f'north {north}\n'
+			# 	f'south {south}\n'
+			# 	f'east  {east}\n'
+			# 	f'west  {west}\n'
+			# )
+
+			if not (west or north or south) and (nw and sw):
+				# grab quad nodes neighbors.
+				north_item = self.maze[sw].neighbors['north']
+				south_item = self.maze[nw].neighbors['south']
+				# affirm whether they share an edge.
+				north_bool = south_item == self.maze[sw]
+				south_bool = north_item == self.maze[nw]
+				# update variable if they do.
+				if north_bool and south_bool:
+					west = True
+
+			if not (east or north or south) and (ne and se):
+				# grab quad nodes neighbors.
+				north_item = self.maze[se].neighbors['north']
+				south_item = self.maze[ne].neighbors['south']
+				# affirm whether they share an edge.
+				north_bool = north_item == self.maze[ne]
+				south_bool = south_item == self.maze[se]
+				# update variable if they do.
+				if north_bool and south_bool:
+					east = True
+
+			if not (north or east or west) and (nw and ne):
+				# grab quad nodes neighbors.
+				east_item = self.maze[ne].neighbors['east']
+				west_item = self.maze[nw].neighbors['west']
+				# affirm whether they share an edge.
+				east_bool = east_item == self.maze[ne]
+				west_bool = west_item == self.maze[nw]
+				# update variable if they do.
+				if east_bool and west_bool:
+					north = True
+
+			if not (south or east or west) and (sw and se):
+				# grab quad nodes neighbors.
+				east_item = self.maze[se].neighbors['east']
+				west_item = self.maze[sw].neighbors['west']
+				# affirm whether they share an edge.
+				east_bool = east_item == self.maze[se]
+				west_bool = west_item == self.maze[sw]
+				# update variable if they do.
+				if east_bool and west_bool:
+					south = True
+
+			glyph = get_glyph(north, south, east, west)
+			if location % string_length == 0:
+				amaze += '\n'
+			amaze += glyph
+			print(amaze)
+
+
 
 		return 'WiP'
 
@@ -172,3 +249,55 @@ class Maze():
 				# this spot is filled.
 				else:
 					pass
+
+
+def get_glyph(north, south, east, west):
+	'''
+	this function returns a maze drawing character.
+	'''
+	# == FIXME ==
+	# this function is awkwardly large.
+	# not sure where to put it semantically.
+	# == TODO ==
+	# these unicode characters must be converted!
+	# like emojis, its a code smell to have them.
+
+	# four passages
+	if north and south and east and west:
+		glyph = ' '
+	# three passages
+	elif south and east and west and not (north):
+		glyph = '╵'
+	elif north and east and west and not (south):
+		glyph = '╷'
+	elif north and south and west and not (east):
+		glyph = '╶'
+	elif north and south and east and not (west):
+		glyph = '╴'
+	# two passages
+	elif north and south and not (east or west):
+		glyph = '─'
+	elif north and east and not (south or west):
+		glyph = '┐'
+	elif north and west and not (south or east):
+		glyph = '┌'
+	elif south and east and not (north or west):
+		glyph = '┘'
+	elif south and west and not (north or east):
+		glyph = '└'
+	elif east and west and not (north or south):
+		glyph = '│'
+	# one passage
+	elif north and not (south or east or west):
+		glyph = '┬'
+	elif south and not (north or east or west):
+		glyph = '┴'
+	elif east and not (north or south or west):
+		glyph = '┤'
+	elif west and not (north or south or east):
+		glyph = '├'
+	# zero passages
+	elif not (north or south or east or west):
+		glyph = '┼'
+
+	return glyph
