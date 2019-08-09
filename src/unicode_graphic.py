@@ -1,31 +1,5 @@
 class UnicodeGraphic(Maze):
 
-
-	def __repr__(self, Maze):
-		string_length = self.length + 1
-		string_height = self.height + 1
-		string_maze = [None] * string_length * string_height
-		for location, character in enumerate(string_maze):
-			# get initial index
-			nw = location - string_length - 1
-			ne = location - string_length
-			sw = location - 1
-			se = location
-			# recalibrate to 'true self' indices
-			nw = nw - (nw // string_height)
-			ne = ne - (ne // string_height)
-			sw = sw - (sw // string_height)
-			se = se - (se // string_height)
-			print(
-				'---\n'
-				f'nw {nw}\n'
-				f'ne {ne}\n'
-				f'sw {sw}\n'
-				f'se {se}\n'
-			)
-			
-		return 'WiP'
-
 '''
 00 01 02 03
 04 05 06 07
