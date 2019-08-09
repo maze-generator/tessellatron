@@ -11,7 +11,7 @@ class Maze():
 		# set up the maze
 		self.generate_maze()
 
-	def __repr__(self, Maze):
+	def __repr__(self):
 		string_length = self.length + 1
 		string_height = self.height + 1
 		string_maze = [None] * string_length * string_height
