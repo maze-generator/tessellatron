@@ -4,23 +4,40 @@ import random
 from block import *
 from unicode_graphic import UnicodeGraphic
 
+
 class Maze():
-	def __init__(self, length, height):
+	def __init__(self, length=None, height=None):
+		'''
+		initialization will run maze generation.
+		maze generation can use one of several algorithms;
+		each one creates a stylistically different result.
+		'''
+		# check if length and height exist yet.
+		if not length or not height:
+			length = int(input('how many blocks wide maze?\t'))
+			height = int(input('how tall will the maze be?\t'))
+		# initialize maze parameters.
 		self.length = length
 		self.height = height
+		# initialize maze via a list with a number of slots.
 		self.maze = [None] * length * height
-		# set up the maze
+
+		# fill in maze array with pointers to maze blocks.
+		# blocks reference their neighbors, creating a graph.
 		self.generate_maze()
 
-	def __repr__(self):
-		type = input('pipes[p] or edges[e]?   ')
+	def __repr__(self, type='e'):
+		'''
+		string representation pulls from UnicodeGraphic.
+		this function is accessed when print is ran on a maze.
+		'''
+		# get graphics from graphics object.
 		graphic = UnicodeGraphic(self)
+		# select proper graphic technique here.
 		if type == 'p':
 			return graphic.pipe_maze()
 		if type == 'e':
 			return graphic.edge_maze()
-		else:
-			return self.__repr__()
 
 	def get_block(self, row, column):
 		'''
@@ -65,7 +82,7 @@ class Maze():
 			every_column.append(self.get_column(column))
 		return every_column
 
-	def generate_maze(self, root_pos = None):
+	def generate_maze(self, root_pos=None):
 		'''
 		generates a perfect maze.
 		its done recursively via a depth-first traversal tree.
@@ -123,7 +140,7 @@ class Maze():
 				# the neighbor must share atleast a row or a column;
 				# otherwise it isnt really a neighbor, is it.
 				if (root_pos_row == neighbor_row
-				or root_pos_column == neighbor_column):
+						or root_pos_column == neighbor_column):
 					return neighbor
 
 			# not a neighbor.

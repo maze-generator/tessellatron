@@ -17,16 +17,16 @@ class UnicodeGraphic():
 			west = True
 
 			# verify if there actually is a path each way.
-			if (block.neighbors['north'] == False 
+			if (block.neighbors['north'] == False
 			or block.neighbors['north'] is None):
 				north = False
-			if (block.neighbors['south'] == False 
+			if (block.neighbors['south'] == False
 			or block.neighbors['south'] is None):
 				south = False
-			if (block.neighbors['east'] == False 
+			if (block.neighbors['east'] == False
 			or block.neighbors['east'] is None):
 				east = False
-			if (block.neighbors['west'] == False 
+			if (block.neighbors['west'] == False
 			or block.neighbors['west'] is None):
 				west = False
 
@@ -51,7 +51,7 @@ class UnicodeGraphic():
 		graphic_length = self.length + 1
 		graphic_height = self.height + 1
 		graphic_maze = [None] * graphic_length * graphic_height
-		
+
 		# this thing preps for calculations with graphics.
 		for location, reference in enumerate(padded_maze):
 			# determine row and column
@@ -80,7 +80,6 @@ class UnicodeGraphic():
 			ne_loc = padded_maze[location + 1]
 			sw_loc = padded_maze[location + padded_length]
 			se_loc = padded_maze[location + padded_length + 1]
-
 
 			# initialize hallway passageways.
 			# if there is a passway, then its true, else false.
@@ -143,6 +142,7 @@ class UnicodeGraphic():
 			text += get_glyph(n_hall, s_hall, e_hall, w_hall, 'edge')
 		# return maze drawing.
 		return text
+
 
 def get_glyph(north, south, east, west, type):
 	'''
