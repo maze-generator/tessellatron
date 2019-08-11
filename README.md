@@ -8,10 +8,16 @@
 - Validate that the maze-graph model fits within 2D space.
 - Analyze maze difficulty based on number and depth of branches, twists, etc
 
+## Product Features
+- Depth-First Search maze generation.
+- Maze scrambler. (deletes `n` halls)
+- Unicode-drawn maze representation.
+- Maze solution finders.
+
 ## Sources
 
+[maze generation](http://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap)
 [imperfect mazes](https://gamedev.stackexchange.com/questions/75623/non-perfect-maze-generation-algorithm)
-
 
 ## Brainstorming
 

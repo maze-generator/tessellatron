@@ -178,3 +178,71 @@ class Maze():
 				# this spot is filled.
 				else:
 					pass
+
+	def aerate_maze(self, n=1):
+		'''
+		deletes n random walls to destroy trees.
+		this could make a maze easier or harder.
+		'''
+		# this will allow us to iterate through blocks.
+		# we want to find a block with a blocked neighbor.
+		unvisited = list(range(0, len(self.maze)))
+		random.shuffle(unvisited)
+
+		# loop through until its found
+		block_id = None
+		block = None
+		found = False
+		while not found:
+			# pick out a random block.
+			block_id = unvisited.pop()
+			block = self.maze[block_id]
+			# check its neighbors.
+			for compass in block.neighbors:
+				neighbor = block.neighbors[compass]
+				# see if it has a blocked off neighbor.
+				if block.neighbors[compass] is False:
+					found = True
+
+		# randomize compass order.
+		random_neighbors = list(block.neighbors.items())
+		random.shuffle(random_neighbors)
+
+		# neighbors
+		sibling_id = None
+		sibling = None
+		direction = None
+
+		# check its compass neighbors.
+		for compass, neighbor in random_neighbors:
+			if neighbor is False:
+				if compass == 'north':
+					sibling_id = block_id - self.length
+				elif compass == 'south':
+					sibling_id = block_id + self.length
+				elif compass == 'east':
+					sibling_id = block_id + 1
+				elif compass == 'west':
+					sibling_id = block_id - 1
+				sibling = self.maze[sibling_id]
+				break
+
+		# this is useful for doubly-linked vertices.
+		reverse_compass = {
+			'north': 'south',
+			'south': 'north',
+			'east': 'west',
+			'west': 'east',
+		}
+
+		# reverse reverses compass, a cardinal direction.
+		reverse = reverse_compass[compass]
+
+		# finally set the new connection!
+		block.neighbors[compass] = sibling
+		sibling.neighbors[reverse] = block
+
+		# keep going if n is more than 1.
+		n -= 1
+		if n > 0:
+			self.aerate_maze(n)

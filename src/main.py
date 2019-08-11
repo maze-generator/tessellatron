@@ -11,6 +11,10 @@ def main(length=None, height=None):
 	maze = Maze(length, height)
 	# output to terminal.
 	print(maze)
+	# airrate
+	maze.aerate_maze(5)
+	# print the modified maze.
+	print(maze)
 
 
 if __name__ == '__main__':
