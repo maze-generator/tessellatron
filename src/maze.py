@@ -1,7 +1,7 @@
 # python packages
 import random
 # internal packages
-from block import *
+from block import Block
 from unicode_graphic import UnicodeGraphic
 
 
@@ -72,7 +72,7 @@ class Maze():
 		for row in range(0, self.height):
 			every_row.append(self.get_row(row))
 		return every_row
-
+ 
 	def get_every_column(self):
 		'''
 		returns an array arrays; a list of every column.

@@ -2,7 +2,6 @@
 import sys
 # internal packages
 from maze import Maze
-from block import Block
 
 
 def main(length=None, height=None):

@@ -3,7 +3,13 @@ class UnicodeGraphic():
 		self.maze_object = maze_object
 
 	def pipe_maze(self):
-		# HACK reassigning self.
+		'''
+		a pipe-maze is much more simple to make.
+		a player must follow lines to complete the maze.
+		while less traditional, it is very easy to make.
+		each vertex determinse a unicode character.
+		'''
+		# HACK reassigning self for convenience.
 		self = self.maze_object
 
 		# initialize empty result string.
@@ -38,9 +44,17 @@ class UnicodeGraphic():
 		return result
 
 	def edge_maze(self):
+		'''
+		an edge-maze is a traditional-looking maze.
+		a player must follow the space between lines to finish.
+		however, this algorithm is also more complex.
+		it must look at 4 nodes to determine 1 unicode glyph.
+		'''
+		# HACK reassigning self for convenience.
 		self = self.maze_object
+
 		# store result item
-		text = ''
+		result = ''
 
 		# the padding helps analyze corners and boundaries.
 		padded_length = self.length + 2
@@ -89,6 +103,9 @@ class UnicodeGraphic():
 			e_hall = None
 			w_hall = None
 
+			# this section is looking at edge pieces.
+			# there is only empty space beyond an edge.
+			# these ternary operators determines this.
 			# north boundary
 			if (nw_loc is None
 			and ne_loc is None):
@@ -107,27 +124,30 @@ class UnicodeGraphic():
 				w_hall = True
 
 			# verify if there is a path in any direction.
+			# remember, this glyph represents a wall, not a space.
+			# this is checking each path adjacent to the wall.
+			# north path
 			if ne_loc is not None and nw_loc is not None:
 				east = self.maze[ne_loc]
 				west = self.maze[nw_loc]
 				if (east.neighbors['west'] == west
 				and west.neighbors['east'] == east):
 					n_hall = True
-
+			# south path
 			if se_loc is not None and sw_loc is not None:
 				east = self.maze[se_loc]
 				west = self.maze[sw_loc]
 				if (east.neighbors['west'] == west
 				and west.neighbors['east'] == east):
 					s_hall = True
-
+			# east path
 			if ne_loc is not None and se_loc is not None:
 				north = self.maze[ne_loc]
 				south = self.maze[se_loc]
 				if (north.neighbors['south'] == south
 				and south.neighbors['north'] == north):
 					e_hall = True
-
+			# west path
 			if nw_loc is not None and sw_loc is not None:
 				north = self.maze[nw_loc]
 				south = self.maze[sw_loc]
@@ -137,11 +157,11 @@ class UnicodeGraphic():
 
 			# add a line break if its an end-of-line.
 			if location % padded_length == 0 and location != 0:
-				text += '\n'
+				result += '\n'
 			# get unicode glyph symbol box-drawing element.
-			text += get_glyph(n_hall, s_hall, e_hall, w_hall, 'edge')
+			result += get_glyph(n_hall, s_hall, e_hall, w_hall, 'edge')
 		# return maze drawing.
-		return text
+		return result
 
 
 def get_glyph(north, south, east, west, type):
