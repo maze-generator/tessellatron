@@ -26,7 +26,7 @@ class Maze():
         # blocks reference their neighbors, creating a graph.
         self.generate_maze()
 
-    def __repr__(self, type='p'):
+    def __repr__(self, type='e'):
         '''
         string representation pulls from UnicodeGraphic.
         this function is accessed when print is ran on a maze.
