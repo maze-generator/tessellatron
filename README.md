@@ -9,10 +9,10 @@
 - Analyze maze difficulty based on number and depth of branches, twists, etc
 
 ## Product Features
-- Maze solution finders.
 - Depth-First Search maze generation.
 - Maze scrambler. (deletes `n` halls)
 - Unicode-drawn maze representation.
+- Maze solution finder, finds best path.
 
 ## Sources
 
