@@ -10,6 +10,7 @@
 1. view the output results in terminal.
 
 # Further Information
+## [Presentation Slides](https://docs.google.com/presentation/d/1J7tgyFyMymNs60c_-nkp1iJ_B9I-l3WTMHfsbggwCaw/edit?usp=sharing)
 ## Proposal
 - Create a solvable maze-graph object representation of a 2D-maze with 90˚ branches.
     - Ensure abstract model of the maze would fit within 2D space.
