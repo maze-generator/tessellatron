@@ -5,14 +5,14 @@
 	- Allow buckling-back (or cycles) in the maze.
 	- Generate less or more branches of greater or lesser depths when first making the maze.
 - Find the *top 3* shortest paths from start to finish on a maze-graph object.
-- Validate that the maze-graph model fits within 2D space.
+- Validate that the maze-graph model fits within ~~3D~~ 2D space. <small>*3D was a typo*</small>.
 - Analyze maze difficulty based on number and depth of branches, twists, etc
 
 ## Product Features
+- Maze solution finders.
 - Depth-First Search maze generation.
 - Maze scrambler. (deletes `n` halls)
 - Unicode-drawn maze representation.
-- Maze solution finders.
 
 ## Sources
 

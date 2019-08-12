@@ -26,7 +26,7 @@ class Maze():
 		# blocks reference their neighbors, creating a graph.
 		self.generate_maze()
 
-	def __repr__(self, type='e'):
+	def __repr__(self, type='p'):
 		'''
 		string representation pulls from UnicodeGraphic.
 		this function is accessed when print is ran on a maze.
@@ -102,7 +102,7 @@ class Maze():
 			# note our visited list exists as the maze property.
 
 		# first, fill the maze spot with an empty block.
-		self.maze[root_pos] = Block()
+		self.maze[root_pos] = Block(root_pos)
 
 		# grab the position id from each cardinal direction.
 		root_neighbors = {
@@ -178,6 +178,43 @@ class Maze():
 				# this spot is filled.
 				else:
 					pass
+
+	def solve_maze(self, start=None, finish=None):
+		# check for default parameters
+		if start == None:
+			start = self.maze[0]
+		if finish == None:
+			finish = self.maze[len(self.maze) - 1]
+
+		# visited list
+		visited = []
+		# HACK: used an array over an actual queue.
+		# this makes it a bit slower than it should actually be.
+		queue = [start]
+
+		while queue != []:
+			# dequeue block at front of queue
+			block = queue.pop()
+			# visit this block's data with given function
+			visited.append(block)
+			# if found, the array is actually the path to finish.
+			if block == finish:
+				return visited
+			# enqueue this block's neighbors, if they are filled.
+			for compass in block.neighbors:
+				neighbor = block.neighbors[compass]
+				# pass if visited
+				if neighbor in visited:
+					pass
+				# check if in
+				elif (neighbor is not None
+				and neighbor is not False):
+					queue.append(neighbor)
+				# pass if nothing
+				else:
+					pass
+		else:
+			return None
 
 	def aerate_maze(self, n=1):
 		'''

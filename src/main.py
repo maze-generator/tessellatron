@@ -12,10 +12,10 @@ def main(length=None, height=None):
 	# output to terminal.
 	print(maze)
 	# airrate
-	maze.aerate_maze(5)
+	maze.aerate_maze(30)
 	# print the modified maze.
 	print(maze)
-
+	print(maze.shortest_path_bfs(maze.maze[0], maze.maze[10]))
 
 if __name__ == '__main__':
 	# check if there are input parameters.
