@@ -4,24 +4,28 @@ import sys
 from maze import Maze
 
 
-def main(length=None, height=None):
+def main(length=None, height=None, aeration=None):
     # there will be a lot of recursion...
     sys.setrecursionlimit(20000)
     # create maze.
-    maze = Maze(length, height)
+    maze = Maze(length, height, aeration)
+    # airrate
+    print('---')
+    print('solution array:', maze.shortest_path_bfs())
+    print('---')
     # output to terminal.
     print(maze)
-    # airrate
-    maze.aerate_maze(5)
-    # print the modified maze.
-    print(maze)
-    print(maze.shortest_path_bfs())
 
 
 if __name__ == '__main__':
     # check if there are input parameters.
     # call main in either case - with different params.
-    if len(sys.argv) == 3:
+    if len(sys.argv) == 4:
+        length = int(sys.argv[1])
+        height = int(sys.argv[2])
+        aeration = int(sys.argv[3])
+        main(length, height, aeration)
+    elif len(sys.argv) == 3:
         length = int(sys.argv[1])
         height = int(sys.argv[2])
         main(length, height)

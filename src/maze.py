@@ -6,7 +6,7 @@ from unicode_graphic import UnicodeGraphic
 
 
 class Maze():
-    def __init__(self, length=None, height=None):
+    def __init__(self, length=None, height=None, aeration=0):
         '''
         initialization will run maze generation.
         maze generation can use one of several algorithms;
@@ -16,6 +16,7 @@ class Maze():
         if not length or not height:
             length = int(input('how many blocks wide maze?\t'))
             height = int(input('how tall will the maze be?\t'))
+            aeration = int(input('how aerated is this maze?\t'))
         # initialize maze parameters.
         self.length = length
         self.height = height
@@ -25,6 +26,9 @@ class Maze():
         # fill in maze array with pointers to maze blocks.
         # blocks reference their neighbors, creating a graph.
         self.generate_maze()
+
+        # aerate the maze
+        self.aerate_maze(aeration)
 
     def __repr__(self, type='e'):
         '''
