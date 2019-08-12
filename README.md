@@ -12,9 +12,9 @@
 # Further Information
 ## Proposal
 - Create a solvable maze-graph object representation of a 2D-maze with 90˚ branches.
-	- Ensure abstract model of the maze would fit within 2D space.
-	- Allow buckling-back (or cycles) in the maze.
-	- Generate less or more branches of greater or lesser depths when first making the maze.
+    - Ensure abstract model of the maze would fit within 2D space.
+    - Allow buckling-back (or cycles) in the maze.
+    - Generate less or more branches of greater or lesser depths when first making the maze.
 - Find the *top 3* shortest paths from start to finish on a maze-graph object.
 - Validate that the maze-graph model fits within ~~3D~~ 2D space. <small>*3D was a typo*</small>.
 - Analyze maze difficulty based on number and depth of branches, twists, etc
@@ -27,8 +27,8 @@
 
 ## Sources
 
-[maze generation](http://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap)
-[imperfect mazes](https://gamedev.stackexchange.com/questions/75623/non-perfect-maze-generation-algorithm)
+- [maze generation](http://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap)
+- [imperfect mazes](https://gamedev.stackexchange.com/questions/75623/non-perfect-maze-generation-algorithm)
 
 ## Brainstorming
 
