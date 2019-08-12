@@ -179,7 +179,7 @@ class Maze():
 				else:
 					pass
 
-	def shortest_path_bfs(self, A=None, B=None):
+	def shortest_path_bfs(self, paths=None, A=None, B=None):
 		'''
 		A = given starting node
 		B = given finishing node
@@ -193,8 +193,11 @@ class Maze():
 		'''
 		# set up default parameters.
 		if A is None or B is None:
-			a_loc = random.randint(0, 0)
-			b_loc = random.randint(0, len(self.maze) - 1)
+			# a_loc = random.randint(0, 0)
+			# b_loc = random.randint(0, len(self.maze) - 1)
+			a_loc = 0
+			b_loc = len(self.maze) - 1
+			print('find', b_loc)
 			A = self.maze[a_loc]
 			B = self.maze[b_loc]
 		# create vertex queue, and start with vertex A.
@@ -209,6 +212,7 @@ class Maze():
 			A = a_list[-1]
 			# check a condition.
 			if A == B:
+				print(len(a_list), 'steps')
 				return a_list
 			# add its neighbors to the queue.
 			for compass in A.neighbors:
@@ -227,7 +231,7 @@ class Maze():
 					c_list = a_list[:]
 					c_list.append(C)
 					queue.insert(0, c_list)
-		return []
+		return paths
 
 	def aerate_maze(self, n=1):
 		'''
