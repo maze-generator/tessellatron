@@ -179,42 +179,49 @@ class Maze():
 				else:
 					pass
 
-	def solve_maze(self, start=None, finish=None):
-		# check for default parameters
-		if start == None:
-			start = self.maze[0]
-		if finish == None:
-			finish = self.maze[len(self.maze) - 1]
-
-		# visited list
-		visited = []
-		# HACK: used an array over an actual queue.
-		# this makes it a bit slower than it should actually be.
-		queue = [start]
+	def shortest_path_bfs(self, A, B):
+		'''
+		A = given starting node
+		B = given finishing node
+		C = arbitrary iterated node
+		a_list = traversed list of nodes
+		b_list = traversed list of nodes
+		c_list = traversed list of nodes
+		queue:
+		visited: set of visited vertices
+		vertices: every single vertex in the graph
+		'''
+		# create vertex queue, and start with vertex A
+		queue = [[A]] # HACK not a real queue
+		# create visited set, and start with vertex A
+		visited = {A}
 
 		while queue != []:
-			# dequeue block at front of queue
-			block = queue.pop()
-			# visit this block's data with given function
-			visited.append(block)
-			# if found, the array is actually the path to finish.
-			if block == finish:
-				return visited
-			# enqueue this block's neighbors, if they are filled.
-			for compass in block.neighbors:
-				neighbor = block.neighbors[compass]
-				# pass if visited
-				if neighbor in visited:
+			# dequeue first vertex
+			# HACK change later for non-array
+			a_list = queue.pop()
+			A = a_list[-1]
+			# check a condition
+			if A == B:
+				return a_list
+			# add its neighbors to the queue
+			for compass in A.neighbors:
+				# get vertex from compass
+				C = A.neighbors[compass]
+				# pass if neighbor does not exist
+				if C is None or C is False:
 					pass
-				# check if in
-				elif (neighbor is not None
-				and neighbor is not False):
-					queue.append(neighbor)
-				# pass if nothing
+				# pass if neighbor has been visited already
+				elif C in visited:
+					pass
 				else:
-					pass
-		else:
-			return None
+					# visit the vertex
+					visited.add(C)
+					# HACK change later for non-array
+					c_list = a_list[:]
+					c_list.append(C)
+					queue.insert(0, c_list)
+		return []
 
 	def aerate_maze(self, n=1):
 		'''
