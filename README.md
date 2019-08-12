@@ -1,4 +1,15 @@
-# Square-Based Maze Generator
+# Square-Based Maze Generation
+## How To Use
+1. navigate to `src/` folder in terminal.
+1. run `python main.py`
+    - this can take additional parameters:
+        1. the length of the maze to be generated (int)
+        1. the width of the maze to be generated (int)
+        1. the aeration of the maze to be generated (int)
+1. follow any on-screen prompts for additional inputs.
+1. view the output results in terminal.
+
+# Further Information
 ## Proposal
 - Create a solvable maze-graph object representation of a 2D-maze with 90˚ branches.
 	- Ensure abstract model of the maze would fit within 2D space.
