@@ -179,7 +179,7 @@ class Maze():
 				else:
 					pass
 
-	def shortest_path_bfs(self, A, B):
+	def shortest_path_bfs(self, A=None, B=None):
 		'''
 		A = given starting node
 		B = given finishing node
@@ -191,33 +191,39 @@ class Maze():
 		visited: set of visited vertices
 		vertices: every single vertex in the graph
 		'''
-		# create vertex queue, and start with vertex A
-		queue = [[A]] # HACK not a real queue
-		# create visited set, and start with vertex A
+		# set up default parameters.
+		if A is None or B is None:
+			a_loc = random.randint(0, 0)
+			b_loc = random.randint(0, len(self.maze) - 1)
+			A = self.maze[a_loc]
+			B = self.maze[b_loc]
+		# create vertex queue, and start with vertex A.
+		queue = [[A]] # HACK not a real queue.
+		# create visited set, and start with vertex A.
 		visited = {A}
 
 		while queue != []:
-			# dequeue first vertex
-			# HACK change later for non-array
+			# dequeue first vertex.
+			# HACK change later for non-array.
 			a_list = queue.pop()
 			A = a_list[-1]
-			# check a condition
+			# check a condition.
 			if A == B:
 				return a_list
-			# add its neighbors to the queue
+			# add its neighbors to the queue.
 			for compass in A.neighbors:
-				# get vertex from compass
+				# get vertex from compass.
 				C = A.neighbors[compass]
-				# pass if neighbor does not exist
+				# pass if neighbor does not exist.
 				if C is None or C is False:
 					pass
-				# pass if neighbor has been visited already
+				# pass if neighbor has been visited already.
 				elif C in visited:
 					pass
 				else:
-					# visit the vertex
+					# visit the vertex.
 					visited.add(C)
-					# HACK change later for non-array
+					# HACK change later for non-array.
 					c_list = a_list[:]
 					c_list.append(C)
 					queue.insert(0, c_list)

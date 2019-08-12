@@ -15,7 +15,7 @@ def main(length=None, height=None):
 	maze.aerate_maze(30)
 	# print the modified maze.
 	print(maze)
-	print(maze.shortest_path_bfs(maze.maze[0], maze.maze[10]))
+	print(maze.shortest_path_bfs())
 
 if __name__ == '__main__':
 	# check if there are input parameters.
