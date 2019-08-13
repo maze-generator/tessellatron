@@ -6,7 +6,7 @@ from unicode_graphic import UnicodeGraphic
 
 
 class Maze():
-    def __init__(self, length=None, height=None, aeration=0):
+    def __init__(self, length=None, height=None, aeration=0, visuals='e'):
         '''
         initialization will run maze generation.
         maze generation can use one of several algorithms;
@@ -20,6 +20,7 @@ class Maze():
         # initialize maze parameters.
         self.length = length
         self.height = height
+        self.visuals = visuals
         # initialize maze via a list with a number of slots.
         self.maze = [None] * length * height
 
@@ -30,11 +31,12 @@ class Maze():
         # aerate the maze
         self.aerate_maze(aeration)
 
-    def __repr__(self, type='e'):
+    def __repr__(self):
         '''
         string representation pulls from UnicodeGraphic.
         this function is accessed when print is ran on a maze.
         '''
+        type = self.visuals
         # get graphics from graphics object.
         graphic = UnicodeGraphic(self)
         # select proper graphic technique here.
