@@ -16,7 +16,7 @@ class Maze():
         if not length or not height:
             length = int(input('how many blocks wide maze?\t'))
             height = int(input('how tall will the maze be?\t'))
-            aeration = int(input('how aerated is this maze?\t'))
+
         # initialize maze parameters.
         self.length = length
         self.height = height
@@ -72,7 +72,7 @@ class Maze():
 
     def get_every_row(self):
         '''
-        returns an array arrays; a list of every row.
+        returns an array of arrays; a list of every row.
         '''
         every_row = []
         for row in range(0, self.height):
@@ -81,7 +81,7 @@ class Maze():
 
     def get_every_column(self):
         '''
-        returns an array arrays; a list of every column.
+        returns an array of arrays; a list of every column.
         '''
         every_column = []
         for column in range(0, self.length):

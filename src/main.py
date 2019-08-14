@@ -4,7 +4,7 @@ import sys
 from maze import Maze
 
 
-def main(length=None, height=None, aeration=None, visuals='e'):
+def main(length=None, height=None, aeration=0, visuals='e'):
     # there will be a lot of recursion...
     sys.setrecursionlimit(20000)
     # create maze.
