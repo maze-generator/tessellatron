@@ -10,6 +10,10 @@ You can find the intensive proposal [here][proposal].
 ## License
 The code is released under the [MIT License][license].
 
+## React.js
+This project was bootstrapped with react.
+Check out its readme [here][react].
+
 <!--
 ## How To Use
 1. navigate to `src/` folder in terminal.
@@ -92,3 +96,4 @@ The code is released under the [MIT License][license].
 [instructions]: ./INSTRUCTIONS.md
 [proposal]: ./PROPOSAL.md
 [license]: ./LICENSE.md
+[react]: ./REACT.md
