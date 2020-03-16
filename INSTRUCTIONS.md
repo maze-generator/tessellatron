@@ -8,7 +8,7 @@ Choose a problem from the provided list or a different problem that can be model
 You must use at least 3 different algorithms to define at least 3 different solutions.
 
 > #### Example
-> Given a network of friends, find the biggest influencer&mdash;the largest group of friends > who all know each other&mdash;and the shortest path for a message to pass from person A to person B via friends.
+> Given a network of friends, find the biggest influencer&mdash;the largest group of friends who all know each other&mdash;and the shortest path for a message to pass from person A to person B via friends.
 
 ### Model the Problem
 Represent the problem and the desired solutions using graphs and graph theory.
