@@ -1,24 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
-function App() {
+const App = () => {
+	const [words, setWords] = useState('Hello, world')
 	return (
-		<div className="App">
-			<header className="App-header">
-				<p>
-					Edit <code>src/App.tsx</code> and save to reload.
-				</p>
-				<a
-					className="App-link"
-					href="https://reactjs.org"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Learn React
-				</a>
-			</header>
-		</div>
-	);
+		<>
+			<h1>Maze Generator</h1>
+			<p>
+				Generate your maze by clicking the button.
+				<br />
+				<input
+					type='button'
+					onClick={() => setWords(words + '!')}
+					value='Generate'
+				/>
+			</p>
+			<textarea
+				className='results'
+				value={words}
+				readOnly={true}
+			/>
+		</>
+	)
 }
 
 export default App;
