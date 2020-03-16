@@ -1,5 +1,13 @@
+# Maze Generator
+This app creates mazes for you to save as text.
+
+The project was created @Make School.
+You can find the project instructions here.
+
+This project was refactored during an intensive period.
+You can find the intensive guidelines here.
+
 <!--
-# Square-Based Maze Generation
 ## How To Use
 1. navigate to `src/` folder in terminal.
 1. run `python main.py`
