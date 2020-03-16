@@ -1,3 +1,4 @@
+<!--
 # Graphs Modeling Project ([`source`](https://github.com/Make-School-Courses/CS-2.2-Advanced-Recursion-and-Graphs/blob/master/Assignments/Graph-Project.md))
 
 ## Project Description
@@ -24,11 +25,11 @@ It's your turn to tackle a real world problem using your graph theory skills.  Y
 	- work on any data set with (n < 30) defined to meet problem specifications as defined in your documentation (README)
 	- Have a README that fully defines the problem scope and solutions
 	- available as a separate repository on GitHub.
-- **Discuss Scale:** What happens with your solutions at scale? (n >>> 30).  
+- **Discuss Scale:** What happens with your solutions at scale? (n >>> 30).
 	- Is your problem still solvable?
 	- What is the time complexity of the algorithms you are using?
-	- Discuss in your GitHub README and associated Summary.  
-	- If possible, implement a more scalable solution using tools like Dynamic Programming or by using a different algorithm that solves the same problem faster.   
+	- Discuss in your GitHub README and associated Summary.
+	- If possible, implement a more scalable solution using tools like Dynamic Programming or by using a different algorithm that solves the same problem faster.
 - **Blog or Present:** Create a presentation or blog post of your project according to the [Presentation Rubric](https://docs.google.com/document/d/1WTLcZNyvRGYDz5L8Kr8a0ILbFAyr92u85paoqGFjxPg/edit?usp=sharing) or [Blog Post Rubric](https://docs.google.com/document/d/1T1oqHFoRo0kl7mPUTFupmsoEkLYltKsVgtqyGKDaCgY/edit?usp=sharing).
 
 
@@ -42,3 +43,4 @@ It's your turn to tackle a real world problem using your graph theory skills.  Y
 - Job Scheduling
 - The Internet
 - [Applications of Graph Theory](https://en.wikipedia.org/wiki/Graph_theory#Applications)
+--->
