@@ -1,11 +1,14 @@
 # Maze Generator
 This app creates mazes for you to save as text.
 
-The project was created @Make School.
-You can find the project instructions here.
+The project was created [@MakeSchool][makeschool].
+You can find the project instructions [here][instructions].
 
 This project was refactored during an intensive period.
-You can find the intensive guidelines here.
+You can find the intensive proposal [here][proposal].
+
+## License
+The code is released under the [MIT License][license].
 
 <!--
 ## How To Use
@@ -84,3 +87,8 @@ You can find the intensive guidelines here.
 
 ```
 --->
+
+[makeschool]: https://www.makeschool.com/
+[instructions]: ./INSTRUCTIONS.md
+[proposal]: ./PROPOSAL.md
+[license]: ./LICENSE.md
