@@ -1,13 +1,11 @@
 class Cell {
-	id: number
-	neighbors: {[key: string]: number | null}
-	constructor (id: number) {
-		this.id = id
+	neighbors: {[key: string]:number|undefined|null}
+	constructor () {
 		this.neighbors = {
-			'north': null,
-			'south': null,
-			'east': null,
-			'west': null,
+			'north': undefined,
+			'south': undefined,
+			'east': undefined,
+			'west': undefined,
 		}
 	}
 }

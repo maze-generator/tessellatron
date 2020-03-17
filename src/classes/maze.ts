@@ -67,112 +67,140 @@ class Maze {
 		}
 		return results
 	}
-}
 
-generate = () => {
-	/*
-	generates a perfect maze.
-	its done recursively via a depth-first traversal tree.
-	this is a setter function; it does not return anything.
-	---
-	compass = cardinal direction
-	reverse = reversed cardinal direction
-	root_pos = root position
-	neighbor = neighbor position
-	*/
-	// Set (or reset) maze to an empty board.
-	const size = this.length * this.height
-	this.maze = new Array<number|undefined|null>(size)
-}
-
-/*
-	def generate_maze(self, root_pos=None):
-		if root_pos is None:
-			# root_pos starts at a random point in the maze.
-			# this doesnt infer a start/exit in the finished maze.
-			# one can always find a path from any point A to B;
-			# the program will decide these points later.
-			root_pos = random.randint(0, len(self.maze) - 1)
-			# note our visited list exists as the maze property.
-
-		# first, fill the maze spot with an empty block.
-		self.maze[root_pos] = Block(root_pos)
-
-		# grab the position id from each cardinal direction.
-		root_neighbors = {
-			'north': root_pos - self.length,
-			'south': root_pos + self.length,
-			'east': root_pos + 1,
-			'west': root_pos - 1,
+	generate (
+		rootIndex?:number
+	) {
+		/*
+		generates a perfect maze.
+		its done recursively via a depth-first traversal tree.
+		this is a setter function; it does not return anything.
+		---
+		compass = cardinal direction
+		reverse = reversed cardinal direction
+		root_pos = root position
+		neighbor = neighbor position
+		*/
+		// Set (or reset) maze to an empty board.
+		this.maze = new Array<Cell|undefined|null>(this.size)
+		if (rootIndex === undefined) {
+			// Generation starts at a random point in the maze;
+			// rootIndex doesn't infer a start/exit.
+			// In the finished maze, one can always find a path
+			// from any point A to B; that can be decided later.
+			rootIndex = Math.random() * (this.size - 1)
+			// note our visited list exists as the maze property.
 		}
 
-		# this is useful for doubly-linked vertices.
-		reverse_compass = {
+		// first, fill the maze spot with an empty block.
+		this.maze[rootIndex] = new Cell()
+
+		// grab the position id from each cardinal direction.
+		const neighboringIndices:{[key:string]:number} = {
+			'north': rootIndex - this.length,
+			'south': rootIndex + this.length,
+			'east': rootIndex + 1,
+			'west': rootIndex - 1,
+		}
+
+		// this is useful for doubly-linking vertices.
+		const reversedCompass:{[key:string]:string} = {
 			'north': 'south',
 			'south': 'north',
 			'east': 'west',
 			'west': 'east',
 		}
 
-		# this row and column will help validate neighbors.
-		root_pos_column = root_pos % self.length
-		root_pos_row = root_pos // self.length
+		// this row and column will help validate neighbors.
+		const rootColumn:number = rootIndex % this.length
+		const rootRow:number = Math.floor(rootIndex / this.length)
 
-		def validate(neighbor):
-			'''
+		const validate = (
+			neighborIndex:number
+		):boolean => {
+			/*
 			helper function.
 			removes neighbors that are invalid in some way,
 			such as being out of bounds or across the map.
-			'''
-			# calculate neighbors row and column position.
-			neighbor_column = neighbor % self.length
-			neighbor_row = neighbor // self.length
+			*/
+			// calculate neighbors row and column position.
+			const neighborColumn:number = neighborIndex % this.length
+			const neighborRow:number = Math.floor(neighborIndex / this.length)
 
-			# ensure neighbor's position lands within the grid.
-			if len(self.maze) > neighbor >= 0:
+			if (
+				// ensure neighbor's position lands within the grid.
+				(this.size > neighborIndex && neighborIndex >= 0)
+				// the neighbor must share atleast a row or a column.
+				// otherwise it isn't really a neighbor, is it?
+				&& (rootRow === neighborRow || rootColumn === neighborColumn)
+			) {
+				// its a neighbor!
+				return true
+			} else {
+				// not a neighbor.
+				return false
+			}
+		}
 
-				# the neighbor must share atleast a row or a column;
-				# otherwise it isnt really a neighbor, is it.
-				if (root_pos_row == neighbor_row
-						or root_pos_column == neighbor_column):
-					return neighbor
+		/*
+		// update neighbors with validate.
+		for (
+			let [compass, neighbor]:[string, number]
+			of Object.entries(neighboringIndices)
+		) {
+			if validate(neighbor)
+			// it is safe to update a compass's value in this loop;
+			// it isnt safe to update a compass in this loop.
+			neighboringIndices[compass] = validate(neighbor)
+		}
+		*/
 
-			# not a neighbor.
-			return None
+		// random shuffle helper function
+		// uses fisher yates randomizer
+		const shuffle = (
+			array:Array<any>,
+		):Array<any> => {
+			const keys = [...array] // create copy
+			const results = []
+			for (let i=0; i<keys.length; i++) {
+				const roll = Math.floor(Math.random() * keys.length)
+				results.push(keys[roll])
+				keys.splice(roll, 1)
+			}
+			return results
+		}
 
-		# update neighbors with validate.
-		for compass, neighbor in root_neighbors.items():
-			# it is safe to update a compass's value in this loop;
-			# it isnt safe to update a compass in this loop.
-			root_neighbors[compass] = validate(neighbor)
+		// randomize compass order
+		const randomCompass:Array<string> = shuffle(Object.keys(neighboringIndices))
 
-		# randomize compass order
-		random_neighbors = list(root_neighbors.items())
-		random.shuffle(random_neighbors)
+		randomCompass.forEach((direction:string):void => {
+			// gets the index of the neighbor via direction.
+			const neighbor:number = neighboringIndices[direction]
+			// reversal reverses direction, a cardinal direction.
+			const reversal:string = reversedCompass[direction]
 
-		for compass, neighbor in random_neighbors:
-			# reverse reverses compass, a cardinal direction.
-			reverse = reverse_compass[compass]
-			# neighbor is empty, representing a maze boundary.
-			if neighbor is None:
-				self.maze[root_pos].neighbors[compass] = None
+			// if validating the neighbor is false, then the
+			// neighbor is empty, representing a maze boundary.
+			if (validate(neighbor)) {
+				this.maze[rootIndex]['neighbors'][direction] = null
+			} else {
+				// neighbor is valid, representing a spot in maze.
+				if (this.maze[neighbor] === undefined) {
+					// this spot is empty! fill it up!
+					// generate a new maze block.
+					this.generate(neighbor)
+					// link up the net / graph / tree.
+					const this_block:Cell = this.maze[rootIndex]
+					const that_block:Cell = this.maze[neighbor]
+					this_block['neighbors'][direction] = that_block
+					that_block['neighbors'][reversal] = this_block
+				}
+			}
+		})
+	}
+}
 
-			# neighbor is an int, representing a spot in maze.
-			else:
-				# this spot is empty! fill it up!
-				if self.maze[neighbor] is None:
-					# generate a new maze block.
-					self.generate_maze(neighbor)
-					# link up the net / graph / tree.
-					this_block = self.maze[root_pos]
-					that_block = self.maze[neighbor]
-					this_block.neighbors[compass] = that_block
-					that_block.neighbors[reverse] = this_block
-
-				# this spot is filled.
-				else:
-					pass
-
+/*
 	def shortest_path_bfs(self, paths=None, A=None, B=None):
 		'''
 		A = given starting node
