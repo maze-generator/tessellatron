@@ -1,14 +1,15 @@
-/*
-class Block():
-	def __init__(self, id):
-		self.id = id
-		self.neighbors = {
-			'north': False,
-			'south': False,
-			'east': False,
-			'west': False,
+class Cell {
+	id: number
+	neighbors: {[key: string]: number | null}
+	constructor (id: number) {
+		this.id = id
+		this.neighbors = {
+			'north': null,
+			'south': null,
+			'east': null,
+			'west': null,
 		}
+	}
+}
 
-	def __repr__(self):
-		return str(self.id)
-*/
+export default Cell
