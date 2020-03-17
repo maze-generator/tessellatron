@@ -44,7 +44,7 @@ class Maze {
 		*/
 		const west:number = row * this.height
 		const east:number = west + this.length
-		return this.maze.slice(east, west)
+		return this.maze.slice(west, east)
 	}
 
 	getColumn (
