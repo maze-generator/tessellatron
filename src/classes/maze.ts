@@ -1,105 +1,92 @@
-/*
-# python packages
-import random
-# internal packages
-from block import Block
-from unicode_graphic import UnicodeGraphic
+import Cell from './cell'
 
 
-class Maze():
-	def __init__(self, length=None, height=None, aeration=0, visuals='e'):
-		'''
-		initialization will run maze generation.
-		maze generation can use one of several algorithms;
-		each one creates a stylistically different result.
-		'''
-		# check if length and height exist yet.
-		if not length or not height:
-			length = int(input('how many blocks wide maze?\t'))
-			height = int(input('how tall will the maze be?\t'))
+class Maze {
+	length:number
+	height:number
+	maze!:Array<Cell|undefined|null>
+	constructor (
+		length:number,
+		height:number,
+	) {
+		// initialize maze parameters.
+		this.length = length
+		this.height = height
 
-		# initialize maze parameters.
-		self.length = length
-		self.height = height
-		self.visuals = visuals
-		# initialize maze via a list with a number of slots.
-		self.maze = [None] * length * height
+		// fill in maze array with pointers to maze blocks.
+		// blocks reference their neighbors, creating a graph.
+		this.generate()
+	}
 
-		# fill in maze array with pointers to maze blocks.
-		# blocks reference their neighbors, creating a graph.
-		self.generate_maze()
+	get size ():number {
+		/*
+		returns the full size of the maze.
+		*/
+		return this.length * this.height
+	}
 
-		# aerate the maze
-		self.aerate_maze(aeration)
-
-	def __repr__(self):
-		'''
-		string representation pulls from UnicodeGraphic.
-		this function is accessed when print is ran on a maze.
-		'''
-		type = self.visuals
-		# get graphics from graphics object.
-		graphic = UnicodeGraphic(self)
-		# select proper graphic technique here.
-		if type == 'p':
-			return graphic.pipe_maze()
-		if type == 'e':
-			return graphic.edge_maze()
-
-	def get_block(self, row, column):
-		'''
+	getBlock (
+		row:number,
+		column:number,
+	):Cell|undefined|null {
+		/*
 		returns the cell located at given coordinates.
-		'''
-		position = row * self.height + column
-		block = self.maze[position]
-		return block
+		*/
+		const position = row * this.height + column
+		return this.maze[position]
+	}
 
-	def get_row(self, row):
-		'''
+	getRow (
+		row:number
+	):Array<Cell|undefined|null> {
+		/*
 		returns the nth full row.
-		'''
-		east = row * self.height
-		west = east + self.length
-		row = self.maze[east:west]
-		return row
+		*/
+		const west:number = row * this.height
+		const east:number = west + this.length
+		return this.maze.slice(east, west)
+	}
 
-	def get_column(self, column):
-		'''
+	getColumn (
+		column:number
+	):Array<Cell|undefined|null> {
+		/*
 		returns the nth full column.
-		'''
-		num_columns = self.length
-		column = self.maze[column::num_columns]
-		return column
+		*/
+		const results:Array<Cell|undefined|null> = []
+		for (
+			// start loop at column number.
+			let index:number = column;
+			// end loop when the index is out-of-bounds.
+			index < this.size;
+			// the column-count is also the index-incrementer.
+			index += this.length
+		) {
+			// add cell to results.
+			results.push(this.maze[index])
+		}
+		return results
+	}
+}
 
-	def get_every_row(self):
-		'''
-		returns an array of arrays; a list of every row.
-		'''
-		every_row = []
-		for row in range(0, self.height):
-			every_row.append(self.get_row(row))
-		return every_row
+generate = () => {
+	/*
+	generates a perfect maze.
+	its done recursively via a depth-first traversal tree.
+	this is a setter function; it does not return anything.
+	---
+	compass = cardinal direction
+	reverse = reversed cardinal direction
+	root_pos = root position
+	neighbor = neighbor position
+	*/
+	// Set (or reset) maze to an empty board.
+	const size = this.length * this.height
+	this.maze = new Array<number|undefined|null>(size)
+}
 
-	def get_every_column(self):
-		'''
-		returns an array of arrays; a list of every column.
-		'''
-		every_column = []
-		for column in range(0, self.length):
-			every_column.append(self.get_column(column))
-		return every_column
-
+/*
 	def generate_maze(self, root_pos=None):
-		'''
-		generates a perfect maze.
-		its done recursively via a depth-first traversal tree.
-		this is a setter function; it does not return anything.
-		---
-		compass = cardinal direction
-		reverse = reversed cardinal direction
-		root_pos = root position
-		neighbor = neighbor position
-		'''
 		if root_pos is None:
 			# root_pos starts at a random point in the maze.
 			# this doesnt infer a start/exit in the finished maze.
@@ -307,3 +294,24 @@ class Maze():
 		if n > 0:
 			self.aerate_maze(n)
 */
+
+
+export default Maze
+
+/***********************************************************
+This section describes footnotes & comments for the project.
+These should mostly contain bugs and todo items.
+
+== TODO ==
+Maze array should have a fixed size:
+size = maze length × maze height
+
+== TODO ==
+Maze class only supports 2D-Square mazes.
+Add support for ND-polyhedral mazes.
+
+== TODO ==
+Maze class only supports breadth-first traversal.
+Add support for other maze-generation algorithms.
+
+***********************************************************/
