@@ -1,3 +1,4 @@
+/*
 # python packages
 import random
 # internal packages
@@ -305,3 +306,4 @@ class Maze():
 		n -= 1
 		if n > 0:
 			self.aerate_maze(n)
+*/

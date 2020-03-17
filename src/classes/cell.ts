@@ -1,3 +1,4 @@
+/*
 class Block():
 	def __init__(self, id):
 		self.id = id
@@ -10,3 +11,4 @@ class Block():
 
 	def __repr__(self):
 		return str(self.id)
+*/
