@@ -68,6 +68,72 @@ class Maze {
 		return results
 	}
 
+	validNeighbors (
+		index1:number,
+		index2:number,
+	):boolean {
+		/*
+		helper function.
+		removes neighbors that are invalid in some way,
+		such as being out of bounds or across the map.
+		*/
+		// calculate neighbors row and column position.
+		const column1:number = index1 % this.length
+		const column2:number = index2 % this.length
+		const row1:number = Math.floor(index1 / this.length)
+		const row2:number = Math.floor(index2 / this.length)
+		let pass1:boolean = false
+		let pass2:boolean = false
+
+		const neighbors1:{[key:string]:number} = {
+			'north': index1 - this.length,
+			'south': index1 + this.length,
+			'east': index1 + 1,
+			'west': index1 - 1,
+		}
+
+		const neighbors2:{[key:string]:number} = {
+			'north': index2 - this.length,
+			'south': index2 + this.length,
+			'east': index2 + 1,
+			'west': index2 - 1,
+		}
+
+		if (
+			// the neighbors must share a row or a column.
+			// otherwise it isn't really a neighbor, is it?
+			(row1 === row2 || column1 === column2)
+			// ensure both positions land within the grid.
+			&& (0 <= index1 && index1 < this.size)
+			&& (0 <= index2 && index2 < this.size)
+		) {
+			// its a neighbor!
+		} else {
+			// not a neighbor.
+			return false
+		}
+
+		for (let neighbor of Object.values(neighbors1)) {
+			if (neighbor === index2) {
+				pass1 = true
+				break
+			}
+		}
+
+		for (let neighbor of Object.values(neighbors2)) {
+			if (neighbor === index1) {
+				pass2 = true
+				break
+			}
+		}
+
+		if (pass1 && pass2) {
+			return true
+		} else {
+			return false
+		}
+	}
+
 	generate (
 		rootIndex?:number
 	) {
@@ -115,33 +181,6 @@ class Maze {
 		const rootColumn:number = rootIndex % this.length
 		const rootRow:number = Math.floor(rootIndex / this.length)
 
-		const validate = (
-			neighborIndex:number
-		):boolean => {
-			/*
-			helper function.
-			removes neighbors that are invalid in some way,
-			such as being out of bounds or across the map.
-			*/
-			// calculate neighbors row and column position.
-			const neighborColumn:number = neighborIndex % this.length
-			const neighborRow:number = Math.floor(neighborIndex / this.length)
-
-			if (
-				// ensure neighbor's position lands within the grid.
-				(this.size > neighborIndex && neighborIndex >= 0)
-				// the neighbor must share atleast a row or a column.
-				// otherwise it isn't really a neighbor, is it?
-				&& (rootRow === neighborRow || rootColumn === neighborColumn)
-			) {
-				// its a neighbor!
-				return true
-			} else {
-				// not a neighbor.
-				return false
-			}
-		}
-
 		/*
 		// update neighbors with validate.
 		for (
@@ -154,21 +193,6 @@ class Maze {
 			neighboringIndices[compass] = validate(neighbor)
 		}
 		*/
-
-		// random shuffle helper function
-		// uses fisher yates randomizer
-		const shuffle = (
-			array:Array<any>,
-		):Array<any> => {
-			const keys = [...array] // create copy
-			const results = []
-			for (let i=0; i<keys.length; i++) {
-				const roll = Math.floor(Math.random() * keys.length)
-				results.push(keys[roll])
-				keys.splice(roll, 1)
-			}
-			return results
-		}
 
 		// randomize compass order
 		const randomCompass:Array<string> = shuffle(Object.keys(neighboringIndices))
