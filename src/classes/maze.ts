@@ -1,5 +1,5 @@
 import Cell from './cell'
-
+import shuffle from '../helpers/shuffle'
 
 class Maze {
 	length:number
@@ -15,7 +15,7 @@ class Maze {
 
 		// fill in maze array with pointers to maze blocks.
 		// blocks reference their neighbors, creating a graph.
-		this.generate()
+		this.generate(0)
 	}
 
 	get size ():number {
@@ -135,9 +135,9 @@ class Maze {
 	}
 
 	generate (
-		rootIndex?:number
+		rootIndex:number
 	) {
-		/*
+		/*******************************************************
 		generates a perfect maze.
 		its done recursively via a depth-first traversal tree.
 		this is a setter function; it does not return anything.
@@ -146,9 +146,10 @@ class Maze {
 		reverse = reversed cardinal direction
 		root_pos = root position
 		neighbor = neighbor position
-		*/
-		// Set (or reset) maze to an empty board.
-		this.maze = new Array<Cell|undefined|null>(this.size)
+		*******************************************************/
+		/*
+		// == TODO ==
+		// This code should be placed elsewhere...
 		if (rootIndex === undefined) {
 			// Generation starts at a random point in the maze;
 			// rootIndex doesn't infer a start/exit.
@@ -157,9 +158,11 @@ class Maze {
 			rootIndex = Math.random() * (this.size - 1)
 			// note our visited list exists as the maze property.
 		}
+		*/
 
-		// first, fill the maze spot with an empty block.
-		this.maze[rootIndex] = new Cell()
+		// first, fill the maze spot with an empty cell.
+		const CurrentCell:Cell = new Cell()
+		this.maze[rootIndex] = CurrentCell
 
 		// grab the position id from each cardinal direction.
 		const neighboringIndices:{[key:string]:number} = {
@@ -177,24 +180,7 @@ class Maze {
 			'west': 'east',
 		}
 
-		// this row and column will help validate neighbors.
-		const rootColumn:number = rootIndex % this.length
-		const rootRow:number = Math.floor(rootIndex / this.length)
-
-		/*
-		// update neighbors with validate.
-		for (
-			let [compass, neighbor]:[string, number]
-			of Object.entries(neighboringIndices)
-		) {
-			if validate(neighbor)
-			// it is safe to update a compass's value in this loop;
-			// it isnt safe to update a compass in this loop.
-			neighboringIndices[compass] = validate(neighbor)
-		}
-		*/
-
-		// randomize compass order
+		// randomize compass order.
 		const randomCompass:Array<string> = shuffle(Object.keys(neighboringIndices))
 
 		randomCompass.forEach((direction:string):void => {
@@ -203,24 +189,30 @@ class Maze {
 			// reversal reverses direction, a cardinal direction.
 			const reversal:string = reversedCompass[direction]
 
-			// if validating the neighbor is false, then the
-			// neighbor is empty, representing a maze boundary.
-			if (validate(neighbor)) {
-				this.maze[rootIndex]['neighbors'][direction] = null
+			// if validating the neighbor fails, then the
+			// neighbor is a maze boundary.
+			if (this.validNeighbors(rootIndex, neighbor)) {
+				// null represents such a boundary.
+				CurrentCell['neighbors'][direction] = null
+			// if the neighbor is valid, then the neighbor exists.
 			} else {
 				// neighbor is valid, representing a spot in maze.
 				if (this.maze[neighbor] === undefined) {
 					// this spot is empty! fill it up!
 					// generate a new maze block.
-					this.generate(neighbor)
+					const NeighborCell:Cell = this.generate(neighbor)
+
 					// link up the net / graph / tree.
-					const this_block:Cell = this.maze[rootIndex]
-					const that_block:Cell = this.maze[neighbor]
-					this_block['neighbors'][direction] = that_block
-					that_block['neighbors'][reversal] = this_block
+					CurrentCell['neighbors'][direction] = NeighborCell
+					NeighborCell['neighbors'][reversal] = CurrentCell
 				}
 			}
 		})
+
+		// this current cell is used in the stack upstream.
+		// if this is the root cell, the returned item
+		// simply might not be caught by anything.
+		return CurrentCell
 	}
 }
 
