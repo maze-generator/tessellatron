@@ -20,11 +20,30 @@ class Cell {
 		}
 	}
 
-	hasAnyPath ():boolean {
+	get boundaries ():{[key:string]:boolean} {
+		// boundaries is the opposite of pathways.
+		const boundaries:{[key:string]:boolean} = {}
+		// loop through pathways and reverse values for boundaries.
+		for (const [direction, isPath] of Object.entries(this.pathways)) {
+			boundaries[direction] = !isPath
+		}
+		// there you have it!
+		return boundaries
+	}
+
+	hasPath ():boolean {
 		// a direction is either a wall (false) or path (true).
-		// check if there's any paths in the values.
+		// check if there's any pathways in the values.
 		return Object.values(this.pathways).includes(true)
 		// `.values()` makes a list of booleans from pathways.
+		// `.includes()` creates a boolean, which is returned.
+	}
+
+	hasWall ():boolean {
+		// a direction is either a wall (true) or path (false).
+		// check if there's any boundaries in the values.
+		return Object.values(this.boundaries).includes(true)
+		// `.values()` makes a list of booleans from boundaries.
 		// `.includes()` creates a boolean, which is returned.
 	}
 
@@ -39,9 +58,10 @@ class Cell {
 		that:Cell,
 		direction:string,
 	):void {
-		// mirroring is the opposite of a direction.
+		// `mirroring` is the opposite of a direction.
 		// for example, the mirror of north is south.
 		const mirroring:string = this.compass[direction]
+		// set neighbors.
 		this.neighbors[direction] = that
 		that.neighbors[mirroring] = this
 	}
