@@ -1,13 +1,13 @@
-import DimensionalCompass from './dimensional-compass'
+import Compass from './compass'
 
 class Cell {
 	position:number
-	compass:DimensionalCompass
+	compass:Compass
 	pathways:{[key:string]:boolean}
 	neighbors:{[key:string]:Cell|undefined|null}
 	constructor (
 		position:number,
-		compass:DimensionalCompass,
+		compass:Compass,
 	) {
 		// initialize basic information.
 		this.position = position

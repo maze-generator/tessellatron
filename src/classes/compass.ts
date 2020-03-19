@@ -3,7 +3,7 @@ type OffsetIndexCallback = (
 	...argument:Array<number>
 ) => (number)
 
-class DimensionalCompass {
+class Compass {
 	private opposites:{[key:string]:string}
 	private modifiers:{[key:string]:OffsetIndexCallback}
 	constructor (
@@ -31,4 +31,43 @@ class DimensionalCompass {
 	}
 }
 
-export default DimensionalCompass
+const squareCompass:Compass = new Compass(
+	{
+		'west':'east',
+		'east':'west',
+		'north':'south',
+		'south':'north',
+	},
+	{
+		'west': (
+			index:number,
+			...dimensions:Array<number>
+		):number => {
+			return index - 1
+		},
+
+		'east': (
+			index:number,
+			...dimensions:Array<number>
+		):number => {
+			return index + 1
+		},
+
+		'north': (
+			index:number,
+			...dimensions:Array<number>
+		):number => {
+			return index - dimensions[0]
+		},
+
+		'south': (
+			index:number,
+			...dimensions:Array<number>
+		):number => {
+			return index + dimensions[0]
+		}
+	}
+)
+
+export default Compass
+export {squareCompass}
