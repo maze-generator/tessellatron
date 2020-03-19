@@ -1,10 +1,10 @@
 import Compass from './compass'
 
 class Cell {
-	position:number
-	compass:Compass
-	pathways:{[key:string]:boolean}
-	neighbors:{[key:string]:Cell|undefined|null}
+	public position:number
+	public pathways:{[key:string]:boolean}
+	public neighbors:{[key:string]:Cell|undefined|null}
+	private readonly compass:Compass
 	constructor (
 		position:number,
 		compass:Compass,
@@ -22,7 +22,7 @@ class Cell {
 		}
 	}
 
-	get boundaries ():{[key:string]:boolean} {
+	public get boundaries ():{[key:string]:boolean} {
 		// boundaries is the opposite of pathways.
 		const boundaries:{[key:string]:boolean} = {}
 		// loop through pathways and reverse values for boundaries.
@@ -33,7 +33,7 @@ class Cell {
 		return boundaries
 	}
 
-	hasPath ():boolean {
+	public hasPath ():boolean {
 		// a direction is either a wall (false) or path (true).
 		// check if there's any pathways in the values.
 		return Object.values(this.pathways).includes(true)
@@ -41,7 +41,7 @@ class Cell {
 		// `.includes()` creates a boolean, which is returned.
 	}
 
-	hasWall ():boolean {
+	public hasWall ():boolean {
 		// a direction is either a wall (true) or path (false).
 		// check if there's any boundaries in the values.
 		return Object.values(this.boundaries).includes(true)
@@ -49,14 +49,14 @@ class Cell {
 		// `.includes()` creates a boolean, which is returned.
 	}
 
-	hasNeighbor (that:Cell):boolean {
+	public hasNeighbor (that:Cell):boolean {
 		// check if this is a neighbor of that.
 		return Object.values(this.neighbors).includes(that)
 		// `.values()` makes a list of cells from neighbors.
 		// `.includes()` creates a boolean, which is returned.
 	}
 
-	joinWithNeighbor (
+	public joinWithNeighbor (
 		that:Cell,
 		direction:string,
 	):void {
