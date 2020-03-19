@@ -1,71 +1,29 @@
 import Cell from './cell'
-import shuffle from '../helpers/shuffle'
+import Adjacents from './adjacents'
 
 class Maze {
-	length:number
-	height:number
-	maze!:Array<Cell|undefined|null>
+	compass:Adjacents
+	dimensions:Array<number>
+	map:Array<Cell|undefined|null>
 	constructor (
-		length:number,
-		height:number,
+		compass:Adjacents,
+		...dimensions:Array<number>
 	) {
-		// initialize maze parameters.
-		this.length = length
-		this.height = height
-
-		// fill in maze array with pointers to maze blocks.
-		// blocks reference their neighbors, creating a graph.
-		this.generate(0)
+		// compass lets us know north/south/east/west.
+		this.compass = compass
+		this.dimensions = dimensions
+		this.map = new Array(this.size)
 	}
 
 	get size ():number {
 		/*
 		returns the full size of the maze.
 		*/
-		return this.length * this.height
-	}
-
-	getBlock (
-		row:number,
-		column:number,
-	):Cell|undefined|null {
-		/*
-		returns the cell located at given coordinates.
-		*/
-		const position = row * this.height + column
-		return this.maze[position]
-	}
-
-	getRow (
-		row:number
-	):Array<Cell|undefined|null> {
-		/*
-		returns the nth full row.
-		*/
-		const west:number = row * this.height
-		const east:number = west + this.length
-		return this.maze.slice(west, east)
-	}
-
-	getColumn (
-		column:number
-	):Array<Cell|undefined|null> {
-		/*
-		returns the nth full column.
-		*/
-		const results:Array<Cell|undefined|null> = []
-		for (
-			// start loop at column number.
-			let index:number = column;
-			// end loop when the index is out-of-bounds.
-			index < this.size;
-			// the column-count is also the index-incrementer.
-			index += this.length
-		) {
-			// add cell to results.
-			results.push(this.maze[index])
+		if (this.dimensions.length === 0) {
+			return 0
+		} else {
+			return this.dimensions.reduce((a, b) => a * b)
 		}
-		return results
 	}
 
 	validNeighbors (
