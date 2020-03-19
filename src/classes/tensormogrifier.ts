@@ -19,33 +19,30 @@ type Locator = (
 ) => (number)
 
 class Tensormogrifier {
-	public shape:string
 	private readonly dimensions:Array<number>
 	private readonly slicer:Slicer
-	private readonly triangulators:{[key:string]:Locator}
+	private readonly locators:{[key:string]:Locator}
 
 	constructor (
-		shape:string,
 		dimensions:Array<number>,
 		slicer:Slicer,
-		triangulators:{[key:string]:Locator},
+		locators:{[key:string]:Locator},
 	) {
-		this.shape = shape
 		this.dimensions = dimensions
 		this.slicer = slicer
-		this.triangulators = triangulators
+		this.locators = locators
 	}
 
 	public getNeighborIndex (
 		index:number,
 		direction:string,
 	):number {
-		const callback:Locator = this.triangulators[direction]
+		const callback:Locator = this.locators[direction]
 		return callback(index, this.dimensions)
 	}
 
 	public getSlicedTensor (
-		...positions:Array<number|undefined>,
+		...positions:Array<number|undefined>
 	):Tensor {
 		return this.slicer(positions, this.dimensions)
 	}
