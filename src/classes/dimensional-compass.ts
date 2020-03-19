@@ -1,46 +1,33 @@
+type OffsetIndexCallback = (
+	number:number,
+	...argument:Array<number>
+) => (number)
+
 class DimensionalCompass {
-	private dimensions:Array<[string, string]>
-	private reversals:{[key:string]:string}
+	private opposites:{[key:string]:string}
+	private modifiers:{[key:string]:OffsetIndexCallback}
 	constructor (
-		dimensions:Array<[string, string]> = [
-			['north', 'south'],
-			['west', 'east'],
-		]
+		opposites:{[key:string]:string},
+		modifiers:{[key:string]:OffsetIndexCallback},
 	) {
-		// `dimensions` helps describe whether an object is
-		// 2nd-dimensional, 3rd-dimensional, or Nth-dimensional.
-		this.dimensions = dimensions
-
-		// `reversals` describes polar opposites, or antipodes.
-		// this will populate when dimensions is looped through.
-		this.reversals = {}
-
-		// a `reversal` is the antipode of a direction.
-		// for example, the `reversal` of 'north' is 'south'.
-		for (const [direction, reversal] of this.dimensions) {
-			// add to reversals.
-			this.reversals[direction] = reversal
-			this.reversals[reversal] = direction
-		}
+		// `opposites` is an object with strings for key/vals.
+		// every direction has an opposite direction.
+		// for example, 'north' and 'south' are opposites.
+		// this `opposites['south']` would obtain 'north'.
+		this.opposites = opposites
+		this.modifiers = modifiers
 	}
 
 	public get directions():Set<string> {
 		// `directions` is a simple set of named vectors.
-		// luckily, these are exactly the keys of reversals!
-		return new Set(Object.keys(this.reversals))
+		// luckily, these are exactly the keys of `opposites`.
+		return new Set(Object.keys(this.opposites))
 	}
 
 	public reverse(direction:string):string {
-		return this.reversals[direction]
-	}
-
-	public dimension(direction:string):number {
-		for (const [index, pairing] of Object.entries(this.dimensions)) {
-			if (direction in pairing) {
-				return parseInt(index)
-			}
-		}
-		throw new Error('direction does not exist!')
+		// directly pulling `opposites` would be easy enough.
+		// ...but, it seems more semantic using a method here!
+		return this.opposites[direction]
 	}
 }
 
