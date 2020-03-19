@@ -1,11 +1,13 @@
+import DimensionalCompass from './dimensional-compass'
+
 class Cell {
 	position:number
-	compass:{[key:string]:string}
+	compass:DimensionalCompass
 	pathways:{[key:string]:boolean}
 	neighbors:{[key:string]:Cell|undefined|null}
 	constructor (
-		compass:{[key:string]:string},
 		position:number,
+		compass:DimensionalCompass,
 	) {
 		// initialize basic information.
 		this.position = position
@@ -14,7 +16,7 @@ class Cell {
 		// initialize pathways & neighbors.
 		this.pathways = {}
 		this.neighbors = {}
-		for (const direction in this.compass) {
+		for (const direction of this.compass.directions) {
 			this.pathways[direction] = false
 			this.neighbors[direction] = undefined
 		}
@@ -58,12 +60,12 @@ class Cell {
 		that:Cell,
 		direction:string,
 	):void {
-		// `mirroring` is the opposite of a direction.
-		// for example, the mirror of north is south.
-		const mirroring:string = this.compass[direction]
+		// a `reversal` is the antipode of a direction.
+		// for example, the `reversal` of 'north' is 'south'.
+		const reversal:string = this.compass.reverse(direction)
 		// set neighbors.
 		this.neighbors[direction] = that
-		that.neighbors[mirroring] = this
+		that.neighbors[reversal] = this
 	}
 }
 
