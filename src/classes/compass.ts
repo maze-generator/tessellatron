@@ -1,21 +1,14 @@
-type OffsetIndexCallback = (
-	number:number,
-	...argument:Array<number>
-) => (number)
-
 class Compass {
-	private opposites:{[key:string]:string}
-	private modifiers:{[key:string]:OffsetIndexCallback}
+	private readonly opposites:{[key:string]:string}
+
 	constructor (
 		opposites:{[key:string]:string},
-		modifiers:{[key:string]:OffsetIndexCallback},
 	) {
 		// `opposites` is an object with strings for key/vals.
 		// every direction has an opposite direction.
 		// for example, 'north' and 'south' are opposites.
 		// this `opposites['south']` would obtain 'north'.
 		this.opposites = opposites
-		this.modifiers = modifiers
 	}
 
 	public get directions():Set<string> {
@@ -31,43 +24,4 @@ class Compass {
 	}
 }
 
-const squareCompass:Compass = new Compass(
-	{
-		'west':'east',
-		'east':'west',
-		'north':'south',
-		'south':'north',
-	},
-	{
-		'west': (
-			index:number,
-			...dimensions:Array<number>
-		):number => {
-			return index - 1
-		},
-
-		'east': (
-			index:number,
-			...dimensions:Array<number>
-		):number => {
-			return index + 1
-		},
-
-		'north': (
-			index:number,
-			...dimensions:Array<number>
-		):number => {
-			return index - dimensions[0]
-		},
-
-		'south': (
-			index:number,
-			...dimensions:Array<number>
-		):number => {
-			return index + dimensions[0]
-		}
-	}
-)
-
 export default Compass
-export {squareCompass}
