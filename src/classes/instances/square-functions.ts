@@ -11,8 +11,7 @@ const squaredSlicer = (
 ):Tensor => {
 	dimensions.unshift(1)
 
-	const dimensionIterators:Array<number> = []
-	const validValues:Array<Array<number>> = []
+	const dimensionModulos:Array<number> = []
 
 	// this piece creates spacers or iterators.
 	// if we have dimensions of [5,4,3] our spacers are:
@@ -28,10 +27,23 @@ const squaredSlicer = (
 		):number => {
 			return a * b
 		})
-		dimensionIterators.push(iterator)
+		dimensionModulos.push(iterator)
 	})
-	const size:number = dimensionIterators[-1]
-	const validIndices:Array<boolean|undefined> = Array(size)
+	const size:number = dimensionModulos[-1]
+	const allIndices:Array<number> = [...Array(size).keys()]
+	const validIndices:Array<boolean> = []
+	allIndices.forEach((
+		index:number
+	):void => {
+		let fullyDivisible:boolean = true
+		positions.forEach((
+			_, index:number
+		):void => {
+			const position:number|undefined = positions[index]
+			const modulo:number = dimensionModulos[index]
+		})
+		validIndices[index] = true
+	})
 }
 
 const getSquaredFunctions = (

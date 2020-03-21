@@ -1,5 +1,5 @@
 import Cell from './cell'
-import Adjacents from './adjacents'
+import Adjacents from './tensormogrifier'
 
 class Maze {
 	compass:Adjacents
@@ -35,6 +35,8 @@ class Maze {
 		removes neighbors that are invalid in some way,
 		such as being out of bounds or across the map.
 		*/
+		// calculate positions.
+
 		// calculate neighbors row and column position.
 		const column1:number = index1 % this.length
 		const column2:number = index2 % this.length
@@ -120,7 +122,7 @@ class Maze {
 
 		// first, fill the maze spot with an empty cell.
 		const CurrentCell:Cell = new Cell()
-		this.maze[rootIndex] = CurrentCell
+		this.map[rootIndex] = CurrentCell
 
 		// grab the position id from each cardinal direction.
 		const neighboringIndices:{[key:string]:number} = {
@@ -155,7 +157,7 @@ class Maze {
 			// if the neighbor is valid, then the neighbor exists.
 			} else {
 				// neighbor is valid, representing a spot in maze.
-				if (this.maze[neighbor] === undefined) {
+				if (this.map[neighbor] === undefined) {
 					// this spot is empty! fill it up!
 					// generate a new maze block.
 					const NeighborCell:Cell = this.generate(neighbor)
