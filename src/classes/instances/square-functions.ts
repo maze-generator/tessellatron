@@ -4,47 +4,57 @@ import Tensormogrifier, {
 	Locator,
 } from "../tensormogrifier"
 
-
 const squaredSlicer = (
 	dimensions:Array<number>,
 	positions:Array<number|undefined>,
-):Tensor => {
-	dimensions.unshift(1)
-
-	const dimensionModulos:Array<number> = []
+):Array<number> => {
+	const size:number = dimensions.reduce((
+		a:number,
+		b:number,
+	):number => {
+		return a * b
+	})
+	const allCells:Array<number> = [...Array(size).keys()]
+	const validCells:Array<number> = []
 
 	// this piece creates spacers or iterators.
 	// if we have dimensions of [5,4,3] our spacers are:
 	// [1,5,20,60]. The final item = total # of positions.
-	positions.forEach((
-		position:number|undefined,
-		index:number,
-	):void =>{
-		const dimensionsThusFar:Array<number> = dimensions.slice(0, index)
-		const iterator:number = dimensionsThusFar.reduce((
-			a:number,
-			b:number,
-		):number => {
-			return a * b
-		})
-		dimensionModulos.push(iterator)
-	})
-	const size:number = dimensionModulos[-1]
-	const allIndices:Array<number> = [...Array(size).keys()]
-	const validIndices:Array<boolean> = []
-	allIndices.forEach((
-		index:number
+	allCells.forEach((
+		cellIndex:number
 	):void => {
-		let fullyDivisible:boolean = true
+		let isValid:boolean = true
+
 		positions.forEach((
-			_, index:number
+			currentPosition:number|undefined,
+			positionIndex:number,
 		):void => {
-			const position:number|undefined = positions[index]
-			const modulo:number = dimensionModulos[index]
+			if (currentPosition !== undefined) {
+				const currentDimension:number = dimensions[positionIndex]
+				const previousDimensions:Array<number> = dimensions.slice(0, positionIndex)
+				const magnitude:number = previousDimensions.reduce((
+					a:number,
+					b:number,
+				):number => {
+					return a * b
+				}, 1)
+
+				console.log(cellIndex, currentDimension, magnitude)
+
+				// check if the cell index is valid right now...
+				if (Math.floor(cellIndex / magnitude) % currentDimension !== currentPosition) {
+					isValid = false
+				}
+			}
 		})
-		validIndices[index] = true
+		if (isValid) {
+			validCells.push(cellIndex)
+		}
 	})
+	return validCells
 }
+
+const squaredLocators = {}
 
 const getSquaredFunctions = (
 	dimensions:Array<number>
