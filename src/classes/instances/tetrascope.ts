@@ -1,10 +1,11 @@
 import Gyroscope from "../gyroscope"
 import { Locator, Slicer } from "../gyroscope"
+import { tetragons } from '../compass'
 
 // squareSlicer takes in the map's dimensions,
 // and then the cell's coordinates.
 // it returns a slice of the desired coordinates.
-const squaredSlicer:Slicer = (
+const tetraSlicer:Slicer = (
 	dimensions:Array<number>,
 	positions:Array<number|undefined>,
 ):Array<number> => {
@@ -52,23 +53,22 @@ const squaredSlicer:Slicer = (
 	return validCells
 }
 
-const squaredLocator:Locator = (
+const tetraLocator:Locator = (
 	dimensions:Array<number>,
-	degree:number,
+	axis:number,
 ):number => {
-	return dimensions.slice(0, degree).reduce((a, b) => {
+	return dimensions.slice(0, axis).reduce((a, b) => {
 		return a * b
 	}, 1)
 }
 
-const squaredGyroscope = (
+export const tetrascope = (
 	dimensions:Array<number>
 ):Gyroscope => {
 	return new Gyroscope(
+		tetragons,
 		dimensions,
-		squaredSlicer,
-		squaredLocator,
+		tetraSlicer,
+		tetraLocator,
 	)
 }
-
-export default squaredGyroscope
