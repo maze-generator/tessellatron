@@ -1,8 +1,8 @@
-type Rose = {[key:string]:{[key:string]:number}}
+export type Rose = {[key:string]:{[key:string]:number}}
 
 export default class Compass {
 	private readonly rose:Rose
-	private readonly directions:Set<string>
+	public readonly directions:Set<string>
 	private readonly opposites:{[key:string]:string}
 	constructor (
 		rose:Rose
@@ -24,6 +24,11 @@ export default class Compass {
 		// thus `opposites['south']` would obtain 'north'.
 		this.opposites = {}
 
+
+		// == TODO ==
+		// this next spart is a bit of a mess.
+		// great place to refactor.
+
 		// the constructor  didn't explicitly state opposites,
 		// but they can be deduced from the rose object.
 		const reducer = (
@@ -38,7 +43,9 @@ export default class Compass {
 			map.set(vector, direction)
 			return map
 		}
-		const vectors:Map = rose.reduce(reducer, new Map())
+		const vectors:Map<number, string> = (
+			Object.keys(rose).reduce(reducer, new Map())
+		)
 		// axes is just temporarily used in this loop.
 		for (const direction in rose) {
 			// compute the vector of the direction.
@@ -46,7 +53,7 @@ export default class Compass {
 			const sign:number = rose[direction]['sign']
 			const vector:number = sign * axis
 			// invert the vector to get the reversed direction.
-			const reversed:string = vectors.get(-vector)
+			const reversed:string = vectors.get(-vector) || 'none'
 			this.opposites[direction] = reversed
 		}
 	}
@@ -68,7 +75,10 @@ export default class Compass {
 	}
 }
 
-export const squares:Rose = {
+// a tetragon is a four-sided polygon.
+// a quadrilateral is a four-angled polygon.
+// they mean the same thing.
+export const tetragons:Rose = {
 	'north': {
 		'sign': -1,
 		'axis': 1,
@@ -87,7 +97,8 @@ export const squares:Rose = {
 	},
 }
 
-export const cubes:Rose = {
+// a hexahedron is a six-sided polyhedron.
+export const hexahedrons:Rose = {
 	'upward': {
 		'sign': -1,
 		'axis': 2,
@@ -114,22 +125,23 @@ export const cubes:Rose = {
 	},
 }
 
+// a hexahedron is a six-sided polygon.
 export const hexagons:Rose = {
 	'northeast': {
 		'sign': -1,
-		'axis': 2, // HELP -> technically north/soth dimension?
+		'axis': 2, // HELP -> technically north/south dimension?
 	},
 	'southwest': {
 		'sign': +1,
-		'axis': 2, // HELP -> technically north/soth dimension?
+		'axis': 2, // HELP -> technically north/south dimension?
 	},
 	'northwest': {
 		'sign': -1,
-		'axis': 1, // HELP -> technically north/soth dimension?
+		'axis': 1, // HELP -> technically north/south dimension?
 	},
 	'southeast': {
 		'sign': +1,
-		'axis': 1, // HELP -> technically north/soth dimension?
+		'axis': 1, // HELP -> technically north/south dimension?
 	},
 	'east': {
 		'sign': +1,
