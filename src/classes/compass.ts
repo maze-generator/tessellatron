@@ -1,14 +1,13 @@
 type Rose = {[key:string]:{[key:string]:number}}
 
-class Compass {
+export default class Compass {
 	private readonly rose:Rose
-	private readonly opposites:{[key:string]:string}
 	private readonly directions:Set<string>
-
+	private readonly opposites:{[key:string]:string}
 	constructor (
 		rose:Rose
 	) {
-		// a compass rose is a useful analogy for this variable.
+		// a compass rose is a useful analogy for this property.
 		// the rose knows the names of the different directions,
 		// but does not know the context of those directions.
 		// this is because the rose itself is a drawing.
@@ -31,8 +30,8 @@ class Compass {
 			map:Map<number, string>,
 			direction:string,
 		):Map<number, string> => {
-			// compute the vector of the direction.
-			const axis:number = rose[direction]['axis']
+			// compute the `vector` of the direction.
+			const axis:number = rose[direction]['axis'] + 1
 			const sign:number = rose[direction]['sign']
 			const vector:number = sign * axis
 			// type `Map` is needed to allow numbers as keys.
@@ -43,7 +42,7 @@ class Compass {
 		// axes is just temporarily used in this loop.
 		for (const direction in rose) {
 			// compute the vector of the direction.
-			const axis:number = rose[direction]['axis']
+			const axis:number = rose[direction]['axis'] + 1
 			const sign:number = rose[direction]['sign']
 			const vector:number = sign * axis
 			// invert the vector to get the reversed direction.
@@ -69,4 +68,75 @@ class Compass {
 	}
 }
 
-export default Compass
+export const squares:Rose = {
+	'north': {
+		'sign': -1,
+		'axis': 1,
+	},
+	'south': {
+		'sign': +1,
+		'axis': 1,
+	},
+	'east': {
+		'sign': -1,
+		'axis': 0,
+	},
+	'west': {
+		'sign': +1,
+		'axis': 0,
+	},
+}
+
+export const cubes:Rose = {
+	'upward': {
+		'sign': -1,
+		'axis': 2,
+	},
+	'downward': {
+		'sign': +1,
+		'axis': 2,
+	},
+	'north': {
+		'sign': -1,
+		'axis': 1,
+	},
+	'south': {
+		'sign': +1,
+		'axis': 1,
+	},
+	'east': {
+		'sign': -1,
+		'axis': 0,
+	},
+	'west': {
+		'sign': +1,
+		'axis': 0,
+	},
+}
+
+export const hexagons:Rose = {
+	'northeast': {
+		'sign': -1,
+		'axis': 2, // HELP -> technically north/soth dimension?
+	},
+	'southwest': {
+		'sign': +1,
+		'axis': 2, // HELP -> technically north/soth dimension?
+	},
+	'northwest': {
+		'sign': -1,
+		'axis': 1, // HELP -> technically north/soth dimension?
+	},
+	'southeast': {
+		'sign': +1,
+		'axis': 1, // HELP -> technically north/soth dimension?
+	},
+	'east': {
+		'sign': +1,
+		'axis': 0,
+	},
+	'west': {
+		'sign': -1,
+		'axis': 0,
+	},
+}
