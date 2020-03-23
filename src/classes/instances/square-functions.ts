@@ -1,10 +1,10 @@
-import Tensormogrifier, {
-	Tensor,
-	Slicer,
-	Locator,
-} from "../tensormogrifier"
+import Gyroscope from "../gyroscope"
+import { Locator, Slicer } from "../gyroscope"
 
-const squaredSlicer = (
+// squareSlicer takes in the map's dimensions,
+// and then the cell's coordinates.
+// it returns a slice of the desired coordinates.
+const squaredSlicer:Slicer = (
 	dimensions:Array<number>,
 	positions:Array<number|undefined>,
 ):Array<number> => {
@@ -39,8 +39,6 @@ const squaredSlicer = (
 					return a * b
 				}, 1)
 
-				console.log(cellIndex, currentDimension, magnitude)
-
 				// check if the cell index is valid right now...
 				if (Math.floor(cellIndex / magnitude) % currentDimension !== currentPosition) {
 					isValid = false
@@ -54,16 +52,23 @@ const squaredSlicer = (
 	return validCells
 }
 
-const squaredLocators = {}
+const squaredLocator:Locator = (
+	dimensions:Array<number>,
+	degree:number,
+):number => {
+	return dimensions.slice(0, degree).reduce((a, b) => {
+		return a * b
+	}, 1)
+}
 
-const getSquaredFunctions = (
+const squaredGyroscope = (
 	dimensions:Array<number>
-):Tensormogrifier => {
-	return new Tensormogrifier(
+):Gyroscope => {
+	return new Gyroscope(
 		dimensions,
 		squaredSlicer,
-		squaredLocators,
+		squaredLocator,
 	)
 }
 
-export default getSquaredFunctions
+export default squaredGyroscope
