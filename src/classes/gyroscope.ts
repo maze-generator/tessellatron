@@ -1,14 +1,9 @@
-// a `Tensor` is a nth-dimensional array of numbers.
-// '0' is a valid `Tensor`, as is `[[2,3],[2,5]]`.
-export type Tensor = Array<Tensor>|number
-
-
 // a `Slicer` callback finds an nth-dimensional coordinate.
 // it returns a cell, a row of cells, or a plane of cells.
 export type Slicer = (
 	positions:Array<number|undefined>,
 	dimensions:Array<number>,
-) => (Tensor)
+) => Array<number>
 
 // a `Locator` callback finds neighboring addresses.
 // such an address takes on the form of an index.
@@ -16,9 +11,9 @@ export type Slicer = (
 export type Locator = (
 	index:number,
 	dimensions:Array<number>
-) => (number)
+) => number
 
-class Tensormogrifier {
+class Gyroscope {
 	private readonly dimensions:Array<number>
 	private readonly slicer:Slicer
 	private readonly locators:{[key:string]:Locator}
@@ -48,4 +43,4 @@ class Tensormogrifier {
 	}
 }
 
-export default Tensormogrifier
+export default Gyroscope
