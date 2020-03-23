@@ -49,7 +49,9 @@ class Cell {
 		// `.includes()` creates a boolean, which is returned.
 	}
 
-	public hasNeighbor (that:Cell):boolean {
+	public hasNeighbor (
+		that:Cell,
+	):boolean {
 		// check if this is a neighbor of that.
 		return Object.values(this.neighbors).includes(that)
 		// `.values()` makes a list of cells from neighbors.
@@ -60,12 +62,12 @@ class Cell {
 		that:Cell,
 		direction:string,
 	):void {
-		// a `reversal` is the antipode of a direction.
-		// for example, the `reversal` of 'north' is 'south'.
-		const reversal:string = this.compass.reverse(direction)
+		// `reversed` is the antipode of a direction.
+		// for example, `reversed` of 'north' is 'south'.
+		const reversed:string = this.compass.reverse(direction)
 		// set neighbors.
 		this.neighbors[direction] = that
-		that.neighbors[reversal] = this
+		that.neighbors[reversed] = this
 	}
 }
 

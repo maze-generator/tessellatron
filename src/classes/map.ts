@@ -1,40 +1,28 @@
-import Cell from './cell'
-import Adjacents from './tensormogrifier'
-
-class Maze {
-	compass:Adjacents
+export default class Map {
 	dimensions:Array<number>
 	map:Array<Cell|undefined|null>
-	constructor (
-		compass:Adjacents,
-		...dimensions:Array<number>
+	constructor(
+		dimensions:Array<number>,
 	) {
-		// compass lets us know north/south/east/west.
-		this.compass = compass
 		this.dimensions = dimensions
 		this.map = new Array(this.size)
 	}
 
 	get size ():number {
-		/*
-		returns the full size of the maze.
-		*/
-		if (this.dimensions.length === 0) {
-			return 0
-		} else {
-			return this.dimensions.reduce((a, b) => a * b)
-		}
+		return this.dimensions.reduce((a, b) => {
+			return a * b
+		})
 	}
+}
 
+/*
 	validNeighbors (
 		index1:number,
 		index2:number,
 	):boolean {
-		/*
-		helper function.
-		removes neighbors that are invalid in some way,
-		such as being out of bounds or across the map.
-		*/
+		// helper function.
+		// removes neighbors that are invalid in some way,
+		// such as being out of bounds or across the map.
 		// calculate positions.
 
 		// calculate neighbors row and column position.
@@ -97,16 +85,16 @@ class Maze {
 	generate (
 		rootIndex:number
 	) {
-		/*******************************************************
-		generates a perfect maze.
-		its done recursively via a depth-first traversal tree.
-		this is a setter function; it does not return anything.
-		---
-		compass = cardinal direction
-		reverse = reversed cardinal direction
-		root_pos = root position
-		neighbor = neighbor position
-		*******************************************************/
+		//
+		// generates a perfect maze.
+		// its done recursively via a depth-first traversal tree.
+		// this is a setter function; it does not return anything.
+		// ---
+		// compass = cardinal direction
+		// reverse = reversed cardinal direction
+		// root_pos = root position
+		// neighbor = neighbor position
+		//
 		/*
 		// == TODO ==
 		// This code should be placed elsewhere...
@@ -118,7 +106,7 @@ class Maze {
 			rootIndex = Math.random() * (this.size - 1)
 			// note our visited list exists as the maze property.
 		}
-		*/
+		*//*
 
 		// first, fill the maze spot with an empty cell.
 		const CurrentCell:Cell = new Cell()
@@ -298,9 +286,6 @@ class Maze {
 		if n > 0:
 			self.aerate_maze(n)
 */
-
-
-export default Maze
 
 /***********************************************************
 This section describes footnotes & comments for the project.
