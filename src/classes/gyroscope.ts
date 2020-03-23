@@ -15,7 +15,7 @@ export type Locator = (
 	index:number,
 ) => number
 
-class Gyroscope extends Compass {
+export default class Gyroscope extends Compass {
 	private readonly dimensions:Array<number>
 	private readonly slicer:Slicer
 	private readonly locator:Locator
@@ -31,19 +31,19 @@ class Gyroscope extends Compass {
 		this.locator = locator
 	}
 
-	// public getNeighborIndex (
-	// 	index:number,
-	// 	direction:string,
-	// ):number {
-	// 	const callback:Locator = this.locators[direction]
-	// 	return callback(index, this.dimensions)
-	// }
+	public neighborOf (
+		index:number,
+		direction:string,
+	):number {
+		const axis:number = this.axisOf(direction)
+		const sign:number = this.signOf(direction)
+		const delta:number = this.locator(this.dimensions, axis)
+		return index + (sign * delta)
+	}
 
-	// public getSlicedTensor (
-	// 	...positions:Array<number|undefined>
-	// ):Tensor {
-	// 	return this.slicer(positions, this.dimensions)
-	// }
+	public sliceAt (
+		coordinates:Array<number|undefined>
+	):Array<number> {
+		return this.slicer(this.dimensions, coordinates)
+	}
 }
-
-export default Gyroscope
