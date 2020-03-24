@@ -1,13 +1,13 @@
 import Compass from './compass'
 
-class Cell {
+export default class Cell {
 	public position:number
 	public pathways:{[key:string]:boolean}
 	public neighbors:{[key:string]:Cell|undefined|null}
 	private readonly compass:Compass
 	constructor (
-		position:number,
 		compass:Compass,
+		position:number,
 	) {
 		// initialize basic information.
 		this.position = position
@@ -70,5 +70,3 @@ class Cell {
 		that.neighbors[reversed] = this
 	}
 }
-
-export default Cell
