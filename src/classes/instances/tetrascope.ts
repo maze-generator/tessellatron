@@ -1,6 +1,11 @@
-import Gyroscope from "../gyroscope"
-import { Slicer } from "../gyroscope"
-import { tetragons } from '../compass'
+import { TetragonCompass } from '../compass'
+
+// a `Slicer` callback finds an nth-dimensional coordinate.
+// it returns a cell, a row of cells, or a plane of cells.
+export type Slicer = (
+	dimensions:Array<number>,
+	positions:Array<number|undefined>,
+) => Array<number>
 
 // squareSlicer takes in the map's dimensions,
 // and then the cell's coordinates.
@@ -57,7 +62,7 @@ export const tetrascope = (
 	dimensions:Array<number>
 ):Gyroscope => {
 	return new Gyroscope(
-		tetragons,
+		TetragonCompass,
 		dimensions,
 		tetraSlicer,
 	)
