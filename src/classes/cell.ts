@@ -69,4 +69,19 @@ export default class Cell {
 		this.neighbors[direction] = that
 		that.neighbors[reversed] = this
 	}
+
+	public pathWithNeighbor (
+		that:Cell,
+		direction:string,
+	):void {
+		// `reversed` is the antipode of a direction.
+		// for example, `reversed` of 'north' is 'south'.
+		const reversed:string = this.compass.reverse(direction)
+		// set pathways.
+		this.pathways[direction] = true
+		that.pathways[reversed] = true
+	}
+
 }
+
+// valid connected neighbors -> neighbor and true
