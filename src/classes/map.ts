@@ -1,17 +1,20 @@
-export default class Map {
+import Compass, {TetragonCompass} from './compass'
+import Cell from './cell'
+
+export default class CellMap {
 	dimensions:Array<number>
+	compass:Compass
+	size:number
 	map:Array<Cell|undefined|null>
 	constructor(
 		dimensions:Array<number>,
 	) {
 		this.dimensions = dimensions
-		this.map = new Array(this.size)
-	}
-
-	get size ():number {
-		return this.dimensions.reduce((a, b) => {
+		this.compass = new TetragonCompass(dimensions)
+		this.size = dimensions.reduce((a, b) => {
 			return a * b
 		})
+		this.map = new Array(this.size)
 	}
 }
 
