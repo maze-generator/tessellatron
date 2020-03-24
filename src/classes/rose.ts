@@ -1,12 +1,13 @@
-export default class Rose {
+export default class Compass {
 	protected readonly magnitudes:Array<number>
 	protected readonly rose:{[key:string]:number}
 	constructor (
-		protected readonly dimensions:Array<number>
+		dimensions:Array<number>
 	) {
 		// create a multiplier affect for magnitudes.
 		const magnitudes = []
 		const multiplier = (a:number, b:number):void => a * b
+		// loop through the size of each dimension.
 		for (const index in Object.keys(dimensions)) {
 			magnitudes.push(
 				dimensions.slice(0, index).reduce(multiplier, 1)
@@ -15,7 +16,7 @@ export default class Rose {
 		this.magnitudes = magnitudes
 	}
 
-	private set rose (
+	protected set rose (
 		rose:{[key:string]:number}
 	):{[key:string]:number} {
 		// `directions` is a simple set of named vectors.
@@ -35,12 +36,10 @@ export default class Rose {
 			map.set(rose[direction], direction)
 			return map
 		}
-
 		const vectors:Map<number, string> = (
 			// set the `vectors` into a map with reduce.
 			Object.keys(rose).reduce(reducer, new Map())
 		)
-
 		// initialize opposites.
 		this.opposites = {}
 		for (const direction in this.directions) {
@@ -64,8 +63,7 @@ export default class Rose {
 // a tetragon is a four-sided polygon.
 // a quadrilateral is a four-angled polygon.
 // they mean the same thing.
-export class TetragonRose extends Rose {
-	private readonly magnitudes:Array<number>
+export class TetragonCompass extends Compass {
 	constructor (
 		dimensions:Array<number>
 	) {
@@ -83,8 +81,7 @@ export class TetragonRose extends Rose {
 }
 
 // a hexahedron is a six-sided polyhedron.
-export class HexahedronRose extends Rose {
-	private readonly magnitudes:Array<number>
+export class HexahedronCompass extends Compass {
 	constructor (
 		dimensions:Array<number>
 	) {
@@ -104,8 +101,7 @@ export class HexahedronRose extends Rose {
 }
 
 // a hexahedron is a six-sided polygon.
-export class HexagonRose extends Rose {
-	private readonly magnitudes:Array<number>
+export class HexagonCompass extends Compass {
 	constructor (
 		dimensions:Array<number>
 	) {
@@ -126,7 +122,7 @@ export class HexagonRose extends Rose {
 
 /***************************NOTES***************************
 ==NOTE==
-- `Rose` is a default class so that it can be typecast.
+- `Compass` is a default class so that it can be typecast.
 
 ==TODO==
 - the for loop in the primary class is suboptimal.
