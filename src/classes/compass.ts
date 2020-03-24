@@ -75,6 +75,27 @@ export default class Compass {
 	}
 }
 
+const triangulator = (
+	dimensions:Array<number>,
+	index:number,
+):Array<number> => {
+	const coordinates:Array<number> = []
+	dimensions.forEach((
+		currentDimension:number,
+		positionIndex:number,
+	):void => {
+		const leadingDimensions:Array<number> = dimensions.slice(0, positionIndex)
+		const magnitude:number = leadingDimensions.reduce((
+			a:number,
+			b:number,
+		):number => {
+			return a * b
+		}, 1)
+		const coordinate:number = Math.floor(index / magnitude) % currentDimension
+		coordinates.push(coordinate)
+	})
+	return coordinates
+}
 
 
 // tetragonSlicer takes in the map's dimensions,
@@ -153,6 +174,12 @@ export class TetragonCompass extends Compass {
 		coordinates:Array<number|undefined>
 	):Array<number> {
 		return tetragonSlicer(this._dimensions, coordinates)
+	}
+
+	triangulator (
+		index:number
+	):Array<number> {
+		return triangulator(this._dimensions, index)
 	}
 }
 
