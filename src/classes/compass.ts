@@ -1,4 +1,4 @@
-export type Rose = {[key:string]:{[key:string]:number}}
+export type Rose = {string:number[]}
 
 export default class Compass {
 	private readonly rose:Rose
@@ -79,76 +79,28 @@ export default class Compass {
 // a quadrilateral is a four-angled polygon.
 // they mean the same thing.
 export const tetragons:Rose = {
-	'north': {
-		'sign': -1,
-		'axis': 1,
-	},
-	'south': {
-		'sign': +1,
-		'axis': 1,
-	},
-	'east': {
-		'sign': -1,
-		'axis': 0,
-	},
-	'west': {
-		'sign': +1,
-		'axis': 0,
-	},
+	'north': [ 0,-1],
+	'south': [ 0, 1],
+	'east':  [ 1, 0],
+	'west':  [-1, 0],
 }
 
 // a hexahedron is a six-sided polyhedron.
 export const hexahedrons:Rose = {
-	'upward': {
-		'sign': -1,
-		'axis': 2,
-	},
-	'downward': {
-		'sign': +1,
-		'axis': 2,
-	},
-	'north': {
-		'sign': -1,
-		'axis': 1,
-	},
-	'south': {
-		'sign': +1,
-		'axis': 1,
-	},
-	'east': {
-		'sign': -1,
-		'axis': 0,
-	},
-	'west': {
-		'sign': +1,
-		'axis': 0,
-	},
+	'above': [ 0, 0,-1],
+	'below': [ 0, 0, 1],
+	'north': [ 0,-1, 0],
+	'south': [ 0, 1, 0],
+	'east':  [-1, 0, 0],
+	'west':  [ 1, 0, 0],
 }
 
 // a hexahedron is a six-sided polygon.
 export const hexagons:Rose = {
-	'northeast': {
-		'sign': -1,
-		'axis': 2, // HELP -> technically north/south dimension?
-	},
-	'southwest': {
-		'sign': +1,
-		'axis': 2, // HELP -> technically north/south dimension?
-	},
-	'northwest': {
-		'sign': -1,
-		'axis': 1, // HELP -> technically north/south dimension?
-	},
-	'southeast': {
-		'sign': +1,
-		'axis': 1, // HELP -> technically north/south dimension?
-	},
-	'east': {
-		'sign': +1,
-		'axis': 0,
-	},
-	'west': {
-		'sign': -1,
-		'axis': 0,
-	},
+	'northwest': [ 0,-1],
+	'southeast': [ 0, 1],
+	'northeast': [ 1,-1],
+	'southwest': [-1, 1],
+	'east':      [-1, 0],
+	'west':      [ 1, 0],
 }

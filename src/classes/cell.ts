@@ -49,7 +49,7 @@ class Cell {
 		// `.includes()` creates a boolean, which is returned.
 	}
 
-	public hasNeighbor (
+	public isNeighborsWith (
 		that:Cell,
 	):boolean {
 		// check if this is a neighbor of that.
