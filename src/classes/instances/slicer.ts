@@ -4,34 +4,35 @@ import { TetragonCompass } from '../compass'
 // it returns a cell, a row of cells, or a plane of cells.
 export type Slicer = (
 	dimensions:Array<number>,
-	positions:Array<number|undefined>,
+	coordinates:Array<number|undefined>,
 ) => Array<number>
 
-// squareSlicer takes in the map's dimensions,
+// tetragonSlicer takes in the map's dimensions,
 // and then the cell's coordinates.
 // it returns a slice of the desired coordinates.
-const tetraSlicer:Slicer = (
-	dimensions:Array<number>,
-	positions:Array<number|undefined>,
+const tetragonSlicer = (
+	coordinates:Array<number|undefined>,
 ):Array<number> => {
+
 	const size:number = dimensions.reduce((
 		a:number,
 		b:number,
 	):number => {
 		return a * b
 	})
+
 	const allCells:Array<number> = [...Array(size).keys()]
 	const validCells:Array<number> = []
 
 	// this piece creates spacers or iterators.
 	// if we have dimensions of [5,4,3] our spacers are:
-	// [1,5,20,60]. The final item = total # of positions.
+	// [1,5,20,60]. The final item = total # of coordinates.
 	allCells.forEach((
 		cellIndex:number
 	):void => {
 		let isValid:boolean = true
 
-		positions.forEach((
+		coordinates.forEach((
 			currentPosition:number|undefined,
 			positionIndex:number,
 		):void => {
@@ -56,14 +57,4 @@ const tetraSlicer:Slicer = (
 		}
 	})
 	return validCells
-}
-
-export const tetrascope = (
-	dimensions:Array<number>
-):Gyroscope => {
-	return new Gyroscope(
-		TetragonCompass,
-		dimensions,
-		tetraSlicer,
-	)
 }
