@@ -79,28 +79,28 @@ export default class Compass {
 // a quadrilateral is a four-angled polygon.
 // they mean the same thing.
 export const tetragons:Rose = {
-	'north': [ 0,-1],
-	'south': [ 0, 1],
-	'east':  [ 1, 0],
-	'west':  [-1, 0],
+	'north': (x:number, y:number):number => -y,
+	'south': (x:number, y:number):number => +y,
+	'east':  (x:number, y:number):number => +x,
+	'west':  (x:number, y:number):number => -x,
 }
 
 // a hexahedron is a six-sided polyhedron.
 export const hexahedrons:Rose = {
-	'above': [ 0, 0,-1],
-	'below': [ 0, 0, 1],
-	'north': [ 0,-1, 0],
-	'south': [ 0, 1, 0],
-	'east':  [-1, 0, 0],
-	'west':  [ 1, 0, 0],
+	'above': (x:number, y:number, z:number) => -z,
+	'below': (x:number, y:number, z:number) => +z,
+	'north': (x:number, y:number, z:number) => -y,
+	'south': (x:number, y:number, z:number) => +y,
+	'east':  (x:number, y:number, z:number) => -x,
+	'west':  (x:number, y:number, z:number) => +x,
 }
 
 // a hexahedron is a six-sided polygon.
 export const hexagons:Rose = {
-	'northwest': [ 0,-1],
-	'southeast': [ 0, 1],
-	'northeast': [ 1,-1],
-	'southwest': [-1, 1],
-	'east':      [-1, 0],
-	'west':      [ 1, 0],
+	'northwest': (x:number, y:number):number => -y,
+	'southeast': (x:number, y:number):number => +y,
+	'northeast': (x:number, y:number):number => x - y,
+	'southwest': (x:number, y:number):number => y - x,
+	'east': (x:number, y:number):number => -x,
+	'west': (x:number, y:number):number => +x,
 }
