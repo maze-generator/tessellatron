@@ -19,6 +19,12 @@ export default class Maze {
 		this.generate(0)
 	}
 
+	validIndex (
+		index:number,
+	):boolean {
+		return 0 <= index && index < this.size
+	}
+
 	validNeighbors (
 		index1:number,
 		index2:number,
@@ -26,10 +32,8 @@ export default class Maze {
 		// helper function.
 		// removes neighbors that are invalid in some way,
 		// such as being out of bounds or across the map.
-		if (
-			index1 > this.size
-			|| index2 > this.size
-		) {
+		if (!this.validIndex(index1)
+		|| !this.validIndex(index2)) {
 			return false
 		}
 
@@ -80,28 +84,29 @@ export default class Maze {
 		randomCompass.forEach((direction:string):void => {
 			// gets the index of the neighbor via direction.
 			const neighborIndex:number = this.compass.offset(index)[direction]
-			// reversal reverses direction, a cardinal direction.
-			const reversal:string = this.compass.opposites[direction]
 
 			// if validating the neighborIndex fails, then the
 			// neighborIndex is a maze boundary.
-			if (this.validNeighbors(index, neighborIndex)) {
+			if (!this.validIndex(neighborIndex)) {
 				// null represents such a boundary.
 				currentCell['neighbors'][direction] = null
 			// if the neighborIndex is valid, then the neighborIndex exists.
-			} else {
+			} else if (this.map[neighborIndex] === undefined) {
 				// neighborIndex is valid, representing a spot in maze.
-				if (this.map[neighborIndex] === undefined) {
-					// this spot is empty! fill it up!
-					// generate a new maze block.
-					const neighborCell:Cell = this.generate(neighborIndex)
+				// this spot is empty! fill it up!
+				// generate a new maze block.
+				const neighborCell:Cell = this.generate(neighborIndex)
 
-					// link up the net / graph / tree.
-					currentCell['neighbors'][direction] = neighborCell
-					neighborCell['neighbors'][reversal] = currentCell
-					// currentCell['pathways'][direction] = true
-					// neighborCell['pathways'][reversal] = true
-				}
+				// link up the net / graph / tree.
+				currentCell.joinWithNeighbor(neighborCell, direction)
+				currentCell.pathWithNeighbor(neighborCell, direction)
+			} else if (this.map[neighborIndex] instanceof Cell) {
+				// this spot is not empty.
+				// @ts-ignore
+				const neighborCell:Cell = this.map[neighborIndex]
+				// in fact, the two cells should not be linked up!
+				// that is represented by path, not join.
+				currentCell.joinWithNeighbor(neighborCell, direction)
 			}
 		})
 
