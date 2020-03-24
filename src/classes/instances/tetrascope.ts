@@ -1,5 +1,5 @@
 import Gyroscope from "../gyroscope"
-import { Locator, Slicer } from "../gyroscope"
+import { Slicer } from "../gyroscope"
 import { tetragons } from '../compass'
 
 // squareSlicer takes in the map's dimensions,
@@ -53,15 +53,6 @@ const tetraSlicer:Slicer = (
 	return validCells
 }
 
-const tetraLocator:Locator = (
-	dimensions:Array<number>,
-	axis:number,
-):number => {
-	return dimensions.slice(0, axis).reduce((a, b) => {
-		return a * b
-	}, 1)
-}
-
 export const tetrascope = (
 	dimensions:Array<number>
 ):Gyroscope => {
@@ -69,6 +60,5 @@ export const tetrascope = (
 		tetragons,
 		dimensions,
 		tetraSlicer,
-		tetraLocator,
 	)
 }
