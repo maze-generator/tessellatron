@@ -1,24 +1,36 @@
 export default class Compass {
-	protected readonly magnitudes:Array<number>
-	protected readonly rose:{[key:string]:number}
+	protected readonly _magnitudes:Array<number>
+	protected _magnets: {[key:string]:number}
+	public opposites: {[key:string]:string}
+	public directions: Set<string>
 	constructor (
 		dimensions:Array<number>
 	) {
 		// create a multiplier affect for magnitudes.
-		const magnitudes = []
-		const multiplier = (a:number, b:number):void => a * b
+		const magnitudes:Array<number> = []
+		const multiplier = (a:number, b:number):number => a * b
 		// loop through the size of each dimension.
-		for (const index in Object.keys(dimensions)) {
+		Object.keys(dimensions).forEach((
+			_:any,
+			index:number,
+		) => {
 			magnitudes.push(
 				dimensions.slice(0, index).reduce(multiplier, 1)
 			)
-		}
-		this.magnitudes = magnitudes
+		})
+		this._magnitudes = magnitudes
+		this._magnets = {}
+		this.opposites = {}
+		this.directions = new Set()
 	}
 
-	protected set rose (
+	public get rose ():{[key:string]:number} {
+		return this._magnets
+	}
+
+	public set rose (
 		rose:{[key:string]:number}
-	):{[key:string]:number} {
+	) {
 		// `directions` is a simple set of named vectors.
 		// luckily, these are exactly the keys of `rose`.
 		this.directions = new Set(Object.keys(rose))
@@ -44,13 +56,14 @@ export default class Compass {
 		this.opposites = {}
 		for (const direction in this.directions) {
 			const vector:number = this.rose[direction]
-			const reversed:string = vectors.get(-vector)
+			// TODO -> bad `|| 'none'`
+			const reversed:string = vectors.get(-vector) || 'none'
 			// here is where reverse-directions is set!
 			this.opposites[direction] = reversed
 		}
 
-		// finally, just return the rose to set.
-		return rose
+		// finally, just return the new rose as the new magnets.
+		this._magnets = rose
 	}
 
 	public reverse(direction:string):string {
@@ -69,7 +82,7 @@ export class TetragonCompass extends Compass {
 	) {
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
-		const [x, y] = this.magnitudes
+		const [x, y] = this._magnitudes
 		// generate a rose of index-offsetters.
 		this.rose = {
 			'north': -y,
@@ -87,7 +100,7 @@ export class HexahedronCompass extends Compass {
 	) {
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
-		const [x, y, z] = this.magnitudes
+		const [x, y, z] = this._magnitudes
 		// generate a rose of index-offsetters.
 		this.rose = {
 			'above': -z,
@@ -107,7 +120,7 @@ export class HexagonCompass extends Compass {
 	) {
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
-		const [x, y] = this.magnitudes
+		const [x, y] = this._magnitudes
 		// generate a rose of index-offsetters.
 		this.rose = {
 			'northwest': -y,
@@ -126,5 +139,5 @@ export class HexagonCompass extends Compass {
 
 ==TODO==
 - the for loop in the primary class is suboptimal.
-- `this.magnitudes` is not the greatest name; rename it.
+- `this._magnitudes` is not the greatest name; rename it.
 ***********************************************************/
