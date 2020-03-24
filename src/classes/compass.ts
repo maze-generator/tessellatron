@@ -1,4 +1,5 @@
 export default class Compass {
+	protected readonly _dimensions:Array<number>
 	protected readonly _magnitudes:Array<number>
 	protected _magnets: {[key:string]:number}
 	public opposites: {[key:string]:string}
@@ -18,6 +19,7 @@ export default class Compass {
 				dimensions.slice(0, index).reduce(multiplier, 1)
 			)
 		})
+		this._dimensions = dimensions
 		this._magnitudes = magnitudes
 		this._magnets = {}
 		this.opposites = {}
@@ -57,7 +59,7 @@ export default class Compass {
 		for (const direction in this.directions) {
 			const vector:number = this.rose[direction]
 			// TODO -> bad `|| 'none'`
-			const reversed:string = vectors.get(-vector) || 'none'
+			const reversed:string = vectors.get(-vector) || ':('
 			// here is where reverse-directions is set!
 			this.opposites[direction] = reversed
 		}
@@ -71,6 +73,61 @@ export default class Compass {
 		// ...but, it seems more semantic using a method here!
 		return this.opposites[direction]
 	}
+}
+
+
+
+// tetragonSlicer takes in the map's dimensions,
+// and then the cell's coordinates.
+// it returns a slice of the desired coordinates.
+const tetragonSlicer = (
+	dimensions:Array<number>,
+	coordinates:Array<number|undefined>,
+):Array<number> => {
+
+	const size:number = dimensions.reduce((
+		a:number,
+		b:number,
+	):number => {
+		return a * b
+	})
+
+	const allCells:Array<number> = [...Array(size).keys()]
+	const validCells:Array<number> = []
+
+	// this piece creates spacers or iterators.
+	// if we have dimensions of [5,4,3] our spacers are:
+	// [1,5,20,60]. The final item = total # of coordinates.
+	allCells.forEach((
+		cellIndex:number
+	):void => {
+		let isValid:boolean = true
+
+		coordinates.forEach((
+			currentPosition:number|undefined,
+			positionIndex:number,
+		):void => {
+			if (currentPosition !== undefined) {
+				const currentDimension:number = dimensions[positionIndex]
+				const previousDimensions:Array<number> = dimensions.slice(0, positionIndex)
+				const magnitude:number = previousDimensions.reduce((
+					a:number,
+					b:number,
+				):number => {
+					return a * b
+				}, 1)
+
+				// check if the cell index is valid right now...
+				if (Math.floor(cellIndex / magnitude) % currentDimension !== currentPosition) {
+					isValid = false
+				}
+			}
+		})
+		if (isValid) {
+			validCells.push(cellIndex)
+		}
+	})
+	return validCells
 }
 
 // a tetragon is a four-sided polygon.
@@ -91,6 +148,12 @@ export class TetragonCompass extends Compass {
 			'west':  -x,
 		}
 	}
+
+	slicer (
+		coordinates:Array<number|undefined>
+	):Array<number> {
+		return tetragonSlicer(this._dimensions, coordinates)
+	}
 }
 
 // a hexahedron is a six-sided polyhedron.
@@ -110,6 +173,12 @@ export class HexahedronCompass extends Compass {
 			'east':  -x,
 			'west':  +x,
 		}
+	}
+
+	slicer (
+		coordinates:Array<number|undefined>
+	):Array<number> {
+		return tetragonSlicer(this._dimensions, coordinates)
 	}
 }
 
