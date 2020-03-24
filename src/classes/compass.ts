@@ -56,8 +56,8 @@ export default class Compass {
 		)
 		// initialize opposites.
 		this.opposites = {}
-		for (const direction in this.directions) {
-			const vector:number = this.rose[direction]
+		for (const direction of this.directions) {
+			const vector:number = rose[direction]
 			// TODO -> bad `|| 'none'`
 			const reversed:string = vectors.get(-vector) || ':('
 			// here is where reverse-directions is set!
@@ -72,6 +72,16 @@ export default class Compass {
 		// directly pulling from `opposites` would be easy...
 		// ...but, it seems more semantic using a method here!
 		return this.opposites[direction]
+	}
+
+	public offset (
+		index:number,
+	):{[key:string]:number} {
+		const offset:{[key:string]:number} = {}
+		for (const [direction, modifier] of Object.entries(this.rose)) {
+			offset[direction] = index + modifier
+		}
+		return offset
 	}
 }
 

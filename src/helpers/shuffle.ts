@@ -1,6 +1,6 @@
 // random shuffle helper function
 // uses fisher yates randomizer
-const shuffle = (
+export const shuffle = (
 	array:Array<any>,
 	items:number = array.length,
 	random:Function = Math.random,
@@ -14,5 +14,3 @@ const shuffle = (
 	}
 	return results
 }
-
-export default shuffle

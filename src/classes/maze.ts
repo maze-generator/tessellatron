@@ -1,5 +1,6 @@
-import Compass, {TetragonCompass} from './compass'
 import Cell from './cell'
+import {TetragonCompass} from './compass'
+import {shuffle} from '../helpers/shuffle'
 
 export default class Maze {
 	dimensions:Array<number>
@@ -15,8 +16,8 @@ export default class Maze {
 			return a * b
 		})
 		this.map = new Array(this.size)
+		this.generate(0)
 	}
-
 
 	validNeighbors (
 		index1:number,
@@ -25,7 +26,12 @@ export default class Maze {
 		// helper function.
 		// removes neighbors that are invalid in some way,
 		// such as being out of bounds or across the map.
-		// calculate positions.
+		if (
+			index1 > this.size
+			|| index2 > this.size
+		) {
+			return false
+		}
 
 		// calculate coordinates.
 		const coordinates1:Array<number> = this.compass.triangulator(index1)
@@ -51,14 +57,10 @@ export default class Maze {
 			return true
 		}
 	}
-}
-
-/*
 
 	generate (
-		rootIndex:number
+		index:number
 	) {
-		//
 		// generates a perfect maze.
 		// its done recursively via a depth-first traversal tree.
 		// this is a setter function; it does not return anything.
@@ -67,65 +69,38 @@ export default class Maze {
 		// reverse = reversed cardinal direction
 		// root_pos = root position
 		// neighbor = neighbor position
-		//
-		/*
-		// == TODO ==
-		// This code should be placed elsewhere...
-		if (rootIndex === undefined) {
-			// Generation starts at a random point in the maze;
-			// rootIndex doesn't infer a start/exit.
-			// In the finished maze, one can always find a path
-			// from any point A to B; that can be decided later.
-			rootIndex = Math.random() * (this.size - 1)
-			// note our visited list exists as the maze property.
-		}
-		*//*
 
 		// first, fill the maze spot with an empty cell.
-		const CurrentCell:Cell = new Cell()
-		this.map[rootIndex] = CurrentCell
-
-		// grab the position id from each cardinal direction.
-		const neighboringIndices:{[key:string]:number} = {
-			'north': rootIndex - this.length,
-			'south': rootIndex + this.length,
-			'east': rootIndex + 1,
-			'west': rootIndex - 1,
-		}
-
-		// this is useful for doubly-linking vertices.
-		const reversedCompass:{[key:string]:string} = {
-			'north': 'south',
-			'south': 'north',
-			'east': 'west',
-			'west': 'east',
-		}
+		const currentCell:Cell = new Cell(this.compass, index)
+		this.map[index] = currentCell
 
 		// randomize compass order.
-		const randomCompass:Array<string> = shuffle(Object.keys(neighboringIndices))
+		const randomCompass:Array<string> = shuffle([...this.compass.directions])
 
 		randomCompass.forEach((direction:string):void => {
 			// gets the index of the neighbor via direction.
-			const neighbor:number = neighboringIndices[direction]
+			const neighborIndex:number = this.compass.offset(index)[direction]
 			// reversal reverses direction, a cardinal direction.
-			const reversal:string = reversedCompass[direction]
+			const reversal:string = this.compass.opposites[direction]
 
-			// if validating the neighbor fails, then the
-			// neighbor is a maze boundary.
-			if (this.validNeighbors(rootIndex, neighbor)) {
+			// if validating the neighborIndex fails, then the
+			// neighborIndex is a maze boundary.
+			if (this.validNeighbors(index, neighborIndex)) {
 				// null represents such a boundary.
-				CurrentCell['neighbors'][direction] = null
-			// if the neighbor is valid, then the neighbor exists.
+				currentCell['neighbors'][direction] = null
+			// if the neighborIndex is valid, then the neighborIndex exists.
 			} else {
-				// neighbor is valid, representing a spot in maze.
-				if (this.map[neighbor] === undefined) {
+				// neighborIndex is valid, representing a spot in maze.
+				if (this.map[neighborIndex] === undefined) {
 					// this spot is empty! fill it up!
 					// generate a new maze block.
-					const NeighborCell:Cell = this.generate(neighbor)
+					const neighborCell:Cell = this.generate(neighborIndex)
 
 					// link up the net / graph / tree.
-					CurrentCell['neighbors'][direction] = NeighborCell
-					NeighborCell['neighbors'][reversal] = CurrentCell
+					currentCell['neighbors'][direction] = neighborCell
+					neighborCell['neighbors'][reversal] = currentCell
+					// currentCell['pathways'][direction] = true
+					// neighborCell['pathways'][reversal] = true
 				}
 			}
 		})
@@ -133,7 +108,7 @@ export default class Maze {
 		// this current cell is used in the stack upstream.
 		// if this is the root cell, the returned item
 		// simply might not be caught by anything.
-		return CurrentCell
+		return currentCell
 	}
 }
 
@@ -192,6 +167,7 @@ export default class Maze {
 					queue.insert(0, c_list)
 		return paths
 
+/*
 	def aerate_maze(self, n=1):
 		'''
 		deletes n random walls to destroy trees.
