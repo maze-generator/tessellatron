@@ -1,49 +1,43 @@
-/*
-class UnicodeGraphic():
-	def __init__(self, maze_object):
-		self.maze_object = maze_object
+import Maze from './maze'
 
-	def pipe_maze(self):
-		'''
-		a pipe-maze is much more simple to make.
-		a player must follow lines to complete the maze.
-		while less traditional, it is very easy to make.
-		each vertex determinse a unicode character.
-		'''
-		# HACK reassigning self for convenience.
-		self = self.maze_object
+export default class UnicodeGraphic {
+	maze:Maze
+	constructor(maze:Maze) {
+		this.maze = maze
+	}
 
-		# initialize empty result string.
-		result = ''
-		# loop through maze.
-		for index, block in enumerate(self.maze):
-			# assumes there is a path in every direction.
-			north = True
-			south = True
-			east = True
-			west = True
+	pipeMaze () {
+		// a pipe-maze is much more simple to make.
+		// a player must follow lines to complete the maze.
+		// while less traditional, it is very easy to make.
+		// each vertex determinse a unicode character.
 
-			# verify if there actually is a path each way.
-			if (block.neighbors['north'] == False
-					or block.neighbors['north'] is None):
-				north = False
-			if (block.neighbors['south'] == False
-					or block.neighbors['south'] is None):
-				south = False
-			if (block.neighbors['east'] == False
-					or block.neighbors['east'] is None):
-				east = False
-			if (block.neighbors['west'] == False
-					or block.neighbors['west'] is None):
-				west = False
+		//initialize empty result string.
+		let result = ''
 
-			# add line break if end of line is reached
-			if index % self.length == 0:
+		// loop through maze.
+		this.maze.map.forEach((
+			cell:any,
+			index:number,
+		):void => {
+			// assumes there is a path in every direction.
+			const north:boolean = cell['pathways']['north']
+			const south:boolean = cell['pathways']['south']
+			const east:boolean = cell['pathways']['east']
+			const west:boolean = cell['pathways']['west']
+
+			// add line break if end of line is reached
+			if (index % this.maze.dimensions[0] === 0) {
 				result += '\n'
-			# get the symbol to be added to the result string
-			result += get_glyph(north, south, east, west, 'pipe')
+			}
+			// get the symbol to be added to the result string
+			result += getGlyph(north, south, east, west, 'pipe')
+		})
 		return result
+	}
+}
 
+/*
 	def edge_maze(self):
 		'''
 		an edge-maze is a traditional-looking maze.
@@ -160,82 +154,107 @@ class UnicodeGraphic():
 			if location % padded_length == 0 and location != 0:
 				result += '\n'
 			# get unicode glyph symbol box-drawing element.
-			result += get_glyph(n_hall, s_hall, e_hall, w_hall, 'edge')
+			result += getGlyph(n_hall, s_hall, e_hall, w_hall, 'edge')
 		# return maze drawing.
 		return result
+*/
 
+const getGlyph = (
+	north:boolean,
+	south:boolean,
+	east:boolean,
+	west:boolean,
+	type:string,
+):string => {
 
-def get_glyph(north, south, east, west, type):
-	'''
-	this function returns a maze drawing character.
-	== TODO ==
-	this is awkwardly large.
-	not sure where to put it semantically.
-	== FIXME ==
-	these unicode characters must be converted!
-	like emojis, its a code smell to have them.
-	'''
+	// this function returns a maze drawing character.
+	// == TODO ==
+	// this is awkwardly large.
+	// not sure where to put it semantically.
+	// == FIXME ==
+	// these unicode characters must be converted!
+	// like emojis, its a code smell to have them.
 
-	# four passages
-	if north and south and east and west:
+	let pipe = ''
+	let edge = ''
+
+	// four passages
+	if (north && south && east && west) {
 		edge = ' '
 		pipe = '┼'
+	}
 
-	# three passages
-	elif south and east and west and not (north):
+	// three passages
+	else if (south && east && west && !(north)) {
 		edge = '╵'
 		pipe = '┬'
-	elif north and east and west and not (south):
+	}
+	else if (north && east && west && !(south)) {
 		edge = '╷'
 		pipe = '┴'
-	elif north and south and west and not (east):
+	}
+	else if (north && south && west && !(east)) {
 		edge = '╶'
 		pipe = '┤'
-	elif north and south and east and not (west):
+	}
+	else if (north && south && east && !(west)) {
 		edge = '╴'
 		pipe = '├'
+	}
 
-	# two passages
-	elif north and south and not (east or west):
+	// two passages
+	else if (north && south && !(east || west)) {
 		edge = '─'
 		pipe = '│'
-	elif north and east and not (south or west):
+	}
+	else if (north && east && !(south || west)) {
 		edge = '┐'
 		pipe = '└'
-	elif north and west and not (south or east):
+	}
+	else if (north && west && !(south || east)) {
 		edge = '┌'
 		pipe = '┘'
-	elif south and east and not (north or west):
+	}
+	else if (south && east && !(north || west)) {
 		edge = '┘'
 		pipe = '┌'
-	elif south and west and not (north or east):
+	}
+	else if (south && west && !(north || east)) {
 		edge = '└'
 		pipe = '┐'
-	elif east and west and not (north or south):
+	}
+	else if (east && west && !(north || south)) {
 		edge = '│'
 		pipe = '─'
+	}
 
-	# one passage
-	elif north and not (south or east or west):
+	// one passage
+	else if (north && !(south || east || west)) {
 		edge = '┬'
 		pipe = '╵'
-	elif south and not (north or east or west):
+	}
+	else if (south && !(north || east || west)) {
 		edge = '┴'
 		pipe = '╷'
-	elif east and not (north or south or west):
+	}
+	else if (east && !(north || south || west)) {
 		edge = '┤'
 		pipe = '╶'
-	elif west and not (north or south or east):
+	}
+	else if (west && !(north || south || east)) {
 		edge = '├'
 		pipe = '╴'
+	}
 
-	# zero passages
-	elif not (north or south or east or west):
+	// zero passages
+	else if (!(north || south || east || west)) {
 		edge = '┼'
 		pipe = ' '
+	}
 
-	if type == 'edge':
+	if (type === 'edge') {
 		return edge
-	if type == 'pipe':
+	} else {
 		return pipe
- */
+	}
+}
