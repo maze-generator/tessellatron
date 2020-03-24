@@ -3,7 +3,7 @@ import './App.css';
 import Maze from '../classes/maze'
 import Graphic from '../classes/unicode-graphic'
 
-const myMaze = new Maze([40,50])
+const myMaze = new Maze([40,10])
 const myGraphic = new Graphic(myMaze)
 
 console.log(myMaze)
@@ -19,7 +19,7 @@ const App = () => {
 			<input
 				type='button'
 				onClick={() => {
-					const newMaze = new Maze([100,20])
+					const newMaze = new Maze([40,10])
 					const newGraphic = new Graphic(newMaze)
 					setWords(newGraphic.pipeMaze())
 				}}

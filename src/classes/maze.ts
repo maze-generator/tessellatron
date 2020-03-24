@@ -32,8 +32,10 @@ export default class Maze {
 		// helper function.
 		// removes neighbors that are invalid in some way,
 		// such as being out of bounds or across the map.
-		if (!this.validIndex(index1)
-		|| !this.validIndex(index2)) {
+		if (
+			!this.validIndex(index1)
+			|| !this.validIndex(index2)
+		) {
 			return false
 		}
 
@@ -78,34 +80,38 @@ export default class Maze {
 		const currentCell:Cell = new Cell(this.compass, index)
 		this.map[index] = currentCell
 
-		// randomize compass order.
+		// next, randomize compass order and loop through.
 		const randomCompass:Array<string> = shuffle([...this.compass.directions])
-
 		randomCompass.forEach((direction:string):void => {
-			// gets the index of the neighbor via direction.
+
+			// get the index of the neighbor via direction.
 			const neighborIndex:number = this.compass.offset(index)[direction]
+			let neighborCell:Cell
 
 			// if validating the neighborIndex fails, then the
 			// neighborIndex is a maze boundary.
-			if (!this.validIndex(neighborIndex)) {
+			if (!this.validIndex(neighborIndex)
+			|| !this.validNeighbors(index, neighborIndex)) {
 				// null represents such a boundary.
 				currentCell['neighbors'][direction] = null
-			// if the neighborIndex is valid, then the neighborIndex exists.
-			} else if (this.map[neighborIndex] === undefined) {
-				// neighborIndex is valid, representing a spot in maze.
-				// this spot is empty! fill it up!
-				// generate a new maze block.
-				const neighborCell:Cell = this.generate(neighborIndex)
+				// continue to next loop item...
 
+			// otherwise the neighborCell should exist.
+			// if the the neighborIndex points to undefined,
+			// then we can visit the index and fill the Cell.
+			} else if (this.map[neighborIndex] === undefined) {
+				// generate a new maze block with the neighborIndex.
+				neighborCell = this.generate(neighborIndex)
 				// link up the net / graph / tree.
 				currentCell.joinWithNeighbor(neighborCell, direction)
 				currentCell.pathWithNeighbor(neighborCell, direction)
+
+			// if the Cell already exists, we can't hook it up.
 			} else if (this.map[neighborIndex] instanceof Cell) {
 				// this spot is not empty.
 				// @ts-ignore
-				const neighborCell:Cell = this.map[neighborIndex]
-				// in fact, the two cells should not be linked up!
-				// that is represented by path, not join.
+				neighborCell = this.map[neighborIndex]
+				// link up the net / graph / tree.
 				currentCell.joinWithNeighbor(neighborCell, direction)
 			}
 		})
