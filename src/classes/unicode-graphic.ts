@@ -1,3 +1,4 @@
+/*
 class UnicodeGraphic():
 	def __init__(self, maze_object):
 		self.maze_object = maze_object
@@ -237,3 +238,4 @@ def get_glyph(north, south, east, west, type):
 		return edge
 	if type == 'pipe':
 		return pipe
+ */
