@@ -18,4 +18,5 @@ textarea {
 	min-width: 80vw;
 	max-width: 80vw;
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+	height: 20vh;
 }
