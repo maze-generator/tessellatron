@@ -8,14 +8,12 @@ import {
  class Compass {
 	protected readonly dimensions:Array<number>
 	protected _rose: {[key:string]:number}
-	public directions: Set<string>
 	constructor (
 		dimensions:Array<number>
 	) {
 		this._rose = {}
 		// set defaults for typescript
 		this.dimensions = dimensions
-		this.directions = new Set()
 
 		// calibrate rose
 		this.rose = {}
@@ -23,6 +21,10 @@ import {
 
 	public get magnitudes () {
 		return getMagnitudes(this.dimensions)
+	}
+
+	public get directions () {
+		return getDirections(this.rose)
 	}
 
 	public get diametrics () {
@@ -40,14 +42,6 @@ import {
 	):void {
 		// first, set the internal rose as expected.
 		this._rose = rose
-		// now, recalibrate the compass properties.
-		this.calibrate()
-	}
-
-	private calibrate():void {
-		// `directions` is a simple set of named vectors.
-		// luckily, these are exactly the keys of `rose`.
-		this.directions = new Set(Object.keys(this.rose))
 	}
 
 	public reverse(direction:string):string {
