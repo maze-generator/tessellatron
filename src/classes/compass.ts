@@ -74,16 +74,6 @@
 		// ...but, it seems more semantic using a method here!
 		return this.diametrics[direction]
 	}
-
-	public offset (
-		index:number,
-	):{[key:string]:number} {
-		const offset:{[key:string]:number} = {}
-		for (const [direction, modifier] of Object.entries(this.rose)) {
-			offset[direction] = index + modifier
-		}
-		return offset
-	}
 }
 
 // a tetragon is a four-sided polygon.
