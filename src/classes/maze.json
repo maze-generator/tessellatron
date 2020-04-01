@@ -1,0 +1,35 @@
+{
+	"dimensions": [2, 3],
+	"compass": {
+		"north": -2,
+		"south": 2,
+		"east": 1,
+		"west": -1
+	},
+	"map": [
+		{
+			"position": 0,
+			"passages": {
+				"north": false,
+				"south": false,
+				"east": true,
+				"west": false
+			},
+			"neighbors": {
+				"east": 1
+			}
+		},
+		{
+			"position": 1,
+			"passages": {
+				"north": false,
+				"south": false,
+				"east": false,
+				"west": true
+			},
+			"neighbors": {
+				"west": 0
+			}
+		}
+	]
+}
