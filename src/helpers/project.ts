@@ -105,19 +105,23 @@ export const getDiametrics = (
 
 export const binaryTriangulate = (
 	dimensions: Array<number>,
-	index: number,
+	cellIndex: number,
 ): Array<number> => {
 	// generate neccessary variables.
 	const coordinates: Array<number> = []
 	const magnitudes: Array<number> = getMagnitudes(dimensions)
+
 	// loop through each index in the dimensions/index array.
-	for (const index of range(0, dimensions.length)) {
+	for (const dimIndex of range(0, dimensions.length)) {
 		// dimensions.length === magnitudes.length;
 		// their index associates one with the other.
-		const dimension: number = dimensions[index]
-		const magnitude: number = magnitudes[index]
+		const dimension: number = dimensions[dimIndex]
+		const magnitude: number = magnitudes[dimIndex]
+
 		// calculate resulting coordinate.
-		const result: number = Math.floor(index / magnitude) % dimension
+		const result: number =
+			Math.floor(cellIndex / magnitude) % dimension
+
 		// push into array.
 		coordinates.push(result)
 	}
