@@ -101,17 +101,24 @@ export const getDiametrics = (
 }
 
 /***********************************************************
+the following methods support cell lookup.
+with an index, you can determine coordinates.
+with coordinates, you get an index.
+with partial coordinates, you get a slice. neato!
 ***********************************************************/
 
 export const binaryTriangulate = (
 	dimensions: Array<number>,
 	cellIndex: number,
 ): Array<number> => {
-	// generate neccessary variables.
+	// coordinates will be returned once populated.
 	const coordinates: Array<number> = []
+
+	// generate magnitudes from dimensions array.
 	const magnitudes: Array<number> = getMagnitudes(dimensions)
 
-	// loop through each index in the dimensions/index array.
+	// loop through each index in the dimensions array.
+	// it maps to indices in magnitudes as well.
 	for (const dimIndex of range(0, dimensions.length)) {
 		// dimensions.length === magnitudes.length;
 		// their index associates one with the other.
@@ -119,8 +126,9 @@ export const binaryTriangulate = (
 		const magnitude: number = magnitudes[dimIndex]
 
 		// calculate resulting coordinate.
-		const result: number =
-			Math.floor(cellIndex / magnitude) % dimension
+		const result: number = Math.floor(
+			cellIndex / magnitude % dimension
+		)
 
 		// push into array.
 		coordinates.push(result)
@@ -136,39 +144,45 @@ export const binaryTensorSlice = (
 	dimensions: Array<number>,
 	coordinates: Array<number|undefined>,
 ): Array<number> => {
+	// slice will be returned once populated.
+	const slice: Array<number> = []
 
+	// generate size & magnitudes from dimensions array.
 	const size: number = getSize(dimensions)
-	const validCells: Array<number> = []
+	const magnitudes: Array<number> = getMagnitudes(dimensions)
 
 	// this piece creates spacers or iterators.
 	// if we have dimensions of [5,4,3] our spacers are:
 	// [1,5,20]. The final item = total # of coordinates.
 	for (const cellIndex of range(0, size)) {
-		let isValid: boolean = true
+		let validCellIndex: boolean = true
 
-		coordinates.forEach((
-			currentPosition: number|undefined,
-			positionIndex: number,
-		): void => {
-			if (currentPosition !== undefined) {
-				const currentDimension: number = dimensions[positionIndex]
-				const previousDimensions: Array<number> = dimensions.slice(0, positionIndex)
-				const magnitude: number = previousDimensions.reduce((
-					a: number,
-					b: number,
-				): number => {
-					return a * b
-				}, 1)
+		// loop through each index in the dimensions array.
+		// it maps to indices in magnitudes & coordinates too.
+		for (const dimIndex of range(0, dimensions.length)) {
+			// dimensions.length === magnitudes.length;
+			// dimensions.length === coordinates.length;
+			// their index associates one with the others.
+			const dimension: number = dimensions[dimIndex]
+			const magnitude: number = magnitudes[dimIndex]
 
-				// check if the cell index is valid right now...
-				if (Math.floor(cellIndex / magnitude) % currentDimension !== currentPosition) {
-					isValid = false
-				}
+			// retrieve current input coordinate.
+			const coordinate: number|undefined = coordinates[dimIndex]
+
+			// calculate resulting coordinate.
+			const result: number = Math.floor(
+				cellIndex / magnitude % dimension
+			)
+
+			if (result !== coordinate) {
+				// result doesn't coorespond with given coordinate.
+				validCellIndex = false
+				break
 			}
-		})
-		if (isValid) {
-			validCells.push(cellIndex)
+		}
+		if (validCellIndex) {
+			slice.push(cellIndex)
 		}
 	}
-	return validCells
+	return slice
 }
