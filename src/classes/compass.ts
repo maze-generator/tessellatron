@@ -1,33 +1,49 @@
 export default class Compass {
 	protected readonly _dimensions:Array<number>
 	protected readonly _magnitudes:Array<number>
-	protected _magnets: {[key:string]:number}
+	protected _rose: {[key:string]:number}
 	public opposites: {[key:string]:string}
 	public directions: Set<string>
 	constructor (
 		dimensions:Array<number>
 	) {
-		// create a multiplier affect for magnitudes.
-		const magnitudes:Array<number> = []
-		const multiplier = (a:number, b:number):number => a * b
-		// loop through the size of each dimension.
-		Object.keys(dimensions).forEach((
-			_:any,
-			index:number,
-		) => {
-			magnitudes.push(
-				dimensions.slice(0, index).reduce(multiplier, 1)
-			)
-		})
 		this._dimensions = dimensions
-		this._magnitudes = magnitudes
-		this._magnets = {}
+		this._magnitudes = this.calculateMagnitudes()
+		this._rose = {}
 		this.opposites = {}
 		this.directions = new Set()
 	}
 
+	private calculateMagnitudes () {
+		// a magnitude is the amount of indices to travel
+		// to shift the nth coordinate by one.
+		// for example, to get from [1, 4, 6] to [1, 5, 6].
+		// each dimension has an associated magnitude.
+		const magnitudes:Array<number> = []
+
+		// create a mini-multiplier reducer function.
+		const multiplier = (a:number, b:number):number => a * b
+
+		// loop through the this._dimensions via index, `i`.
+		for (
+			let i:number = 0;
+			i < this._dimensions.length;
+			i += 1
+		) {
+			// collect dimensions leading up to current dimension.
+			const previous:number[] = this._dimensions.slice(0, i)
+			// calculate the product of those dimensions.
+			const product:number = previous.reduce(multiplier, 1)
+			// add the product to the list of magnitudes.
+			magnitudes.push(product)
+		}
+
+		// magnitudes is useful just for this.
+		return magnitudes
+	}
+
 	public get rose ():{[key:string]:number} {
-		return this._magnets
+		return this._rose
 	}
 
 	public set rose (
@@ -36,7 +52,6 @@ export default class Compass {
 		// `directions` is a simple set of named vectors.
 		// luckily, these are exactly the keys of `rose`.
 		this.directions = new Set(Object.keys(rose))
-
 
 		// `opposites` is a harder nut to crack.
 		// the app reverses the keys into a JavaScript Map.
@@ -65,7 +80,7 @@ export default class Compass {
 		}
 
 		// finally, just return the new rose as the new magnets.
-		this._magnets = rose
+		this._rose = rose
 	}
 
 	public reverse(direction:string):string {
