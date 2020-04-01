@@ -27,7 +27,7 @@ import {
 		return getDiametrics(this.rose)
 	}
 
-	public reverse(direction:string):string {
+	public reverse(direction: string): string {
 		// directly pulling from `diametrics` would be easy...
 		// ...but, it seems more semantic using a method here!
 		return this.diametrics[direction]
@@ -40,7 +40,7 @@ import {
 export class TetragonCompass extends Compass {
 	public readonly rose: {[key: string]: number}
 	constructor (
-		dimensions:Array<number>
+		dimensions: Array<number>
 	) {
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
@@ -55,14 +55,14 @@ export class TetragonCompass extends Compass {
 	}
 
 	slice (
-		coordinates:Array<number|undefined>
-	):Array<number> {
+		coordinates: Array<number|undefined>
+	): Array<number> {
 		return binarySlice(this.dimensions, coordinates)
 	}
 
 	triangulate (
-		index:number
-	):Array<number> {
+		index: number
+	): Array<number> {
 		return binaryTriangulate(this.dimensions, index)
 	}
 }
@@ -71,7 +71,7 @@ export class TetragonCompass extends Compass {
 export class HexahedronCompass extends Compass {
 	public readonly rose: {[key: string]: number}
 	constructor (
-		dimensions:Array<number>
+		dimensions: Array<number>
 	) {
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
@@ -88,8 +88,8 @@ export class HexahedronCompass extends Compass {
 	}
 
 	slice (
-		coordinates:Array<number|undefined>
-	):Array<number> {
+		coordinates: Array<number|undefined>
+	): Array<number> {
 		return binarySlice(this.dimensions, coordinates)
 	}
 }
@@ -98,7 +98,7 @@ export class HexahedronCompass extends Compass {
 export class HexagonCompass extends Compass {
 	public readonly rose: {[key: string]: number}
 	constructor (
-		dimensions:Array<number>
+		dimensions: Array<number>
 	) {
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
@@ -118,22 +118,22 @@ export class HexagonCompass extends Compass {
 
 
 const binaryTriangulate = (
-	dimensions:Array<number>,
-	index:number,
-):Array<number> => {
-	const coordinates:Array<number> = []
+	dimensions: Array<number>,
+	index: number,
+): Array<number> => {
+	const coordinates: Array<number> = []
 	dimensions.forEach((
-		currentDimension:number,
-		positionIndex:number,
-	):void => {
-		const leadingDimensions:Array<number> = dimensions.slice(0, positionIndex)
-		const magnitude:number = leadingDimensions.reduce((
-			a:number,
-			b:number,
-		):number => {
+		currentDimension: number,
+		positionIndex: number,
+	): void => {
+		const leadingDimensions: Array<number> = dimensions.slice(0, positionIndex)
+		const magnitude: number = leadingDimensions.reduce((
+			a: number,
+			b: number,
+		): number => {
 			return a * b
 		}, 1)
-		const coordinate:number = Math.floor(index / magnitude) % currentDimension
+		const coordinate: number = Math.floor(index / magnitude) % currentDimension
 		coordinates.push(coordinate)
 	})
 	return coordinates
@@ -144,39 +144,39 @@ const binaryTriangulate = (
 // and then the cell's coordinates.
 // it returns a slice of the desired coordinates.
 const binarySlice = (
-	dimensions:Array<number>,
-	coordinates:Array<number|undefined>,
-):Array<number> => {
+	dimensions: Array<number>,
+	coordinates: Array<number|undefined>,
+): Array<number> => {
 
-	const size:number = dimensions.reduce((
-		a:number,
-		b:number,
-	):number => {
+	const size: number = dimensions.reduce((
+		a: number,
+		b: number,
+	): number => {
 		return a * b
 	})
 
-	const allCells:Array<number> = [...Array(size).keys()]
-	const validCells:Array<number> = []
+	const allCells: Array<number> = [...Array(size).keys()]
+	const validCells: Array<number> = []
 
 	// this piece creates spacers or iterators.
 	// if we have dimensions of [5,4,3] our spacers are:
 	// [1,5,20,60]. The final item = total # of coordinates.
 	allCells.forEach((
-		cellIndex:number
-	):void => {
-		let isValid:boolean = true
+		cellIndex: number
+	): void => {
+		let isValid: boolean = true
 
 		coordinates.forEach((
-			currentPosition:number|undefined,
-			positionIndex:number,
-		):void => {
+			currentPosition: number|undefined,
+			positionIndex: number,
+		): void => {
 			if (currentPosition !== undefined) {
-				const currentDimension:number = dimensions[positionIndex]
-				const previousDimensions:Array<number> = dimensions.slice(0, positionIndex)
-				const magnitude:number = previousDimensions.reduce((
-					a:number,
-					b:number,
-				):number => {
+				const currentDimension: number = dimensions[positionIndex]
+				const previousDimensions: Array<number> = dimensions.slice(0, positionIndex)
+				const magnitude: number = previousDimensions.reduce((
+					a: number,
+					b: number,
+				): number => {
 					return a * b
 				}, 1)
 
