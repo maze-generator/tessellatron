@@ -100,7 +100,87 @@ export default class Compass {
 	}
 }
 
-const triangulator = (
+// a tetragon is a four-sided polygon.
+// a quadrilateral is a four-angled polygon.
+// they mean the same thing.
+export class TetragonCompass extends Compass {
+	constructor (
+		dimensions:Array<number>
+	) {
+		super(dimensions)
+		// deconstruct magnitudes for each axis.
+		const [x, y] = this._magnitudes
+		// generate a rose of index-offsetters.
+		this.rose = {
+			'north': -y,
+			'south': +y,
+			'east':  +x,
+			'west':  -x,
+		}
+	}
+
+	slice (
+		coordinates:Array<number|undefined>
+	):Array<number> {
+		return binarySlicer(this._dimensions, coordinates)
+	}
+
+	triangulate (
+		index:number
+	):Array<number> {
+		return binaryTriangulate(this._dimensions, index)
+	}
+}
+
+// a hexahedron is a six-sided polyhedron.
+export class HexahedronCompass extends Compass {
+	constructor (
+		dimensions:Array<number>
+	) {
+		super(dimensions)
+		// deconstruct magnitudes for each axis.
+		const [x, y, z] = this._magnitudes
+		// generate a rose of index-offsetters.
+		this.rose = {
+			'above': -z,
+			'below': +z,
+			'north': -y,
+			'south': +y,
+			'east':  -x,
+			'west':  +x,
+		}
+	}
+
+	slice (
+		coordinates:Array<number|undefined>
+	):Array<number> {
+		return binarySlicer(this._dimensions, coordinates)
+	}
+}
+
+// a hexahedron is a six-sided polygon.
+export class HexagonCompass extends Compass {
+	constructor (
+		dimensions:Array<number>
+	) {
+		super(dimensions)
+		// deconstruct magnitudes for each axis.
+		const [x, y] = this._magnitudes
+		// generate a rose of index-offsetters.
+		this.rose = {
+			'northwest': -y,
+			'southeast': +y,
+			'northeast': x - y,
+			'southwest': y - x,
+			'east': -x,
+			'west': +x,
+		}
+	}
+}
+
+
+
+const binaryTriangulate = (
 	dimensions:Array<number>,
 	index:number,
 ):Array<number> => {
@@ -123,10 +203,10 @@ const triangulator = (
 }
 
 
-// tetragonSlicer takes in the map's dimensions,
+// binarySlicer takes in the map's dimensions,
 // and then the cell's coordinates.
 // it returns a slice of the desired coordinates.
-const tetragonSlicer = (
+const binarySlicer = (
 	dimensions:Array<number>,
 	coordinates:Array<number|undefined>,
 ):Array<number> => {
@@ -174,84 +254,6 @@ const tetragonSlicer = (
 		}
 	})
 	return validCells
-}
-
-// a tetragon is a four-sided polygon.
-// a quadrilateral is a four-angled polygon.
-// they mean the same thing.
-export class TetragonCompass extends Compass {
-	constructor (
-		dimensions:Array<number>
-	) {
-		super(dimensions)
-		// deconstruct magnitudes for each axis.
-		const [x, y] = this._magnitudes
-		// generate a rose of index-offsetters.
-		this.rose = {
-			'north': -y,
-			'south': +y,
-			'east':  +x,
-			'west':  -x,
-		}
-	}
-
-	slicer (
-		coordinates:Array<number|undefined>
-	):Array<number> {
-		return tetragonSlicer(this._dimensions, coordinates)
-	}
-
-	triangulator (
-		index:number
-	):Array<number> {
-		return triangulator(this._dimensions, index)
-	}
-}
-
-// a hexahedron is a six-sided polyhedron.
-export class HexahedronCompass extends Compass {
-	constructor (
-		dimensions:Array<number>
-	) {
-		super(dimensions)
-		// deconstruct magnitudes for each axis.
-		const [x, y, z] = this._magnitudes
-		// generate a rose of index-offsetters.
-		this.rose = {
-			'above': -z,
-			'below': +z,
-			'north': -y,
-			'south': +y,
-			'east':  -x,
-			'west':  +x,
-		}
-	}
-
-	slicer (
-		coordinates:Array<number|undefined>
-	):Array<number> {
-		return tetragonSlicer(this._dimensions, coordinates)
-	}
-}
-
-// a hexahedron is a six-sided polygon.
-export class HexagonCompass extends Compass {
-	constructor (
-		dimensions:Array<number>
-	) {
-		super(dimensions)
-		// deconstruct magnitudes for each axis.
-		const [x, y] = this._magnitudes
-		// generate a rose of index-offsetters.
-		this.rose = {
-			'northwest': -y,
-			'southeast': +y,
-			'northeast': x - y,
-			'southwest': y - x,
-			'east': -x,
-			'west': +x,
-		}
-	}
 }
 
 /***************************NOTES***************************
