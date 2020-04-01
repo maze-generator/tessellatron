@@ -6,24 +6,25 @@ import {
 } from '../helpers/project'
 
  class Compass {
-	protected readonly _dimensions:Array<number>
-	protected readonly _magnitudes:Array<number>
+	protected readonly dimensions:Array<number>
 	protected _rose: {[key:string]:number}
 	public directions: Set<string>
 	public diametrics: {[key:string]:string}
 	constructor (
-		dimensions:Array<number>,
-		magnitudes:Array<number>,
+		dimensions:Array<number>
 	) {
 		// set defaults for typescript
 		this._rose = {}
-		this._dimensions = dimensions
-		this._magnitudes = magnitudes
+		this.dimensions = dimensions
 		this.diametrics = {}
 		this.directions = new Set()
 
 		// calibrate rose
 		this.rose = {}
+	}
+
+	public get magnitudes () {
+		return getMagnitudes(this.dimensions)
 	}
 
 	// @ts-ignore -> must be public
@@ -34,7 +35,7 @@ import {
 	// @ts-ignore -> must be protected or private
 	protected set rose (
 		rose:{[key:string]:number}
-	) {
+	):void {
 		// first, set the internal rose as expected.
 		this._rose = rose
 		// now, recalibrate the compass properties.
@@ -92,7 +93,7 @@ export class TetragonCompass extends Compass {
 	) {
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
-		const [x, y] = this._magnitudes
+		const [x, y] = this.magnitudes
 		// generate a rose of index-offsetters.
 		this.rose = {
 			'north': -y,
@@ -105,13 +106,13 @@ export class TetragonCompass extends Compass {
 	slice (
 		coordinates:Array<number|undefined>
 	):Array<number> {
-		return binarySlicer(this._dimensions, coordinates)
+		return binarySlice(this.dimensions, coordinates)
 	}
 
 	triangulate (
 		index:number
 	):Array<number> {
-		return binaryTriangulate(this._dimensions, index)
+		return binaryTriangulate(this.dimensions, index)
 	}
 }
 
@@ -122,7 +123,7 @@ export class HexahedronCompass extends Compass {
 	) {
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
-		const [x, y, z] = this._magnitudes
+		const [x, y, z] = this.magnitudes
 		// generate a rose of index-offsetters.
 		this.rose = {
 			'above': -z,
@@ -137,7 +138,7 @@ export class HexahedronCompass extends Compass {
 	slice (
 		coordinates:Array<number|undefined>
 	):Array<number> {
-		return binarySlicer(this._dimensions, coordinates)
+		return binarySlice(this.dimensions, coordinates)
 	}
 }
 
@@ -148,7 +149,7 @@ export class HexagonCompass extends Compass {
 	) {
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
-		const [x, y] = this._magnitudes
+		const [x, y] = this.magnitudes
 		// generate a rose of index-offsetters.
 		this.rose = {
 			'northwest': -y,
@@ -186,10 +187,10 @@ const binaryTriangulate = (
 }
 
 
-// binarySlicer takes in the map's dimensions,
+// binarySlice takes in the map's dimensions,
 // and then the cell's coordinates.
 // it returns a slice of the desired coordinates.
-const binarySlicer = (
+const binarySlice = (
 	dimensions:Array<number>,
 	coordinates:Array<number|undefined>,
 ):Array<number> => {
@@ -239,11 +240,13 @@ const binarySlicer = (
 	return validCells
 }
 
+export default TetragonCompass
+
 /***************************NOTES***************************
 ==NOTE==
 - `Compass` is a default class so that it can be typecast.
 
 ==TODO==
 - the for loop in the primary class is suboptimal.
-- `this._magnitudes` is not the greatest name; rename it.
+- `this.magnitudes` is not the greatest name; rename it.
 ***********************************************************/
