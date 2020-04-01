@@ -42,7 +42,7 @@ export default class Maze {
 		this.map = new Array(this.size)
 
 		// create compass
-		this.compass = new TetragonCompass(dimensions, magnitudes)
+		this.compass = new TetragonCompass(dimensions)
 
 		// TODO: generation shall not execute here.
 		this.generate(0)

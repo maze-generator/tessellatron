@@ -4,6 +4,7 @@ import {
 	getDirections,
 	getDiametrics,
 } from '../helpers/project'
+import {range} from '../helpers/series'
 
  class Compass {
 	protected readonly dimensions: Array<number>
@@ -34,18 +35,27 @@ import {
 	}
 }
 
-// a tetragon is a four-sided polygon.
-// a quadrilateral is a four-angled polygon.
-// they mean the same thing.
+/***********************************************************
+a tetragon is a four-sided polygon.
+a quadrilateral is a four-angled polygon.
+they represent the same thing...a square(ish) shape!
+
+A finished map using this compass looks like this:
+┌┬┬┐
+├┼┼┤
+├┼┼┤
+└┴┴┘
+***********************************************************/
 export class TetragonCompass extends Compass {
 	public readonly rose: {[key: string]: number}
 	constructor (
 		dimensions: Array<number>
 	) {
+		// extend various functions from base class.
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
 		const [x, y] = this.magnitudes
-		// generate a rose of index-offsetters.
+		// set a new rose of index-offsetters.
 		this.rose = {
 			'north': -y,
 			'south': +y,
@@ -54,18 +64,34 @@ export class TetragonCompass extends Compass {
 		}
 	}
 
-	slice (
-		coordinates: Array<number|undefined>
+	public tensorSlice (
+		...coordinates: Array<number|undefined>
 	): Array<number> {
-		return binarySlice(this.dimensions, coordinates)
+		return binaryTensorSlice(this.dimensions, coordinates)
 	}
 
-	triangulate (
+	public triangulate (
 		index: number
 	): Array<number> {
 		return binaryTriangulate(this.dimensions, index)
 	}
 }
+
+
+/***********************************************************
+a hexahedron is a six-sided polyhedron.
+standard 6-sided dice are a perfect example of this.
+remember that you can stack dice in three dimensions,
+and, in fact, thats how they package and ship in bulk.
+
+A finished map using this compass looks like this:
+
+layer 1:    layer 2:    layer 3:
+┌┬┬┐        ┌┬┬┐        ┌┬┬┐
+├┼┼┤        ├┼┼┤        ├┼┼┤
+├┼┼┤        ├┼┼┤        ├┼┼┤
+└┴┴┘        └┴┴┘        └┴┴┘
+***********************************************************/
 
 // a hexahedron is a six-sided polyhedron.
 export class HexahedronCompass extends Compass {
@@ -73,10 +99,11 @@ export class HexahedronCompass extends Compass {
 	constructor (
 		dimensions: Array<number>
 	) {
+		// extend various functions from base class.
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
 		const [x, y, z] = this.magnitudes
-		// generate a rose of index-offsetters.
+		// set a new rose of index-offsetters.
 		this.rose = {
 			'above': -z,
 			'below': +z,
@@ -87,12 +114,30 @@ export class HexahedronCompass extends Compass {
 		}
 	}
 
-	slice (
-		coordinates: Array<number|undefined>
+	public tensorSlice (
+		...coordinates: Array<number|undefined>
 	): Array<number> {
-		return binarySlice(this.dimensions, coordinates)
+		return binaryTensorSlice(this.dimensions, coordinates)
+	}
+
+	public triangulate (
+		index: number
+	): Array<number> {
+		return binaryTriangulate(this.dimensions, index)
 	}
 }
+
+
+/***********************************************************
+hexagons are interesting six-sided polygons.
+despite having six sides, you can triangulate a cell
+by knowing the location on the two of the three axis.
+
+A finished map using this compass looks like this:
+⬡ ⬡ ⬡
+ ⬡ ⬡ ⬡
+  ⬡ ⬡ ⬡
+***********************************************************/
 
 // a hexahedron is a six-sided polygon.
 export class HexagonCompass extends Compass {
@@ -100,18 +145,31 @@ export class HexagonCompass extends Compass {
 	constructor (
 		dimensions: Array<number>
 	) {
+		// extend various functions from base class.
 		super(dimensions)
 		// deconstruct magnitudes for each axis.
 		const [x, y] = this.magnitudes
-		// generate a rose of index-offsetters.
+		// set a new rose of index-offsetters.
 		this.rose = {
+			'east': -x,
+			'west': +x,
 			'northwest': -y,
 			'southeast': +y,
 			'northeast': x - y,
 			'southwest': y - x,
-			'east': -x,
-			'west': +x,
 		}
+	}
+
+	public tensorSlice (
+		...coordinates: Array<number|undefined>
+	): Array<number> {
+		return binaryTensorSlice(this.dimensions, coordinates)
+	}
+
+	public triangulate (
+		index: number
+	): Array<number> {
+		return binaryTriangulate(this.dimensions, index)
 	}
 }
 
@@ -143,27 +201,18 @@ const binaryTriangulate = (
 // binarySlice takes in the map's dimensions,
 // and then the cell's coordinates.
 // it returns a slice of the desired coordinates.
-const binarySlice = (
+const binaryTensorSlice = (
 	dimensions: Array<number>,
 	coordinates: Array<number|undefined>,
 ): Array<number> => {
 
-	const size: number = dimensions.reduce((
-		a: number,
-		b: number,
-	): number => {
-		return a * b
-	})
-
-	const allCells: Array<number> = [...Array(size).keys()]
+	const size: number = getSize(dimensions)
 	const validCells: Array<number> = []
 
 	// this piece creates spacers or iterators.
 	// if we have dimensions of [5,4,3] our spacers are:
-	// [1,5,20,60]. The final item = total # of coordinates.
-	allCells.forEach((
-		cellIndex: number
-	): void => {
+	// [1,5,20]. The final item = total # of coordinates.
+	for (const cellIndex of range(0, size)) {
 		let isValid: boolean = true
 
 		coordinates.forEach((
@@ -189,7 +238,7 @@ const binarySlice = (
 		if (isValid) {
 			validCells.push(cellIndex)
 		}
-	})
+	}
 	return validCells
 }
 
