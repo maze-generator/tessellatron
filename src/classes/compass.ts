@@ -9,14 +9,12 @@ import {
 	protected readonly dimensions:Array<number>
 	protected _rose: {[key:string]:number}
 	public directions: Set<string>
-	public diametrics: {[key:string]:string}
 	constructor (
 		dimensions:Array<number>
 	) {
-		// set defaults for typescript
 		this._rose = {}
+		// set defaults for typescript
 		this.dimensions = dimensions
-		this.diametrics = {}
 		this.directions = new Set()
 
 		// calibrate rose
@@ -25,6 +23,10 @@ import {
 
 	public get magnitudes () {
 		return getMagnitudes(this.dimensions)
+	}
+
+	public get diametrics () {
+		return getDiametrics(this.rose)
 	}
 
 	// @ts-ignore -> must be public
@@ -46,35 +48,6 @@ import {
 		// `directions` is a simple set of named vectors.
 		// luckily, these are exactly the keys of `rose`.
 		this.directions = new Set(Object.keys(this.rose))
-
-		// `diametrics` is a harder nut to crack.
-		// it pairs directions with their respective opposites.
-		const reducer = (
-			map:Map<number, string>,
-			direction:string,
-		):Map<number, string> => {
-			// reverse the keys into a JavaScript Map.
-			// the keys are numbers, so they can be made negative.
-			// use that to find the opposing direction string.
-			map.set(this.rose[direction], direction)
-			return map
-		}
-
-		const vectors:Map<number, string> = (
-			// set the `vectors` into a map with reduce.
-			[...this.directions].reduce(reducer, new Map())
-		)
-
-		// initialize diametrics.
-		this.diametrics = {}
-		for (const direction of this.directions) {
-			const vector:number = this.rose[direction]
-			// TODO -> bad `|| 'none'`...
-			// TODO -> its a frowny face for goodness sake!
-			const reversed:string = vectors.get(-vector) || ':('
-			// here is where reverse-directions is set!
-			this.diametrics[direction] = reversed
-		}
 	}
 
 	public reverse(direction:string):string {
