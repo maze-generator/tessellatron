@@ -46,6 +46,7 @@ A finished map using this compass looks like this:
 ├┼┼┤
 └┴┴┘
 ***********************************************************/
+
 export class TetragonCompass extends Compass {
 	public readonly rose: {[key: string]: number}
 	constructor (
@@ -76,7 +77,6 @@ export class TetragonCompass extends Compass {
 		return binaryTriangulate(this.dimensions, index)
 	}
 }
-
 
 /***********************************************************
 a hexahedron is a six-sided polyhedron.
@@ -126,7 +126,6 @@ export class HexahedronCompass extends Compass {
 		return binaryTriangulate(this.dimensions, index)
 	}
 }
-
 
 /***********************************************************
 hexagons are interesting six-sided polygons.

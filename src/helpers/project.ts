@@ -107,21 +107,20 @@ export const binaryTriangulate = (
 	dimensions: Array<number>,
 	index: number,
 ): Array<number> => {
+	// generate neccessary variables.
 	const coordinates: Array<number> = []
-	dimensions.forEach((
-		currentDimension: number,
-		positionIndex: number,
-	): void => {
-		const leadingDimensions: Array<number> = dimensions.slice(0, positionIndex)
-		const magnitude: number = leadingDimensions.reduce((
-			a: number,
-			b: number,
-		): number => {
-			return a * b
-		}, 1)
-		const coordinate: number = Math.floor(index / magnitude) % currentDimension
-		coordinates.push(coordinate)
-	})
+	const magnitudes: Array<number> = getMagnitudes(dimensions)
+	// loop through each index in the dimensions/index array.
+	for (const index of range(0, dimensions.length)) {
+		// dimensions.length === magnitudes.length;
+		// their index associates one with the other.
+		const dimension: number = dimensions[index]
+		const magnitude: number = magnitudes[index]
+		// calculate resulting coordinate.
+		const result: number = Math.floor(index / magnitude) % dimension
+		// push into array.
+		coordinates.push(result)
+	}
 	return coordinates
 }
 
