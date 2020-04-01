@@ -1,10 +1,10 @@
 import {
-	getSize,
 	getMagnitudes,
 	getDirections,
 	getDiametrics,
+	binaryTensorSlice,
+	binaryTriangulate,
 } from '../helpers/project'
-import {range} from '../helpers/series'
 
  class Compass {
 	protected readonly dimensions: Array<number>
@@ -171,75 +171,6 @@ export class HexagonCompass extends Compass {
 	): Array<number> {
 		return binaryTriangulate(this.dimensions, index)
 	}
-}
-
-
-
-const binaryTriangulate = (
-	dimensions: Array<number>,
-	index: number,
-): Array<number> => {
-	const coordinates: Array<number> = []
-	dimensions.forEach((
-		currentDimension: number,
-		positionIndex: number,
-	): void => {
-		const leadingDimensions: Array<number> = dimensions.slice(0, positionIndex)
-		const magnitude: number = leadingDimensions.reduce((
-			a: number,
-			b: number,
-		): number => {
-			return a * b
-		}, 1)
-		const coordinate: number = Math.floor(index / magnitude) % currentDimension
-		coordinates.push(coordinate)
-	})
-	return coordinates
-}
-
-
-// binarySlice takes in the map's dimensions,
-// and then the cell's coordinates.
-// it returns a slice of the desired coordinates.
-const binaryTensorSlice = (
-	dimensions: Array<number>,
-	coordinates: Array<number|undefined>,
-): Array<number> => {
-
-	const size: number = getSize(dimensions)
-	const validCells: Array<number> = []
-
-	// this piece creates spacers or iterators.
-	// if we have dimensions of [5,4,3] our spacers are:
-	// [1,5,20]. The final item = total # of coordinates.
-	for (const cellIndex of range(0, size)) {
-		let isValid: boolean = true
-
-		coordinates.forEach((
-			currentPosition: number|undefined,
-			positionIndex: number,
-		): void => {
-			if (currentPosition !== undefined) {
-				const currentDimension: number = dimensions[positionIndex]
-				const previousDimensions: Array<number> = dimensions.slice(0, positionIndex)
-				const magnitude: number = previousDimensions.reduce((
-					a: number,
-					b: number,
-				): number => {
-					return a * b
-				}, 1)
-
-				// check if the cell index is valid right now...
-				if (Math.floor(cellIndex / magnitude) % currentDimension !== currentPosition) {
-					isValid = false
-				}
-			}
-		})
-		if (isValid) {
-			validCells.push(cellIndex)
-		}
-	}
-	return validCells
 }
 
 export default TetragonCompass
