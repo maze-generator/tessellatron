@@ -6,16 +6,12 @@ import {
 } from '../helpers/project'
 
  class Compass {
-	protected readonly dimensions:Array<number>
-	protected _rose: {[key:string]:number}
+	protected readonly dimensions: Array<number>
+	protected rose: {[key: string]: number}
 	constructor (
-		dimensions:Array<number>
+		dimensions: Array<number>
 	) {
-		this._rose = {}
-		// set defaults for typescript
 		this.dimensions = dimensions
-
-		// calibrate rose
 		this.rose = {}
 	}
 
@@ -31,19 +27,6 @@ import {
 		return getDiametrics(this.rose)
 	}
 
-	// @ts-ignore -> must be public
-	public get rose ():{[key:string]:number} {
-		return this._rose
-	}
-
-	// @ts-ignore -> must be protected or private
-	protected set rose (
-		rose:{[key:string]:number}
-	):void {
-		// first, set the internal rose as expected.
-		this._rose = rose
-	}
-
 	public reverse(direction:string):string {
 		// directly pulling from `diametrics` would be easy...
 		// ...but, it seems more semantic using a method here!
@@ -55,6 +38,7 @@ import {
 // a quadrilateral is a four-angled polygon.
 // they mean the same thing.
 export class TetragonCompass extends Compass {
+	public readonly rose: {[key: string]: number}
 	constructor (
 		dimensions:Array<number>
 	) {
@@ -85,6 +69,7 @@ export class TetragonCompass extends Compass {
 
 // a hexahedron is a six-sided polyhedron.
 export class HexahedronCompass extends Compass {
+	public readonly rose: {[key: string]: number}
 	constructor (
 		dimensions:Array<number>
 	) {
@@ -111,6 +96,7 @@ export class HexahedronCompass extends Compass {
 
 // a hexahedron is a six-sided polygon.
 export class HexagonCompass extends Compass {
+	public readonly rose: {[key: string]: number}
 	constructor (
 		dimensions:Array<number>
 	) {
