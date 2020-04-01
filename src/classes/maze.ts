@@ -21,7 +21,7 @@ export default class Maze {
 
 		// the magnitudes are how much an index must move as
 		// to offset an associated coordinate by exactly one.
-		this.magnitudes = []
+		const magnitudes:Array<number> = []
 		// loop through dimensions via each index, `i`.
 		for (let i:number = 0; i < dimensions.length; i += 1) {
 			// collect antecedent dimensions leading up to this.
@@ -29,17 +29,20 @@ export default class Maze {
 			// calculate the product of those dimensions.
 			const product:number = previous.reduce(multiplier, 1)
 			// add the product to the list of magnitudes.
-			this.magnitudes.push(product)
+			magnitudes.push(product)
 		}
+
+		// apply calculated effects to this object.
+		this.magnitudes = magnitudes
 
 		// calculate size of the maze, aka the number of cells.
 		this.size = dimensions.reduce(multiplier)
 
-		// the board begins blank.
+		// the maze board begins blank.
 		this.map = new Array(this.size)
 
 		// create compass
-		this.compass = new TetragonCompass(dimensions)
+		this.compass = new TetragonCompass(dimensions, magnitudes)
 
 		// TODO: generation shall not execute here.
 		this.generate(0)
@@ -111,7 +114,7 @@ export default class Maze {
 		randomCompass.forEach((direction:string):void => {
 
 			// get the index of the neighbor via direction.
-			const neighborIndex:number = this.compass.offset(index)[direction]
+			const neighborIndex:number = this.compass.rose[direction] + index
 			let neighborCell:Cell
 
 			// if validating the neighborIndex fails, then the

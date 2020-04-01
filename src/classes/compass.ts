@@ -1,92 +1,78 @@
-export default class Compass {
+ class Compass {
 	protected readonly _dimensions:Array<number>
 	protected readonly _magnitudes:Array<number>
 	protected _rose: {[key:string]:number}
-	public opposites: {[key:string]:string}
 	public directions: Set<string>
+	public diametrics: {[key:string]:string}
 	constructor (
-		dimensions:Array<number>
+		dimensions:Array<number>,
+		magnitudes:Array<number>,
 	) {
-		this._dimensions = dimensions
-		this._magnitudes = this.calculateMagnitudes()
+		// set defaults for typescript
 		this._rose = {}
-		this.opposites = {}
+		this._dimensions = dimensions
+		this._magnitudes = magnitudes
+		this.diametrics = {}
 		this.directions = new Set()
+
+		// calibrate rose
+		this.rose = {}
 	}
 
-	private calculateMagnitudes () {
-		// a magnitude is the amount of indices to travel
-		// to shift the nth coordinate by one.
-		// for example, to get from [1, 4, 6] to [1, 5, 6].
-		// each dimension has an associated magnitude.
-		const magnitudes:Array<number> = []
-
-		// create a mini-multiplier reducer function.
-		const multiplier = (a:number, b:number):number => a * b
-
-		// loop through the this._dimensions via index, `i`.
-		for (
-			let i:number = 0;
-			i < this._dimensions.length;
-			i += 1
-		) {
-			// collect dimensions leading up to current dimension.
-			const previous:number[] = this._dimensions.slice(0, i)
-			// calculate the product of those dimensions.
-			const product:number = previous.reduce(multiplier, 1)
-			// add the product to the list of magnitudes.
-			magnitudes.push(product)
-		}
-
-		// magnitudes is useful just for this.
-		return magnitudes
-	}
-
+	// @ts-ignore -> must be public
 	public get rose ():{[key:string]:number} {
 		return this._rose
 	}
 
-	public set rose (
+	// @ts-ignore -> must be protected or private
+	protected set rose (
 		rose:{[key:string]:number}
 	) {
+		// first, set the internal rose as expected.
+		this._rose = rose
+		// now, recalibrate the compass properties.
+		this.calibrate()
+	}
+
+	private calibrate():void {
 		// `directions` is a simple set of named vectors.
 		// luckily, these are exactly the keys of `rose`.
-		this.directions = new Set(Object.keys(rose))
+		this.directions = new Set(Object.keys(this.rose))
 
-		// `opposites` is a harder nut to crack.
-		// the app reverses the keys into a JavaScript Map.
-		// since the keys are numbers, they can be inverted.
-		// use that to find the opposing direction string.
+		// `diametrics` is a harder nut to crack.
+		// it pairs directions with their respective opposites.
 		const reducer = (
 			map:Map<number, string>,
 			direction:string,
 		):Map<number, string> => {
-			// compute the `vector` of the direction.
-			map.set(rose[direction], direction)
+			// reverse the keys into a JavaScript Map.
+			// the keys are numbers, so they can be made negative.
+			// use that to find the opposing direction string.
+			map.set(this.rose[direction], direction)
 			return map
 		}
+
 		const vectors:Map<number, string> = (
 			// set the `vectors` into a map with reduce.
-			Object.keys(rose).reduce(reducer, new Map())
+			[...this.directions].reduce(reducer, new Map())
 		)
-		// initialize opposites.
-		this.opposites = {}
+
+		// initialize diametrics.
+		this.diametrics = {}
 		for (const direction of this.directions) {
-			const vector:number = rose[direction]
-			// TODO -> bad `|| 'none'`
+			const vector:number = this.rose[direction]
+			// TODO -> bad `|| 'none'`...
+			// TODO -> its a frowny face for goodness sake!
 			const reversed:string = vectors.get(-vector) || ':('
 			// here is where reverse-directions is set!
-			this.opposites[direction] = reversed
+			this.diametrics[direction] = reversed
 		}
-
-		// finally, just return the new rose as the new magnets.
-		this._rose = rose
 	}
 
 	public reverse(direction:string):string {
-		// directly pulling from `opposites` would be easy...
+		// directly pulling from `diametrics` would be easy...
 		// ...but, it seems more semantic using a method here!
-		return this.opposites[direction]
+		return this.diametrics[direction]
 	}
 
 	public offset (
