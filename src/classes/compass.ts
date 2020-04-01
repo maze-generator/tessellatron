@@ -1,3 +1,10 @@
+import {
+	getSize,
+	getMagnitudes,
+	getDirections,
+	getDiametrics,
+} from '../helpers/project'
+
  class Compass {
 	protected readonly _dimensions:Array<number>
 	protected readonly _magnitudes:Array<number>
