@@ -6,7 +6,7 @@ import {
 	binaryTriangulate,
 } from '../helpers/project'
 
- class Compass {
+class Compass {
 	protected readonly dimensions: Array<number>
 	protected rose: {[key: string]: number}
 	constructor (
@@ -171,8 +171,6 @@ export class HexagonCompass extends Compass {
 		return binaryTriangulate(this.dimensions, index)
 	}
 }
-
-export default TetragonCompass
 
 /***************************NOTES***************************
 ==NOTE==
