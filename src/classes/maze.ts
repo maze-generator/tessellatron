@@ -120,8 +120,8 @@ export default class Maze {
 				// generate a new maze block with the neighborIndex.
 				neighborCell = this.generate(neighborIndex)
 				// link up the net / graph / tree.
-				currentCell.joinWithNeighbor(neighborCell, direction)
-				currentCell.pathWithNeighbor(neighborCell, direction)
+				currentCell.addNeighbor(neighborCell, direction)
+				currentCell.makePathway(neighborCell, direction)
 
 			// if the Cell already exists, we can't hook it up.
 			} else if (this.map[neighborIndex] instanceof Cell) {
@@ -129,7 +129,7 @@ export default class Maze {
 				// @ts-ignore
 				neighborCell = this.map[neighborIndex]
 				// link up the net / graph / tree.
-				currentCell.joinWithNeighbor(neighborCell, direction)
+				currentCell.addNeighbor(neighborCell, direction)
 			}
 		})
 

@@ -1,47 +1,48 @@
-import Compass from './compass'
-
 export default class Cell {
+	private readonly compass:any
 	public position:number
-	public pathways:{[key:string]:boolean}
+	public passages:{[key:string]:boolean}
 	public neighbors:{[key:string]:Cell|undefined|null}
-	private readonly compass:Compass
 	constructor (
-		compass:Compass,
+		compass:any,
 		position:number,
 	) {
 		// initialize basic information.
-		this.position = position
 		this.compass = compass
+		this.position = position
 
-		// initialize pathways & neighbors.
-		this.pathways = {}
+		// initialize passages & neighbors.
+		this.passages = {}
 		this.neighbors = {}
 		for (const direction of this.compass.directions) {
-			this.pathways[direction] = false
+			this.passages[direction] = false
 			this.neighbors[direction] = undefined
 		}
 	}
 
-	public get boundaries ():{[key:string]:boolean} {
-		// boundaries is the opposite of pathways.
+	public get boundaries (
+	):{[key:string]:boolean} {
+		// boundaries is the opposite of passages.
 		const boundaries:{[key:string]:boolean} = {}
-		// loop through pathways and reverse values for boundaries.
-		for (const [direction, isPath] of Object.entries(this.pathways)) {
-			boundaries[direction] = !isPath
+		// loop through passages and reverse values for boundaries.
+		for (const direction in this.passages) {
+			boundaries[direction] = !this.passages[direction]
 		}
 		// there you have it!
 		return boundaries
 	}
 
-	public hasPath ():boolean {
+	public hasPath (
+	):boolean {
 		// a direction is either a wall (false) or path (true).
-		// check if there's any pathways in the values.
-		return Object.values(this.pathways).includes(true)
-		// `.values()` makes a list of booleans from pathways.
+		// check if there's any passages in the values.
+		return Object.values(this.passages).includes(true)
+		// `.values()` makes a list of booleans from passages.
 		// `.includes()` creates a boolean, which is returned.
 	}
 
-	public hasWall ():boolean {
+	public hasWall (
+	):boolean {
 		// a direction is either a wall (true) or path (false).
 		// check if there's any boundaries in the values.
 		return Object.values(this.boundaries).includes(true)
@@ -49,7 +50,7 @@ export default class Cell {
 		// `.includes()` creates a boolean, which is returned.
 	}
 
-	public isNeighborsWith (
+	public hasNeighbor (
 		that:Cell,
 	):boolean {
 		// check if this is a neighbor of that.
@@ -58,7 +59,7 @@ export default class Cell {
 		// `.includes()` creates a boolean, which is returned.
 	}
 
-	public joinWithNeighbor (
+	public addNeighbor (
 		that:Cell,
 		direction:string,
 	):void {
@@ -70,16 +71,16 @@ export default class Cell {
 		that.neighbors[reversed] = this
 	}
 
-	public pathWithNeighbor (
+	public makePathway (
 		that:Cell,
 		direction:string,
 	):void {
 		// `reversed` is the antipode of a direction.
 		// for example, `reversed` of 'north' is 'south'.
 		const reversed:string = this.compass.reverse(direction)
-		// set pathways.
-		this.pathways[direction] = true
-		that.pathways[reversed] = true
+		// set passages.
+		this.passages[direction] = true
+		that.passages[reversed] = true
 	}
 
 }

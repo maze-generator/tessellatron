@@ -21,10 +21,10 @@ export default class UnicodeGraphic {
 			index:number,
 		):void => {
 			// assumes there is a path in every direction.
-			const north:boolean = cell['pathways']['north']
-			const south:boolean = cell['pathways']['south']
-			const east:boolean = cell['pathways']['east']
-			const west:boolean = cell['pathways']['west']
+			const north:boolean = cell['passages']['north']
+			const south:boolean = cell['passages']['south']
+			const east:boolean = cell['passages']['east']
+			const west:boolean = cell['passages']['west']
 
 			// add line break if end of line is reached
 			if (index % this.maze.dimensions[0] === 0) {
