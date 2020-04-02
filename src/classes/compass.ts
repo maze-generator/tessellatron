@@ -41,13 +41,15 @@ a quadrilateral is a four-angled polygon.
 they represent the same thing...a square(ish) shape!
 
 A finished map using this compass looks like this:
-┌┬┬┐
-├┼┼┤
-├┼┼┤
-└┴┴┘
+┌─┬─┬─┐
+├─┼─┼─┤
+├─┼─┼─┤
+└─┴─┴─┘
 ***********************************************************/
 
 export class TetragonCompass extends Compass {
+	// rose was protected in Compass, but is now public.
+	// once it changes in the constructor, its readonly.
 	public readonly rose: {[key: string]: number}
 	constructor (
 		dimensions: Array<number>
@@ -87,14 +89,16 @@ and, in fact, thats how they package and ship in bulk.
 A finished map using this compass looks like this:
 
 layer 1:    layer 2:    layer 3:
-┌┬┬┐        ┌┬┬┐        ┌┬┬┐
-├┼┼┤        ├┼┼┤        ├┼┼┤
-├┼┼┤        ├┼┼┤        ├┼┼┤
-└┴┴┘        └┴┴┘        └┴┴┘
+┌─┬─┬─┐     ┌─┬─┬─┐     ┌─┬─┬─┐
+├─┼─┼─┤     ├─┼─┼─┤     ├─┼─┼─┤
+├─┼─┼─┤     ├─┼─┼─┤     ├─┼─┼─┤
+└─┴─┴─┘     └─┴─┴─┘     └─┴─┴─┘
 ***********************************************************/
 
 // a hexahedron is a six-sided polyhedron.
 export class HexahedronCompass extends Compass {
+	// rose was protected in Compass, but is now public.
+	// once it changes in the constructor, its readonly.
 	public readonly rose: {[key: string]: number}
 	constructor (
 		dimensions: Array<number>
@@ -133,13 +137,16 @@ despite having six sides, you can triangulate a cell
 by knowing the location on the two of the three axis.
 
 A finished map using this compass looks like this:
-⬡ ⬡ ⬡
- ⬡ ⬡ ⬡
-  ⬡ ⬡ ⬡
+┌─┬─┬─┐
+└┬┴┬┴┬┴┐
+ └┬┴┬┴┬┴┐
+  └─┴─┴─┘
 ***********************************************************/
 
 // a hexahedron is a six-sided polygon.
 export class HexagonCompass extends Compass {
+	// rose was protected in Compass, but is now public.
+	// once it changes in the constructor, its readonly.
 	public readonly rose: {[key: string]: number}
 	constructor (
 		dimensions: Array<number>
