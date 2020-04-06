@@ -1,6 +1,7 @@
 import Cell from './cell'
 import {TetragonCompass} from './compass'
 import {shuffle} from '../helpers/random'
+import {range} from '../helpers/series'
 import {
 	getSize,
 	getMagnitudes,
@@ -46,13 +47,8 @@ export default class Maze {
 		index1:number,
 		index2:number,
 	):boolean {
-		// helper function.
-		// removes neighbors that are invalid in some way,
-		// such as being out of bounds or across the map.
-		if (
-			!this.validIndex(index1)
-			|| !this.validIndex(index2)
-		) {
+		// validate both indices first.
+		if (!this.validIndex(index1) || !this.validIndex(index2)) {
 			return false
 		}
 
@@ -60,24 +56,21 @@ export default class Maze {
 		const coordinates1:Array<number> = this.compass.triangulate(index1)
 		const coordinates2:Array<number> = this.compass.triangulate(index2)
 
-		// count the differences.
-		let differences:number = 0
-		// the coordinates must share all but one dimension.
-		coordinates1.forEach((
-			coordinate1:number,
-			position:number,
-		) => {
-			const coordinate2:number = coordinates2[position]
-			if (coordinate1 !== coordinate2) {
-				differences += 1
+		// loop through each coordinate.
+		// all coordinates but one must match.
+		let delta = 0
+		for (const coorIndex in range(0, coordinates1.length)) {
+			if (coordinates1[coorIndex] !== coordinates2[coorIndex]) {
+				delta += 1
 			}
-		})
-
-		// now, check the differences, and return.
-		if (differences > 1) {
-			return false
-		} else {
+			if (delta > 1) {
+				break
+			}
+		}
+		if (delta === 1) {
 			return true
+		} else {
+			return false
 		}
 	}
 
