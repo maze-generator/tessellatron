@@ -56,7 +56,7 @@ These properties are important for orienting cells in place.
 ***********************************************************/
 
 export const getDirections = (
-	rose: {[key: string]: number},
+	rose: Record<string, number>
 ) => {
 	// `directions` is a simple set of named vectors.
 	// luckily, these are exactly the keys of the `rose`.
@@ -64,7 +64,7 @@ export const getDirections = (
 }
 
 export const getDiametrics = (
-	rose: {[key: string]: number},
+	rose: Record<string, number>
 ) => {
 	// `diametrics` is a harder nut to crack.
 	// it pairs directions with their respective opposites.
@@ -88,7 +88,7 @@ export const getDiametrics = (
 	)
 
 	// initialize diametrics.
-	const diametrics: {[key: string]: string} = {}
+	const diametrics: Record<string, string> = {}
 	for (const direction of directions) {
 		const vector: number = rose[direction]
 		// TODO -> bad `|| 'none'`...
@@ -135,7 +135,6 @@ export const binaryTriangulate = (
 	}
 	return coordinates
 }
-
 
 // binarySlice takes in the map's dimensions,
 // and then the cell's coordinates.

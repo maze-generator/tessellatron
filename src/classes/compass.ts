@@ -8,7 +8,7 @@ import {
 
 class Compass {
 	protected readonly dimensions: Array<number>
-	protected rose: {[key: string]: number}
+	protected rose: Record<string, number>
 	constructor (
 		dimensions: Array<number>
 	) {
@@ -50,7 +50,7 @@ A finished map using this compass looks like this:
 export class TetragonCompass extends Compass {
 	// rose was protected in Compass, but is now public.
 	// once it changes in the constructor, its readonly.
-	public readonly rose: {[key: string]: number}
+	public readonly rose: Record<string, number>
 	constructor (
 		dimensions: Array<number>
 	) {
@@ -99,7 +99,7 @@ layer 1:    layer 2:    layer 3:
 export class HexahedronCompass extends Compass {
 	// rose was protected in Compass, but is now public.
 	// once it changes in the constructor, its readonly.
-	public readonly rose: {[key: string]: number}
+	public readonly rose: Record<string, number>
 	constructor (
 		dimensions: Array<number>
 	) {
@@ -147,7 +147,7 @@ A finished map using this compass looks like this:
 export class HexagonCompass extends Compass {
 	// rose was protected in Compass, but is now public.
 	// once it changes in the constructor, its readonly.
-	public readonly rose: {[key: string]: number}
+	public readonly rose: Record<string, number>
 	constructor (
 		dimensions: Array<number>
 	) {

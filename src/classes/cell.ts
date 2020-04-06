@@ -1,8 +1,8 @@
 export default class Cell {
 	private readonly compass:any
 	public position:number
-	public passages:{[key:string]:boolean}
-	public neighbors:{[key:string]:Cell|undefined|null}
+	public passages:Record<string, boolean>
+	public neighbors:Record<string, Cell|undefined|null>
 	constructor (
 		compass:any,
 		position:number,
@@ -21,9 +21,9 @@ export default class Cell {
 	}
 
 	public get boundaries (
-	):{[key:string]:boolean} {
+	):Record<string, boolean> {
 		// boundaries is the opposite of passages.
-		const boundaries:{[key:string]:boolean} = {}
+		const boundaries:Record<string, boolean> = {}
 		// loop through passages and reverse values for boundaries.
 		for (const direction in this.passages) {
 			boundaries[direction] = !this.passages[direction]
@@ -85,7 +85,7 @@ export default class Cell {
 
 	public stringJSON (
 	):string {
-		const data: {[key: string]:any } = {}
+		const data: Record<string, any> = {}
 		data['position'] = this.position
 		data['passages'] = this.passages
 		data['neighbors'] = {}
