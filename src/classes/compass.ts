@@ -60,10 +60,10 @@ export class TetragonCompass extends Compass {
 		const [x, y] = this.magnitudes
 		// set a new rose of index-offsetters.
 		this.rose = {
+			'west':  -x,
+			'east':  +x,
 			'north': -y,
 			'south': +y,
-			'east':  +x,
-			'west':  -x,
 		}
 	}
 
@@ -109,12 +109,12 @@ export class HexahedronCompass extends Compass {
 		const [x, y, z] = this.magnitudes
 		// set a new rose of index-offsetters.
 		this.rose = {
-			'above': -z,
-			'below': +z,
+			'west':  -x,
+			'east':  +x,
 			'north': -y,
 			'south': +y,
-			'east':  -x,
-			'west':  +x,
+			'above': -z,
+			'below': +z,
 		}
 	}
 
