@@ -83,6 +83,32 @@ export default class Cell {
 		that.passages[reversed] = true
 	}
 
+	public stringJSON (
+	):string {
+		const data: {[key: string]:any } = {}
+		data['position'] = this.position
+		data['passages'] = this.passages
+		data['neighbors'] = {}
+		for (const direction in this.compass.directions) {
+			// neighbor is a cell...usually.
+			// otherwise, it is null or defined.
+			//
+			// null means the neighbor is out-of-bounds.
+			// this occurs if the cell is a side- or corner-piece.
+			//
+			// undefined just means the neighbor isnt yet defined.
+			// this occurs before the algorithm is done running.
+			const neighbor = this.neighbors[direction]
+			if (neighbor !== undefined && neighbor !== null) {
+				data['neighbors'][direction] = neighbor['position']
+			} else if (neighbor === null) {
+				data['neighbors'][direction] = null
+			} else {
+				// neighbor is presumeably undefined.
+				// such a value isnt valid JSON, so its omitted.
+			}
+		}
+		// JSON stringify for an output.
+		return JSON.stringify(data)
+	}
 }
-
-// valid connected neighbors -> neighbor and true
