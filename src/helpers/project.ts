@@ -185,3 +185,54 @@ export const binaryTensorSlice = (
 	}
 	return slice
 }
+
+/***********************************************************
+validate two neighbors
+***********************************************************/
+
+export const indexIsWithinBounds = (
+	id:number,
+	size:number,
+):boolean => {
+	return 0 <= id && id < size
+}
+
+export const indicesAreNeighbors = (
+	id1: number,
+	id2: number,
+	size: number,
+	dimensions: Array<number>,
+) => {
+		// validate both indices first.
+		if (!indexIsWithinBounds(id1, size) || !indexIsWithinBounds(id2, size)) {
+			return false
+		}
+
+		// calculate coordinates.
+		const coordinates1:Array<number> = binaryTriangulate(dimensions, id1)
+		const coordinates2:Array<number> = binaryTriangulate(dimensions, id2)
+
+		// loop through each coordinate.
+		// all coordinates but one must match.
+		let counter = 0
+		for (const coorIndex in range(0, coordinates1.length)) {
+			// set up variables
+			const coor1:number = coordinates1[coorIndex]
+			const coor2:number = coordinates2[coorIndex]
+			const difference:number = Math.abs(coor1 - coor2)
+			// check if-gates
+			if (difference === 0) {
+				// do nothing
+			} else if (difference === 1) {
+				counter += 1
+			} else {
+				break
+			} if (counter > 1) {
+				break
+			}
+		} if (counter === 1) {
+			return true
+		} else {
+			return false
+		}
+}
