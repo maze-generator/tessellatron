@@ -190,49 +190,39 @@ export const binaryTensorSlice = (
 validate two neighbors
 ***********************************************************/
 
-export const indexIsWithinBounds = (
+export const isValidIndex = (
 	id:number,
 	size:number,
-):boolean => {
+): boolean => {
 	return 0 <= id && id < size
 }
 
-export const indicesAreNeighbors = (
+export const getNeighbors = (
+	rose: Record<string, number>,
+	id: number,
+): Record<string, number> => {
+	const neighbors: Record<string, number> = {}
+	const entries: Array<[string, number]> = Object.entries(rose)
+	for (const [direction, modifier] of entries) {
+		neighbors[direction] = id + modifier
+	}
+	return neighbors
+}
+
+export const areNeighbors = (
+	rose: Record<string, number>,
 	id1: number,
 	id2: number,
-	size: number,
-	dimensions: Array<number>,
 ) => {
-		// validate both indices first.
-		if (!indexIsWithinBounds(id1, size) || !indexIsWithinBounds(id2, size)) {
-			return false
-		}
-
-		// calculate coordinates.
-		const coordinates1:Array<number> = binaryTriangulate(dimensions, id1)
-		const coordinates2:Array<number> = binaryTriangulate(dimensions, id2)
-
-		// loop through each coordinate.
-		// all coordinates but one must match.
-		let counter = 0
-		for (const coorIndex in range(0, coordinates1.length)) {
-			// set up variables
-			const coor1:number = coordinates1[coorIndex]
-			const coor2:number = coordinates2[coorIndex]
-			const difference:number = Math.abs(coor1 - coor2)
-			// check if-gates
-			if (difference === 0) {
-				// do nothing
-			} else if (difference === 1) {
-				counter += 1
-			} else {
-				break
-			} if (counter > 1) {
-				break
-			}
-		} if (counter === 1) {
-			return true
-		} else {
-			return false
-		}
+	// calculate neighbors of both ids.
+	const neighbors1 = getNeighbors(rose, id1)
+	const neighbors2 = getNeighbors(rose, id2)
+	// strip out unneeded directions; its irrelevent.
+	const addresses1: Set<number> = new Set(Object.values(neighbors1))
+	const addresses2: Set<number> = new Set(Object.values(neighbors2))
+	// extract the boolean using the `Set.has()` method.
+	const isNeighbor1 = addresses1.has(id2)
+	const isNeighbor2 = addresses2.has(id1)
+	// both must be neighbors of one another.
+	return isNeighbor1 && isNeighbor2
 }
