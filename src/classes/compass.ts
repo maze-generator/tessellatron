@@ -1,3 +1,22 @@
+/***************************NOTES***************************
+Compass
+- Inputs
+	- dimensions: Array<integer>
+	- layout: shape
+- Properties
+	- magnitudes: Array<integer>
+	- directions: Set<direction>
+	- diametrics: Record<direction, direction>
+- Methods
+	- getTensorSlice(coordinates: Array<index>): Tensor
+	- getCoordinates(tensor: Tensor): Array<index>
+	- indicesAreNeighbors(id1: index, id2: index):boolean
+	- indexIsWithinBounds(id:index):boolean
+
+==TODO==
+- `this.magnitudes` is not the greatest name; rename it.
+***********************************************************/
+
 import {
 	getMagnitudes,
 	getDirections,
@@ -178,12 +197,3 @@ export class HexagonCompass extends Compass {
 		return binaryTriangulate(this.dimensions, index)
 	}
 }
-
-/***************************NOTES***************************
-==NOTE==
-- `Compass` is a default class so that it can be typecast.
-
-==TODO==
-- the for loop in the primary class is suboptimal.
-- `this.magnitudes` is not the greatest name; rename it.
-***********************************************************/
