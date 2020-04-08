@@ -1,5 +1,6 @@
 import Map from './map'
 import Compass from './compass'
+import Generator from './generator'
 
 export default class Main {
 	// these are the base inputs.
