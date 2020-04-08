@@ -23,7 +23,7 @@ import {
 	getDiametrics,
 } from '../helpers/project'
 
-class Compass {
+export default class Compass {
 	// typeset the inputs.
 	protected data: Record<string, number>
 	public directions: Set<string>
@@ -38,7 +38,7 @@ class Compass {
 		layout: string,
 		dimensions: Array<number>,
 	) {
-		this.data = {} // UTILIZE GYROSCOPE METHOD
+		this.data = tetragonGyroscope(dimensions)
 		this.directions = getDirections(this.data)
 		this.diametrics = getDiametrics(this.data)
 		this.dimensions = dimensions
