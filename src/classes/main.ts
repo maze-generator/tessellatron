@@ -9,8 +9,8 @@ export default class Main {
 		this.dimensions = dimensions
 
 		// create a base map & compass template.
-		this.map = new Map()
-		this.compass = new Compass()
+		this.map = new Map(dimensions)
+		this.compass = new Compass(layout, dimensions)
 
 		// create a base maze algorithm template.
 		// with maze algorithm, create cells, and insert to map.
