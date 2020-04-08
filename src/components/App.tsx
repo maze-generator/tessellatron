@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
-import Maze from '../classes/maze'
-import Graphic from '../classes/unicode-graphic'
 
-const myMaze = new Maze([40,10])
-const myGraphic = new Graphic(myMaze)
-
-console.log(myMaze)
+const myMaze: string = 'hello'
 
 const App = () => {
-	const [words, setWords] = useState(myGraphic.pipeMaze())
+	const [words, setWords] = useState(myMaze)
 	return (
 		<>
 			<h1>Maze Generator</h1>
@@ -19,9 +14,7 @@ const App = () => {
 			<input
 				type='button'
 				onClick={() => {
-					const newMaze = new Maze([40,10])
-					const newGraphic = new Graphic(newMaze)
-					setWords(newGraphic.pipeMaze())
+					setWords(myMaze)
 				}}
 				value='Generate'
 			/>

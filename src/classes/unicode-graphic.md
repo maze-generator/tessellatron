@@ -1,3 +1,4 @@
+```ts
 import Maze from './maze'
 
 export default class UnicodeGraphic {

@@ -1,3 +1,4 @@
+```ts
 export default class Cell {
 	private readonly compass:any
 	public position:number

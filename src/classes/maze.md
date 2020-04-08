@@ -1,3 +1,4 @@
+```ts
 import Cell from './cell'
 import {TetragonCompass} from './compass'
 import {shuffle} from '../helpers/random'
