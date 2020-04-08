@@ -1,6 +1,17 @@
-import Map from './map.ts'
+import Map from './map'
+import Compass from './compass'
 
 export default class Main {
+	// these are the base inputs.
+	layout: string
+	algorithm: string
+	dimensions: Array<number>
+
+	// these are generated from the class.
+	map: Map
+	compass: Compass
+	generator: Generator
+
 	constructor(
 		layout: string,
 		algorithm: string,
@@ -8,6 +19,7 @@ export default class Main {
 	) {
 		// take inputs of size & layout.
 		this.layout = layout
+		this.algorithm = algorithm
 		this.dimensions = dimensions
 
 		// create a base map & compass template.

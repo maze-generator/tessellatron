@@ -68,7 +68,7 @@ const tetragonGyroscope = (
 	magnitudes:Array<number>,
 ): Record<string, number> => {
 	// deconstruct magnitudes for each axis.
-	const [x, y]:number = magnitudes
+	const [x, y]: Array<number> = magnitudes
 	// set a new data of index-offsetters.
 	return {
 		'west':  -x,
@@ -98,7 +98,7 @@ const hexahedronGyroscope = (
 	magnitudes: Array<number>,
 ): Record<string, number> => {
 	// deconstruct magnitudes for each axis.
-	const [x, y, z]:number = magnitudes
+	const [x, y, z]: Array<number> = magnitudes
 	// set a new data of index-offsetters.
 	return {
 		'west':  -x,
@@ -127,7 +127,7 @@ const hexagonGyroscope = (
 	magnitudes: Array<number>
 ): Record<string, number> => {
 	// deconstruct magnitudes for each axis.
-	const [x, y] = this.magnitudes
+	const [x, y]: Array<number> = magnitudes
 	// set a new data of index-offsetters.
 	return {
 		'east': -x,
