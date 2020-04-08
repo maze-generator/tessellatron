@@ -1,20 +1,8 @@
-```ts
-import Cell from './cell'
-import {TetragonCompass} from './compass'
-import {shuffle} from '../helpers/random'
-import {range} from '../helpers/series'
-import {
-	getSize,
-	getMagnitudes,
-} from '../helpers/project'
-
-
-export default class Maze {
-	compass:TetragonCompass
-	dimensions:Array<number>
-	magnitudes:Array<number>
-	size:number
-	map:Array<Cell|null|undefined>
+export default class Map {
+	readonly dimensions: Array<number>
+	readonly magnitudes: Array<number>
+	readonly size: number
+	public data: Array<Cell|undefined>
 	constructor(
 		dimensions:Array<number>,
 	) {
@@ -28,53 +16,12 @@ export default class Maze {
 		// the `size`, or number of cells, helps fill the map.
 		this.size = getSize(dimensions)
 
-		// the maze `map` begins blank.
-		this.map = new Array(this.size)
-
-		// the `compass` orients each cell correctly.
-		this.compass = new TetragonCompass(dimensions)
-
-		// TODO: generation shall not execute here.
-		this.generate(0)
+		// the map `data` begins blank.
+		this.data = new Array(this.size)
 	}
+}
 
-	validIndex (
-		index:number,
-	):boolean {
-		return 0 <= index && index < this.size
-	}
-
-	validNeighbors (
-		index1:number,
-		index2:number,
-	):boolean {
-		// validate both indices first.
-		if (!this.validIndex(index1) || !this.validIndex(index2)) {
-			return false
-		}
-
-		// calculate coordinates.
-		const coordinates1:Array<number> = this.compass.triangulate(index1)
-		const coordinates2:Array<number> = this.compass.triangulate(index2)
-
-		// loop through each coordinate.
-		// all coordinates but one must match.
-		let delta = 0
-		for (const coorIndex in range(0, coordinates1.length)) {
-			if (coordinates1[coorIndex] !== coordinates2[coorIndex]) {
-				delta += 1
-			}
-			if (delta > 1) {
-				break
-			}
-		}
-		if (delta === 1) {
-			return true
-		} else {
-			return false
-		}
-	}
-
+/*
 	generate (
 		index:number
 	) {
@@ -132,9 +79,7 @@ export default class Maze {
 		// simply might not be caught by anything.
 		return currentCell
 	}
-}
 
-/*
 	def shortest_path_bfs(self, paths=None, A=None, B=None):
 		'''
 		A = given starting node
@@ -189,7 +134,6 @@ export default class Maze {
 					queue.insert(0, c_list)
 		return paths
 
-/*
 	def aerate_maze(self, n=1):
 		'''
 		deletes n random walls to destroy trees.

@@ -1,3 +1,5 @@
+import Map from './map.ts'
+
 export default class Main {
 	constructor(
 		layout: string,
