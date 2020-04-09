@@ -6,10 +6,31 @@ export default class Generator {
 	}
 }
 
+const generate = () => {
+	// create cell from index.
+	// mark cell as active.
+
+	// for all random neighbors of cell:
+		// if the cell is unvisited:
+			// get cell by running dfs on the neighbor.
+			// connect pathway to and from neighbor.
+		// otherwise
+
+	// mark cell as visited.
+
+	/*
+	start:
+	// activated
+	4
+	Cell(4)
+	Cell(4), 5
+	Cell(4), Cell(5)
+	// visited
+	--> connect <--
+	*/
+}
+
 /*
-	generate (
-		index:number
-	) {
 		// generates a perfect maze.
 		// its done recursively via a depth-first traversal tree.
 		// this is a setter function; it does not return anything.
