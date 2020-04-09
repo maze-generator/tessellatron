@@ -6,28 +6,39 @@ export default class Generator {
 	}
 }
 
-const generate = () => {
-	// create cell from index.
-	// mark cell as active.
+const generateBFS = (
+	id01: number
+) => {
+	// create cell from id.
+	const cell01: Cell = this.map.data[id01]
 
-	// for all random neighbors of cell:
-		// if the cell is unvisited:
-			// get cell by running dfs on the neighbor.
-			// connect pathway to and from neighbor.
-		// otherwise
+	// mark self as active.
+	cell01.status = 'active'
+	// TODO: await command to continue.
 
-	// mark cell as visited.
+	// for all random neighbors of cell01:
+	const randomDirs: Array<string> = shuffle(this.compass.directions)
+	for (const direction in randomDirs) {
 
-	/*
-	start:
-	// activated
-	4
-	Cell(4)
-	Cell(4), 5
-	Cell(4), Cell(5)
-	// visited
-	--> connect <--
-	*/
+		// identify the neighbor cell
+		const id02: number = cell01.neighbors[direction]
+		const cell02: Cell = this.map.data[id02]
+
+		// check for unvisited neighbors
+		if (cell02.status !== 'unvisited') {
+
+			// connect the cells
+			cell01.pathway[direction] = true
+			cell02.pathway[this.compass.reverse(direction)] = true
+
+			// transfer 'active' state to id02
+			cell01.status = 'passive'
+			generateBFS(id02)
+		}
+	}
+
+	// mark cell as completed; neighbors have been exhuasted.
+	cell01.status = 'complete'
 }
 
 /*
