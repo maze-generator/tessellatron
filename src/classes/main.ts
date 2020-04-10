@@ -14,21 +14,21 @@ export default class Main {
 	generator: Generator
 
 	constructor(
+		dimensions: Array<number>,
 		layout: string,
 		algorithm: string,
-		dimensions: Array<number>,
 	) {
 		// take inputs of size & layout.
+		this.dimensions = dimensions
 		this.layout = layout
 		this.algorithm = algorithm
-		this.dimensions = dimensions
 
 		// create a base map & compass template.
 		this.map = new Map(dimensions)
-		this.compass = new Compass(layout, dimensions)
+		this.compass = new Compass(dimensions, layout)
 
 		// create a base maze algorithm template.
 		// with maze algorithm, create cells, and insert to map.
-		this.generator = new Generator(algorithm)
+		this.generator = new Generator(this.map, dimensions, algorithm)
 	}
 }
