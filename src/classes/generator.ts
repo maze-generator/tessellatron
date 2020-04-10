@@ -6,7 +6,11 @@ export default class Generator {
 	}
 }
 
-const generateBFS = (
+// REQUIREMENTS:
+// map
+// compass
+// algorithm
+const generateRecursiveDFS = (
 	id01: number
 ) => {
 	// create cell from id.
@@ -14,25 +18,29 @@ const generateBFS = (
 
 	// mark self as active.
 	cell01.status = 'active'
-	// TODO: await command to continue.
 
-	// for all random neighbors of cell01:
+	// TODO: await command to continue.
+	// ...
+
+	// loop through neighbors in a random order.
 	const randomDirs: Array<string> = shuffle(this.compass.directions)
 	for (const direction in randomDirs) {
 
-		// identify the neighbor cell
+		// identify the neighbor cell.
 		const id02: number = cell01.neighbors[direction]
 		const cell02: Cell = this.map.data[id02]
 
-		// check for unvisited neighbors
+		// check for unvisited neighbors.
 		if (cell02.status !== 'unvisited') {
 
 			// connect the cells
 			cell01.pathway[direction] = true
 			cell02.pathway[this.compass.reverse(direction)] = true
 
-			// transfer 'active' state to id02
+			// transfer 'active' state to id02.
 			cell01.status = 'passive'
+
+			// recursively call with new neighbor.
 			generateBFS(id02)
 		}
 	}
