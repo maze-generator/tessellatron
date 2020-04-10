@@ -2,7 +2,7 @@ export default class Map {
 	readonly dimensions: Array<number>
 	readonly magnitudes: Array<number>
 	readonly size: number
-	public data: Array<Cell|undefined>
+	public data: Array<Cell>
 	constructor(
 		dimensions:Array<number>,
 	) {
