@@ -8,7 +8,7 @@
 	},
 	"map": [
 		{
-			"position": 0,
+			"state": "unvisited",
 			"passages": {
 				"north": false,
 				"south": false,
@@ -20,16 +20,24 @@
 			}
 		},
 		{
-			"position": 1,
+			"state": "active",
 			"passages": {
 				"north": false,
 				"south": false,
 				"east": false,
-				"west": true
+				"west": false
 			},
 			"neighbors": {
-				"west": 0
+				"east": 1
 			}
-		}
+		},
 	]
 }
+
+/*
+	"unvisited" -> not touched since initialization
+	"active"    -> being processed
+	"passive"   -> being processed
+	"passage"   -> finished processing
+	"barrier"   -> finished processing
+*/
