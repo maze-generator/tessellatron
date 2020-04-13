@@ -23,12 +23,9 @@ export default class Main {
 		this.layout = layout
 		this.algorithm = algorithm
 
-		// create a base map & compass template.
+		// create a base map, compass, and generator template.
 		this.map = new Map(dimensions)
 		this.compass = new Compass(this.map, layout)
-
-		// create a base maze algorithm template.
-		// with maze algorithm, create cells, and insert to map.
 		this.generator = new Generator(this.map, this.compass, algorithm)
 	}
 }
