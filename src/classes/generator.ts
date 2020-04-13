@@ -14,49 +14,49 @@ export default class Generator {
 		this.algorithm = algorithm
 	}
 
-// REQUIREMENTS:
-// data
-// directions
-// diametrics
-// algorithm
-const generateRecursiveDFS = (
-	id01: number
-) => {
-	// create cell from id.
-	const cell01: Cell = this.data[id01]
+	// REQUIREMENTS:
+	// data
+	// directions
+	// diametrics
+	// algorithm
+	const generateRecursiveDFS = (
+		id01: number
+	) => {
+		// create cell from id.
+		const cell01: Cell = this.data[id01]
 
-	// mark self as active.
-	cell01.status = 'active'
+		// mark self as active.
+		cell01.status = 'active'
 
-	// TODO: await command to continue.
-	// ...
+		// TODO: await command to continue.
+		// ...
 
-	// loop through neighbors in a random order.
-	const randomDirs: Array<string> = shuffle(this.directions)
-	for (const direction in randomDirs) {
+		// loop through neighbors in a random order.
+		const randomDirs: Array<string> = shuffle(this.directions)
+		for (const direction in randomDirs) {
 
-		// identify the neighbor cell.
-		const id02: number = cell01.neighbors[direction]
-		const cell02: Cell = this.data[id02]
+			// identify the neighbor cell.
+			const id02: number = cell01.neighbors[direction]
+			const cell02: Cell = this.data[id02]
 
-		// check for unvisited neighbors.
-		if (cell02.status !== 'unvisited') {
+			// check for unvisited neighbors.
+			if (cell02.status !== 'unvisited') {
 
-			// connect the cells
-			cell01.pathway[direction] = true
-			cell02.pathway[this.diametrics[direction]] = true
+				// connect the cells
+				cell01.pathway[direction] = true
+				cell02.pathway[this.diametrics[direction]] = true
 
-			// transfer 'active' state to id02.
-			cell01.status = 'passive'
+				// transfer 'active' state to id02.
+				cell01.status = 'passive'
 
-			// recursively call with new neighbor.
-			generateBFS(id02)
+				// recursively call with new neighbor.
+				generateBFS(id02)
+			}
 		}
-	}
 
-	// mark cell as completed; neighbors have been exhuasted.
-	cell01.status = 'complete'
-}
+		// mark cell as completed; neighbors have been exhuasted.
+		cell01.status = 'complete'
+	}
 }
 
 /*
