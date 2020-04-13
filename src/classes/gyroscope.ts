@@ -10,7 +10,7 @@ A finished map using this compass looks like this:
 └─┴─┴─┘
 ***********************************************************/
 
-const tetragonGyroscope = (
+export const tetragonGyroscope = (
 	magnitudes:Array<number>,
 ): Record<string, number> => {
 	// deconstruct magnitudes for each axis.
@@ -40,7 +40,7 @@ layer 1:    layer 2:    layer 3:
 ***********************************************************/
 
 // a hexahedron is a six-sided polyhedron.
-const hexahedronGyroscope = (
+export const hexahedronGyroscope = (
 	magnitudes: Array<number>,
 ): Record<string, number> => {
 	// deconstruct magnitudes for each axis.
@@ -69,7 +69,7 @@ A finished map using this compass looks like this:
 ***********************************************************/
 
 // a hexahedron is a six-sided polygon.
-const hexagonGyroscope = (
+export const hexagonGyroscope = (
 	magnitudes: Array<number>
 ): Record<string, number> => {
 	// deconstruct magnitudes for each axis.

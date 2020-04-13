@@ -1,6 +1,5 @@
-import Map from './map'
-import Compass from './compass'
 import Cell from './cell'
+import Maze from './maze'
 import {shuffle} from '../helpers/random'
 
 export default class Generator {
@@ -9,13 +8,12 @@ export default class Generator {
 	antipodes: Record<string, string>
 	algorithm: string
 	constructor(
-		map: Map,
-		compass: Compass,
+		maze: Maze,
 		algorithm: string,
 	) {
-		this.data = map.data
-		this.directions = compass.directions
-		this.antipodes = compass.antipodes
+		this.data = maze.map.data
+		this.directions = maze.compass.directions
+		this.antipodes = maze.compass.antipodes
 		this.algorithm = algorithm
 	}
 

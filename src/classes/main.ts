@@ -1,5 +1,4 @@
-import Map from './map'
-import Compass from './compass'
+import Maze from './maze'
 import Generator from './generator'
 
 export default class Main {
@@ -8,8 +7,7 @@ export default class Main {
 	algorithm: string
 
 	// these are generated from the class.
-	map: Map
-	compass: Compass
+	maze: Maze
 	generator: Generator
 
 	constructor(
@@ -22,9 +20,8 @@ export default class Main {
 		this.algorithm = algorithm
 
 		// create a base map, compass, and generator template.
-		this.compass = new Compass(dimensions, layout)
-		this.map = new Map(this.compass, dimensions)
-		this.generator = new Generator(this.map, this.compass, algorithm)
+		this.maze = new Maze(dimensions, layout, algorithm)
+		this.generator = new Generator(this.maze, algorithm)
 
 		this.generator.recursiveDFS(0)
 	}

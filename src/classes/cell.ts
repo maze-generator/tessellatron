@@ -1,17 +1,14 @@
-import Map from './map'
-import Compass from './compass'
+import Maze from './maze'
 import {getNeighbors} from '../helpers/project'
 
 export default class Cell {
-	map: Map
-	compass: Compass
+	maze: Maze
 	public id: number
 	public status: 'unvisited'|'active'|'passive'|'complete'
 	public passages: Record<string, boolean>
 	public neighbors: Record<string, number>
 	constructor (
-		map: Map,
-		compass: Compass,
+		maze: Maze,
 		id: number,
 	) {
 		// initialize basic information.
@@ -19,20 +16,19 @@ export default class Cell {
 		this.status = 'unvisited'
 
 		// add class information.
-		this.map = map
-		this.compass = compass
+		this.maze = maze
 
 		// initialize neighbors.
 		this.neighbors = getNeighbors(
-			this.compass.rose,
-			this.map.dimensions,
-			this.map.size,
+			this.maze.compass.rose,
+			this.maze.map.dimensions,
+			this.maze.map.size,
 			this.id,
 		)
 
 		// initialize passages.
 		this.passages = {}
-		for (const direction of this.compass.directions) {
+		for (const direction of this.maze.compass.directions) {
 			// `false` means there is no direct connection to a neighbor.
 			// this changes when something connects two cells with one another.
 			this.passages[direction] = false
@@ -84,11 +80,11 @@ export default class Cell {
 	):void {
 
 		// get instance of that cell.
-		const that = this.map.data[id]
+		const that = this.maze.map.data[id]
 
 		// `reversed` is the antipode of a direction.
 		// for example, `reversed` of 'north' is 'south'.
-		const reversed: string = this.compass.antipodes[direction]
+		const reversed: string = this.maze.compass.antipodes[direction]
 
 		// set neighbors.
 		this.neighbors[direction] = that.id
@@ -100,11 +96,11 @@ export default class Cell {
 		direction:string,
 	): void {
 		// get instance of that cell.
-		const that = this.map.data[id]
+		const that = this.maze.map.data[id]
 
 		// `reversed` is the antipode of a direction.
 		// for example, `reversed` of 'north' is 'south'.
-		const reversed: string = this.compass.antipodes[direction]
+		const reversed: string = this.maze.compass.antipodes[direction]
 
 		// set passages.
 		this.passages[direction] = true
@@ -119,7 +115,7 @@ export default class Cell {
 		data['id'] = this.id
 		data['passages'] = this.passages
 		data['neighbors'] = {}
-		for (const direction in this.compass.directions) {
+		for (const direction in this.maze.compass.directions) {
 			// neighbor is a cell...usually.
 			// otherwise, it is null or defined.
 			//
