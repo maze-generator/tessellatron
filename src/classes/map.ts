@@ -1,3 +1,6 @@
+import Cell from './Cell'
+import {getMagnitudes, getSize} from '../helpers/project'
+
 export default class Map {
 	readonly dimensions: Array<number>
 	readonly magnitudes: Array<number>
@@ -17,6 +20,6 @@ export default class Map {
 		this.size = getSize(dimensions)
 
 		// the map `data` begins blank.
-		this.data = new Array(this.size)
+		this.data = []
 	}
 }
