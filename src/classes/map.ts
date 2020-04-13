@@ -1,4 +1,3 @@
-import Compass from './compass'
 import Cell from './cell'
 import {
 	getMagnitudes,
@@ -11,30 +10,39 @@ import {
 } from '../helpers/project'
 
 export default class Map {
-	readonly dimensions: Array<number>
-	readonly magnitudes: Array<number>
-	readonly size: number
-	public data: Array<Cell>
-	private compass: Compass
+	public compass: Compass
+	public map: Map
 	constructor(
-		compass: Compass,
 		dimensions: Array<number>,
+		layout: string,
+		algorithm: string,
 	) {
+		this.map = {}
+		this.compass = {}
+
 		// `dimensions` represents the shape of the maze.
 		// eg length=3, width=4, height=5; or simply [3, 4, 5].
-		this.dimensions = dimensions
+		this.map.dimensions = dimensions
 
 		// `magnitudes` are helpful to locate maze cells.
-		this.magnitudes = getMagnitudes(dimensions)
+		this.map.magnitudes = getMagnitudes(dimensions)
 
 		// the `size`, or number of cells, helps fill the map.
-		this.size = getSize(dimensions)
+		this.map.size = getSize(dimensions)
+
+		// the `rose` describes the offset in each direction.
+		// its extremely useful for computing neighbors.
+		this.compass.rose = tetragonGyroscope(this.map.magnitudes)
+		// TODO: properly choose tetragonGyroscope using layout.
+
+		// `directions` are helpful in a pinch.
+		this.compass.directions = getDirections(this.compass.rose)
+
+		// `antipodes` define the opposite of each direction.
+		this.compass.antipodes = getAntipodes(this.compass.rose)
 
 		// the map `data` begins blank.
-		this.data = []
-
-		// compass functionality is neccessary for the cells.
-		this.compass = compass
+		this.map.data = []
 
 		// fill data with actual cells.
 		for (let index: number = 0; index < this.size; index++) {
@@ -46,7 +54,7 @@ export default class Map {
 		id: number,
 	): boolean {
 		// utilize helper function.
-		return isValidIndex(this.size, id)
+		return isValidIndex(this.map.size, id)
 	}
 
 	areNeighbors (
@@ -55,8 +63,8 @@ export default class Map {
 	): boolean {
 		// utilize helper function.
 		return areNeighbors(
-			this.dimensions,
-			this.size,
+			this.map.dimensions,
+			this.map.size,
 			id01,
 			id02,
 		)
@@ -68,8 +76,8 @@ export default class Map {
 		// utilize helper function.
 		return getNeighbors(
 			this.compass.rose,
-			this.dimensions,
-			this.size,
+			this.map.dimensions,
+			this.map.size,
 			id,
 		)
 	}
@@ -78,13 +86,13 @@ export default class Map {
 		id: number
 	): Array<number> {
 		// utilize helper function.
-		return binaryTriangulate(this.dimensions, id)
+		return binaryTriangulate(this.map.dimensions, id)
 	}
 
 	tensorSlice (
 		coordinates: Array<number|undefined>
 	): Array<number> {
 		// utilize helper function.
-		return binaryTensorSlice(this.dimensions, coordinates)
+		return binaryTensorSlice(this.map.dimensions, coordinates)
 	}
 }
