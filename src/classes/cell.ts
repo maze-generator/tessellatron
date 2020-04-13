@@ -40,7 +40,7 @@ export default class Cell {
 	}
 
 	public get boundaries (
-	):Record<string, boolean> {
+	): Record<string, boolean> {
 		// boundaries is the opposite of passages.
 		const boundaries:Record<string, boolean> = {}
 		// loop through passages and reverse values for boundaries.
@@ -52,7 +52,7 @@ export default class Cell {
 	}
 
 	public hasPath (
-	):boolean {
+	): boolean {
 		// a direction is either a wall (false) or path (true).
 		// check if there's any passages in the values.
 		return Object.values(this.passages).includes(true)
@@ -61,7 +61,7 @@ export default class Cell {
 	}
 
 	public hasWall (
-	):boolean {
+	): boolean {
 		// a direction is either a wall (true) or path (false).
 		// check if there's any boundaries in the values.
 		return Object.values(this.boundaries).includes(true)
@@ -71,7 +71,7 @@ export default class Cell {
 
 	public hasNeighbor (
 		id: number,
-	):boolean {
+	): boolean {
 		// check if this is a neighbor of that.
 		return Object.values(this.neighbors).includes(id)
 		// `.values()` makes a list of cells from neighbors.
@@ -95,13 +95,17 @@ export default class Cell {
 		that.neighbors[reversed] = this.id
 	}
 
-	public makePathway (
-		that:Cell,
+	public connectCell (
+		id: number,
 		direction:string,
-	):void {
+	): void {
+		// get instance of that cell.
+		const that = this.map.data[id]
+
 		// `reversed` is the antipode of a direction.
 		// for example, `reversed` of 'north' is 'south'.
 		const reversed: string = this.compass.antipodes[direction]
+
 		// set passages.
 		this.passages[direction] = true
 		that.passages[reversed] = true

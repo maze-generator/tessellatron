@@ -18,6 +18,7 @@ Compass
 ***********************************************************/
 import Map from './map'
 import {
+	getMagnitudes,
 	getDirections,
 	getAntipodes,
 } from '../helpers/project'
@@ -29,10 +30,13 @@ export default class Compass {
 	public readonly antipodes: Record<string, string>
 
 	constructor (
-		map: Map,
+		dimensions: Array<number>,
 		layout: string,
 	) {
-		this.rose = tetragonGyroscope(map.magnitudes)
+		const magnitudes: Array<number> = getMagnitudes(dimensions)
+		// the rose describes the shape of the entire maze.
+		// TODO: properly choose tetragonGyroscope using layout.
+		this.rose = tetragonGyroscope(magnitudes)
 		this.directions = getDirections(this.rose)
 		this.antipodes = getAntipodes(this.rose)
 	}

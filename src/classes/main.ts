@@ -6,7 +6,6 @@ export default class Main {
 	// these are the base inputs.
 	layout: string
 	algorithm: string
-	dimensions: Array<number>
 
 	// these are generated from the class.
 	map: Map
@@ -19,13 +18,13 @@ export default class Main {
 		algorithm: string = 'recursive breadth-first search',
 	) {
 		// take inputs of size & layout.
-		this.dimensions = dimensions
 		this.layout = layout
 		this.algorithm = algorithm
 
 		// create a base map, compass, and generator template.
-		this.map = new Map(dimensions)
-		this.compass = new Compass(this.map, layout)
+		this.compass = new Compass(dimensions, layout)
+		this.map = new Map(this.compass, dimensions)
 		this.generator = new Generator(this.map, this.compass, algorithm)
+
 	}
 }

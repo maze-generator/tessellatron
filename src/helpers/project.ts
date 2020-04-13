@@ -204,7 +204,7 @@ export const areNeighbors = (
 	id02: number,
 ) => {
 	// validate both indices first.
-	if (!isValidIndex(id01, size) || !isValidIndex(id02, size)) {
+	if (!isValidIndex(size, id01) || !isValidIndex(size, id02)) {
 		return false
 	}
 
@@ -247,6 +247,7 @@ export const getNeighbors = (
 	size: number,
 	id01: number,
 ): Record<string, number> => {
+
 	// initialize return container.
 	const neighbors: Record<string, number> = {}
 

@@ -3,7 +3,7 @@ import './App.css'
 import Main from '../classes/main'
 
 const myMaze: string = 'hello'
-const myMain = new Main([10,10])
+console.log(new Main([10,10]))
 
 const App = () => {
 	const [words, setWords] = useState(myMaze)
