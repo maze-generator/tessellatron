@@ -1,23 +1,27 @@
-```ts
 export default class Cell {
-	private readonly compass:any
-	public position:number
-	public passages:Record<string, boolean>
-	public neighbors:Record<string, Cell|undefined|null>
+	private readonly compass: any
+	public id: number
+	public state: string
+	public passages: Record<string, boolean>
+	public neighbors: Record<string, number>
 	constructor (
 		compass:any,
-		position:number,
+		id:number,
 	) {
 		// initialize basic information.
 		this.compass = compass
-		this.position = position
+		this.id = id
+		this.state = 'unvisited'
 
-		// initialize passages & neighbors.
+		// initialize neighbors & passages.
+		this.neighbors = getNeighbors(this.id)
 		this.passages = {}
-		this.neighbors = {}
 		for (const direction of this.compass.directions) {
-			this.passages[direction] = false
-			this.neighbors[direction] = undefined
+			if (this.neighbors[direction] !== undefined) {
+				// `false` means there is no direct connection to a neighbor.
+				// this changes when something connects two cells with one another.
+				this.passages[direction] = false
+			}
 		}
 	}
 
@@ -52,10 +56,10 @@ export default class Cell {
 	}
 
 	public hasNeighbor (
-		that:Cell,
+		id: number,
 	):boolean {
 		// check if this is a neighbor of that.
-		return Object.values(this.neighbors).includes(that)
+		return Object.values(this.neighbors).includes(id)
 		// `.values()` makes a list of cells from neighbors.
 		// `.includes()` creates a boolean, which is returned.
 	}
@@ -87,7 +91,7 @@ export default class Cell {
 	public stringJSON (
 	):string {
 		const data: Record<string, any> = {}
-		data['position'] = this.position
+		data['id'] = this.id
 		data['passages'] = this.passages
 		data['neighbors'] = {}
 		for (const direction in this.compass.directions) {
@@ -101,7 +105,7 @@ export default class Cell {
 			// this occurs before the algorithm is done running.
 			const neighbor = this.neighbors[direction]
 			if (neighbor !== undefined && neighbor !== null) {
-				data['neighbors'][direction] = neighbor['position']
+				data['neighbors'][direction] = neighbor['id']
 			} else if (neighbor === null) {
 				data['neighbors'][direction] = null
 			} else {
