@@ -24,13 +24,9 @@ import {
 
 export default class Compass {
 	// typeset the inputs.
-	protected readonly rose: Record<string, number>
+	public readonly rose: Record<string, number>
 	public readonly directions: Set<string>
 	public readonly antipodes: Record<string, string>
-
-	// these are needed internally, but they are not
-	// semantic enough to be public class properties.
-	protected readonly magnitudes: Array<number>
 
 	constructor (
 		map: Map,
@@ -39,7 +35,6 @@ export default class Compass {
 		this.rose = tetragonGyroscope(map.magnitudes)
 		this.directions = getDirections(this.rose)
 		this.antipodes = getAntipodes(this.rose)
-		this.magnitudes = map.magnitudes
 	}
 }
 
