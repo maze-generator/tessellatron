@@ -16,7 +16,7 @@ Compass
 ==TODO==
 - `this.magnitudes` is not the greatest name; rename it.
 ***********************************************************/
-
+import Map from './map'
 import {
 	getMagnitudes,
 	getDirections,
@@ -25,7 +25,7 @@ import {
 
 export default class Compass {
 	// typeset the inputs.
-	protected readonly data: Record<string, number>
+	protected readonly rose: Record<string, number>
 	public readonly directions: Set<string>
 	public readonly diametrics: Record<string, string>
 
@@ -35,14 +35,14 @@ export default class Compass {
 	protected readonly magnitudes: Array<number>
 
 	constructor (
+		map: Map,
 		layout: string,
-		dimensions: Array<number>,
 	) {
-		this.data = tetragonGyroscope(dimensions)
-		this.directions = getDirections(this.data)
-		this.diametrics = getDiametrics(this.data)
-		this.dimensions = dimensions
-		this.magnitudes = getMagnitudes(dimensions)
+		this.rose = tetragonGyroscope(map.dimensions)
+		this.directions = getDirections(this.rose)
+		this.diametrics = getDiametrics(this.rose)
+		this.dimensions = map.dimensions
+		this.magnitudes = map.magnitudes
 	}
 
 	public reverse(direction: string): string {
@@ -69,7 +69,7 @@ const tetragonGyroscope = (
 ): Record<string, number> => {
 	// deconstruct magnitudes for each axis.
 	const [x, y]: Array<number> = magnitudes
-	// set a new data of index-offsetters.
+	// set a new rose of index-offsetters.
 	return {
 		'west':  -x,
 		'east':  +x,
@@ -99,7 +99,7 @@ const hexahedronGyroscope = (
 ): Record<string, number> => {
 	// deconstruct magnitudes for each axis.
 	const [x, y, z]: Array<number> = magnitudes
-	// set a new data of index-offsetters.
+	// set a new rose of index-offsetters.
 	return {
 		'west':  -x,
 		'east':  +x,
@@ -128,7 +128,7 @@ const hexagonGyroscope = (
 ): Record<string, number> => {
 	// deconstruct magnitudes for each axis.
 	const [x, y]: Array<number> = magnitudes
-	// set a new data of index-offsetters.
+	// set a new rose of index-offsetters.
 	return {
 		'east': -x,
 		'west': +x,
