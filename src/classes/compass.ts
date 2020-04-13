@@ -6,7 +6,7 @@ Compass
 - Properties
 	- magnitudes: Array<integer>
 	- directions: Set<direction>
-	- diametrics: Record<direction, direction>
+	- antipodes: Record<direction, direction>
 - Methods
 	- getTensorSlice(coordinates: Array<index>): Tensor
 	- getCoordinates(tensor: Tensor): Array<index>
@@ -19,35 +19,27 @@ Compass
 import Map from './map'
 import {
 	getDirections,
-	getDiametrics,
+	getAntipodes,
 } from '../helpers/project'
 
 export default class Compass {
 	// typeset the inputs.
 	protected readonly rose: Record<string, number>
 	public readonly directions: Set<string>
-	public readonly diametrics: Record<string, string>
+	public readonly antipodes: Record<string, string>
 
 	// these are needed internally, but they are not
 	// semantic enough to be public class properties.
-	protected readonly dimensions: Array<number>
 	protected readonly magnitudes: Array<number>
 
 	constructor (
 		map: Map,
 		layout: string,
 	) {
-		this.rose = tetragonGyroscope(map.dimensions)
+		this.rose = tetragonGyroscope(map.magnitudes)
 		this.directions = getDirections(this.rose)
-		this.diametrics = getDiametrics(this.rose)
-		this.dimensions = map.dimensions
+		this.antipodes = getAntipodes(this.rose)
 		this.magnitudes = map.magnitudes
-	}
-
-	public reverse(direction: string): string {
-		// directly pulling from `diametrics` would be easy...
-		// ...but, it seems more semantic using a method here!
-		return this.diametrics[direction]
 	}
 }
 

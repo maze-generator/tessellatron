@@ -6,7 +6,7 @@ import {shuffle} from '../helpers/random'
 export default class Generator {
 	data: Array<number>
 	directions: Set<string>
-	diametrics: Record<string, string>
+	antipodes: Record<string, string>
 	algorithm: string
 	constructor(
 		map: Map,
@@ -15,7 +15,7 @@ export default class Generator {
 	) {
 		this.data = map.data
 		this.directions = compass.directions
-		this.diametrics = compass.diametrics
+		this.antipodes = compass.antipodes
 		this.algorithm = algorithm
 	}
 
@@ -44,7 +44,7 @@ export default class Generator {
 
 				// connect the cells
 				cell01.pathway[direction] = true
-				cell02.pathway[this.diametrics[direction]] = true
+				cell02.pathway[this.antipodes[direction]] = true
 
 				// transfer 'active' state to id02.
 				cell01.status = 'passive'

@@ -70,7 +70,7 @@ export default class Cell {
 	):void {
 		// `reversed` is the antipode of a direction.
 		// for example, `reversed` of 'north' is 'south'.
-		const reversed:string = this.compass.reverse(direction)
+		const reversed: string = this.compass.antipodes[direction]
 		// set neighbors.
 		this.neighbors[direction] = that
 		that.neighbors[reversed] = this
@@ -82,7 +82,7 @@ export default class Cell {
 	):void {
 		// `reversed` is the antipode of a direction.
 		// for example, `reversed` of 'north' is 'south'.
-		const reversed:string = this.compass.reverse(direction)
+		const reversed: string = this.compass.antipodes[direction]
 		// set passages.
 		this.passages[direction] = true
 		that.passages[reversed] = true

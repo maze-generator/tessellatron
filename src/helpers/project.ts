@@ -50,7 +50,7 @@ export const getMagnitudes = (
 This section includes helper functions for a compass `rose`.
 Given a `rose` object, the application can find:
 - a set of supported `directions`
-- a the polar opposite of each direction, or `diametric`.
+- a the polar opposite of each direction, or `antipode`.
 
 These properties are important for orienting cells in place.
 ***********************************************************/
@@ -63,10 +63,10 @@ export const getDirections = (
 	return new Set(Object.keys(rose))
 }
 
-export const getDiametrics = (
+export const getAntipodes = (
 	rose: Record<string, number>
 ) => {
-	// `diametrics` is a harder nut to crack.
+	// `antipodes` is a harder nut to crack.
 	// it pairs directions with their respective opposites.
 
 	// first, we do need `directions`.
@@ -87,17 +87,17 @@ export const getDiametrics = (
 		[...directions].reduce(reverse, new Map())
 	)
 
-	// initialize diametrics.
-	const diametrics: Record<string, string> = {}
+	// initialize antipodes.
+	const antipodes: Record<string, string> = {}
 	for (const direction of directions) {
 		const vector: number = rose[direction]
 		// TODO -> bad `|| 'none'`...
 		// TODO -> its a frowny face for goodness sake!
 		const reversed: string = vectors.get(-vector) || ':('
 		// here is where reverse-directions is set!
-		diametrics[direction] = reversed
+		antipodes[direction] = reversed
 	}
-	return diametrics
+	return antipodes
 }
 
 /***********************************************************
