@@ -4,7 +4,7 @@ import Cell from './cell'
 import {shuffle} from '../helpers/random'
 
 export default class Generator {
-	data: Array<number>
+	data: Array<Cell>
 	directions: Set<string>
 	antipodes: Record<string, string>
 	algorithm: string
@@ -32,7 +32,7 @@ export default class Generator {
 		// ...
 
 		// loop through neighbors in a random order.
-		const randomDirs: Array<string> = shuffle(this.directions)
+		const randomDirs: Array<string> = shuffle([...this.directions])
 		for (const direction in randomDirs) {
 
 			// identify the neighbor cell.
@@ -43,14 +43,14 @@ export default class Generator {
 			if (cell02.status === 'unvisited') {
 
 				// connect the cells
-				cell01.pathway[direction] = true
-				cell02.pathway[this.antipodes[direction]] = true
+				cell01.passages[direction] = true
+				cell02.passages[this.antipodes[direction]] = true
 
 				// transfer 'active' state to id02.
 				cell01.status = 'passive'
 
 				// recursively call with new neighbor.
-				generateBFS(id02)
+				this.recursiveDFS(id02)
 			}
 		}
 
