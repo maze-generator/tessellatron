@@ -14,14 +14,9 @@ export default class Generator {
 		this.algorithm = algorithm
 	}
 
-	// REQUIREMENTS:
-	// data
-	// directions
-	// diametrics
-	// algorithm
-	const generateRecursiveDFS = (
-		id01: number
-	) => {
+	recursiveDFS (
+		id01: number,
+	): void {
 		// create cell from id.
 		const cell01: Cell = this.data[id01]
 
@@ -40,7 +35,7 @@ export default class Generator {
 			const cell02: Cell = this.data[id02]
 
 			// check for unvisited neighbors.
-			if (cell02.status !== 'unvisited') {
+			if (cell02.status === 'unvisited') {
 
 				// connect the cells
 				cell01.pathway[direction] = true
@@ -60,60 +55,6 @@ export default class Generator {
 }
 
 /*
-		// generates a perfect maze.
-		// its done recursively via a depth-first traversal tree.
-		// this is a setter function; it does not return anything.
-		// ---
-		// compass = cardinal direction
-		// reverse = reversed cardinal direction
-		// root_pos = root position
-		// neighbor = neighbor position
-
-		// first, fill the maze spot with an empty cell.
-		const currentCell:Cell = new Cell(this.compass, index)
-		this.map[index] = currentCell
-
-		// next, randomize compass order and loop through.
-		const randomCompass:Array<string> = shuffle([...this.compass.directions])
-		randomCompass.forEach((direction:string):void => {
-
-			// get the index of the neighbor via direction.
-			const neighborIndex:number = this.compass.rose[direction] + index
-			let neighborCell:Cell
-
-			// if validating the neighborIndex fails, then the
-			// neighborIndex is a maze boundary.
-			if (!this.validIndex(neighborIndex)
-			|| !this.validNeighbors(index, neighborIndex)) {
-				// null represents such a boundary.
-				currentCell['neighbors'][direction] = null
-				// continue to next loop item...
-
-			// otherwise the neighborCell should exist.
-			// if the the neighborIndex points to undefined,
-			// then we can visit the index and fill the Cell.
-			} else if (this.map[neighborIndex] === undefined) {
-				// generate a new maze block with the neighborIndex.
-				neighborCell = this.generate(neighborIndex)
-				// link up the net / graph / tree.
-				currentCell.addNeighbor(neighborCell, direction)
-				currentCell.makePathway(neighborCell, direction)
-
-			// if the Cell already exists, we can't hook it up.
-			} else if (this.map[neighborIndex] instanceof Cell) {
-				// this spot is not empty.
-				// @ts-ignore
-				neighborCell = this.map[neighborIndex]
-				// link up the net / graph / tree.
-				currentCell.addNeighbor(neighborCell, direction)
-			}
-		})
-
-		// this current cell is used in the stack upstream.
-		// if this is the root cell, the returned item
-		// simply might not be caught by anything.
-		return currentCell
-	}
 
 	def shortest_path_bfs(self, paths=None, A=None, B=None):
 		'''
