@@ -1,52 +1,75 @@
 import Cell from './cell'
 import {
-	getMagnitudes,
 	getSize,
+	getMagnitudes,
+	getDirections,
+	getAntipodes,
 	binaryTriangulate,
 	binaryTensorSlice,
 	isValidIndex,
 	areNeighbors,
 	getNeighbors,
 } from '../helpers/project'
+import {
+	Map,
+	Compass,
+} from '../helpers/types'
+import {
+	tetragonGyroscope
+} from './gyroscope'
 
-export default class Map {
-	public compass: Compass
+export default class Maze {
 	public map: Map
+	public compass: Compass
 	constructor(
 		dimensions: Array<number>,
 		layout: string,
 		algorithm: string,
 	) {
-		this.map = {}
-		this.compass = {}
 
-		// `dimensions` represents the shape of the maze.
-		// eg length=3, width=4, height=5; or simply [3, 4, 5].
-		this.map.dimensions = dimensions
+		/*********MAP******************************************/
 
 		// `magnitudes` are helpful to locate maze cells.
-		this.map.magnitudes = getMagnitudes(dimensions)
+		const magnitudes: Array<number> = getMagnitudes(dimensions)
 
 		// the `size`, or number of cells, helps fill the map.
-		this.map.size = getSize(dimensions)
+		const size: number = getSize(dimensions)
+
+		// the map `data` begins blank.
+		// it will later be populated with cells.
+		const data: Array<Cell> = []
+
+		this.map = {
+			dimensions,
+			magnitudes,
+			size,
+			data,
+		}
+
+		/*********COMPASS**************************************/
 
 		// the `rose` describes the offset in each direction.
 		// its extremely useful for computing neighbors.
-		this.compass.rose = tetragonGyroscope(this.map.magnitudes)
+		const rose: Record<string, number> = tetragonGyroscope(magnitudes)
 		// TODO: properly choose tetragonGyroscope using layout.
 
 		// `directions` are helpful in a pinch.
-		this.compass.directions = getDirections(this.compass.rose)
+		const directions: Set<string> = getDirections(rose)
 
 		// `antipodes` define the opposite of each direction.
-		this.compass.antipodes = getAntipodes(this.compass.rose)
+		const antipodes: Record<string, string> = getAntipodes(rose)
 
-		// the map `data` begins blank.
-		this.map.data = []
+		this.compass = {
+			rose,
+			directions,
+			antipodes,
+		}
+
+		/*********EXECUTE**************************************/
 
 		// fill data with actual cells.
-		for (let index: number = 0; index < this.size; index++) {
-			this.data[index] = new Cell(this, compass, index)
+		for (let index: number = 0; index < this.map.size; index++) {
+			this.map.data[index] = new Cell(this, index)
 		}
 	}
 
