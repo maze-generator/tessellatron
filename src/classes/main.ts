@@ -25,10 +25,10 @@ export default class Main {
 
 		// create a base map & compass template.
 		this.map = new Map(dimensions)
-		this.compass = new Compass(dimensions, layout)
+		this.compass = new Compass(this.map, layout)
 
 		// create a base maze algorithm template.
 		// with maze algorithm, create cells, and insert to map.
-		this.generator = new Generator(this.map, dimensions, algorithm)
+		this.generator = new Generator(this.map, this.compass, algorithm)
 	}
 }

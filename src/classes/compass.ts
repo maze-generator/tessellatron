@@ -18,7 +18,6 @@ Compass
 ***********************************************************/
 import Map from './map'
 import {
-	getMagnitudes,
 	getDirections,
 	getDiametrics,
 } from '../helpers/project'
