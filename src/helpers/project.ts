@@ -191,38 +191,78 @@ validate two neighbors
 ***********************************************************/
 
 export const isValidIndex = (
-	id:number,
 	size:number,
+	id:number,
 ): boolean => {
 	return 0 <= id && id < size
 }
 
-export const getNeighbors = (
-	rose: Record<string, number>,
-	id: number,
-): Record<string, number> => {
-	const neighbors: Record<string, number> = {}
-	const entries: Array<[string, number]> = Object.entries(rose)
-	for (const [direction, modifier] of entries) {
-		neighbors[direction] = id + modifier
+export const areNeighbors = (
+	dimensions: Array<number>,
+	size: number,
+	id01: number,
+	id02: number,
+) => {
+	// validate both indices first.
+	if (!isValidIndex(id01, size) || !isValidIndex(id02, size)) {
+		return false
 	}
-	return neighbors
+
+	// calculate coordinates.
+	const coordinates1:Array<number> = binaryTriangulate(dimensions, id01)
+	const coordinates2:Array<number> = binaryTriangulate(dimensions, id02)
+
+	// loop through each coordinate.
+	// all coordinates but one must match.
+	let counter = 0
+	for (const index in range(0, coordinates1.length)) {
+
+		// set up variables
+		const coor1:number = coordinates1[index]
+		const coor2:number = coordinates2[index]
+		const difference:number = Math.abs(coor1 - coor2)
+
+		// check if-gates
+		if (difference === 0) {
+			// do nothing
+		} else if (difference === 1) {
+			counter += 1
+		} else {
+			return false
+		} if (counter > 1) {
+			return false
+		}
+
+	// guarenteed return statement
+	} if (counter === 1) {
+		return true
+	} else {
+		return false
+	}
 }
 
-export const areNeighbors = (
+export const getNeighbors = (
 	rose: Record<string, number>,
-	id1: number,
-	id2: number,
-) => {
-	// calculate neighbors of both ids.
-	const neighbors1 = getNeighbors(rose, id1)
-	const neighbors2 = getNeighbors(rose, id2)
-	// strip out unneeded directions; its irrelevent.
-	const addresses1: Set<number> = new Set(Object.values(neighbors1))
-	const addresses2: Set<number> = new Set(Object.values(neighbors2))
-	// extract the boolean using the `Set.has()` method.
-	const isNeighbor1 = addresses1.has(id2)
-	const isNeighbor2 = addresses2.has(id1)
-	// both must be neighbors of one another.
-	return isNeighbor1 && isNeighbor2
+	dimensions: Array<number>,
+	size: number,
+	id01: number,
+): Record<string, number> => {
+	// initialize return container.
+	const neighbors: Record<string, number> = {}
+
+	// set up loop over keys and values.
+	const entries: Array<[string, number]> = Object.entries(rose)
+	for (const [direction, modifier] of entries) {
+
+		// calculate potential neighbor via modifier.
+		const id02: number = id01 + modifier
+
+		// validate neighbor & add to list.
+		if (areNeighbors(dimensions, size, id01, id02)) {
+			neighbors[direction] = id01 + modifier
+		}
+	}
+
+	// return list of neighbors.
+	return neighbors
 }
