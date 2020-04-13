@@ -1,27 +1,41 @@
+import Map from './map'
+import Compass from './compass'
+import {getNeighbors} from '../helpers/project'
+
 export default class Cell {
-	private readonly compass: any
+	map: Map
+	compass: Compass
 	public id: number
-	public state: string
+	public status: 'unvisited'|'active'|'passive'|'complete'
 	public passages: Record<string, boolean>
 	public neighbors: Record<string, number>
 	constructor (
-		compass:any,
-		id:number,
+		map: Map,
+		compass: Compass,
+		id: number,
 	) {
 		// initialize basic information.
-		this.compass = compass
 		this.id = id
-		this.state = 'unvisited'
+		this.status = 'unvisited'
 
-		// initialize neighbors & passages.
-		this.neighbors = getNeighbors(this.id)
+		// add class information.
+		this.map = map
+		this.compass = compass
+
+		// initialize neighbors.
+		this.neighbors = getNeighbors(
+			this.compass.rose,
+			this.map.dimensions,
+			this.map.size,
+			this.id,
+		)
+
+		// initialize passages.
 		this.passages = {}
 		for (const direction of this.compass.directions) {
-			if (this.neighbors[direction] !== undefined) {
-				// `false` means there is no direct connection to a neighbor.
-				// this changes when something connects two cells with one another.
-				this.passages[direction] = false
-			}
+			// `false` means there is no direct connection to a neighbor.
+			// this changes when something connects two cells with one another.
+			this.passages[direction] = false
 		}
 	}
 
@@ -65,15 +79,20 @@ export default class Cell {
 	}
 
 	public addNeighbor (
-		that:Cell,
+		id: number,
 		direction:string,
 	):void {
+
+		// get instance of that cell.
+		const that = this.map.data[id]
+
 		// `reversed` is the antipode of a direction.
 		// for example, `reversed` of 'north' is 'south'.
 		const reversed: string = this.compass.antipodes[direction]
+
 		// set neighbors.
-		this.neighbors[direction] = that
-		that.neighbors[reversed] = this
+		this.neighbors[direction] = that.id
+		that.neighbors[reversed] = this.id
 	}
 
 	public makePathway (
@@ -87,7 +106,9 @@ export default class Cell {
 		this.passages[direction] = true
 		that.passages[reversed] = true
 	}
+}
 
+	/*
 	public stringJSON (
 	):string {
 		const data: Record<string, any> = {}
@@ -116,4 +137,4 @@ export default class Cell {
 		// JSON stringify for an output.
 		return JSON.stringify(data)
 	}
-}
+	*/
