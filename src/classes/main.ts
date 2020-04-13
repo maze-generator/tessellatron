@@ -26,5 +26,6 @@ export default class Main {
 		this.map = new Map(this.compass, dimensions)
 		this.generator = new Generator(this.map, this.compass, algorithm)
 
+		this.generator.recursiveDFS(0)
 	}
 }

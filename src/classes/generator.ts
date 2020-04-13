@@ -32,9 +32,10 @@ export default class Generator {
 		// ...
 
 		// loop through neighbors in a random order.
-		const randomDirs: Array<string> = shuffle([...this.directions])
-		for (const direction in randomDirs) {
-
+		const eligibleDirs: Array<string> = Object.keys(cell01.neighbors)
+		const randomDirs: Array<string> = shuffle(eligibleDirs)
+		for (const direction of randomDirs) {
+			console.log(direction)
 			// identify the neighbor cell.
 			const id02: number = cell01.neighbors[direction]
 			const cell02: Cell = this.data[id02]
