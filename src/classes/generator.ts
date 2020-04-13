@@ -1,3 +1,8 @@
+import Map from './map'
+import Compass from './compass'
+import Cell from './cell'
+import {shuffle} from '../helpers/random'
+
 export default class Generator {
 	data: Array<number>
 	directions: Set<string>
