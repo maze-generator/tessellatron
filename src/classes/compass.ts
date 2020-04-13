@@ -25,9 +25,9 @@ import {
 
 export default class Compass {
 	// typeset the inputs.
-	protected data: Record<string, number>
-	public directions: Set<string>
-	private diametrics: Record<string, string>
+	protected readonly data: Record<string, number>
+	public readonly directions: Set<string>
+	public readonly diametrics: Record<string, string>
 
 	// these are needed internally, but they are not
 	// semantic enough to be public class properties.
