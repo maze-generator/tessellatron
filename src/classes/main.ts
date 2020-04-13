@@ -15,8 +15,8 @@ export default class Main {
 
 	constructor(
 		dimensions: Array<number>,
-		layout: string,
-		algorithm: string,
+		layout: string = 'square',
+		algorithm: string = 'recursive breadth-first search',
 	) {
 		// take inputs of size & layout.
 		this.dimensions = dimensions
