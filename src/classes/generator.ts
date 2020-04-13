@@ -1,20 +1,29 @@
 export default class Generator {
+	data: Array<number>
+	directions: Set<string>
+	diametrics: Record<string, string>
+	algorithm: string
 	constructor(
-		algorithm: string
+		map: Map,
+		compass: Compass,
+		algorithm: string,
 	) {
+		this.data = map.data
+		this.directions = compass.directions
+		this.diametrics = compass.diametrics
 		this.algorithm = algorithm
 	}
-}
 
 // REQUIREMENTS:
-// map
-// compass
+// data
+// directions
+// diametrics
 // algorithm
 const generateRecursiveDFS = (
 	id01: number
 ) => {
 	// create cell from id.
-	const cell01: Cell = this.map.data[id01]
+	const cell01: Cell = this.data[id01]
 
 	// mark self as active.
 	cell01.status = 'active'
@@ -23,19 +32,19 @@ const generateRecursiveDFS = (
 	// ...
 
 	// loop through neighbors in a random order.
-	const randomDirs: Array<string> = shuffle(this.compass.directions)
+	const randomDirs: Array<string> = shuffle(this.directions)
 	for (const direction in randomDirs) {
 
 		// identify the neighbor cell.
 		const id02: number = cell01.neighbors[direction]
-		const cell02: Cell = this.map.data[id02]
+		const cell02: Cell = this.data[id02]
 
 		// check for unvisited neighbors.
 		if (cell02.status !== 'unvisited') {
 
 			// connect the cells
 			cell01.pathway[direction] = true
-			cell02.pathway[this.compass.reverse(direction)] = true
+			cell02.pathway[this.diametrics[direction]] = true
 
 			// transfer 'active' state to id02.
 			cell01.status = 'passive'
@@ -47,6 +56,7 @@ const generateRecursiveDFS = (
 
 	// mark cell as completed; neighbors have been exhuasted.
 	cell01.status = 'complete'
+}
 }
 
 /*
