@@ -3,7 +3,6 @@ import {shuffle} from '../helpers/random'
 
 /*********DEPTH-FIRST SEARCH*****************************/
 
-
 export const recursiveDFS = (
 	id01: number,
 	mapData: Array<Cell>,

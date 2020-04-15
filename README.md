@@ -14,6 +14,17 @@ The code is released under the [MIT License][license].
 This project was bootstrapped with react.
 Check out its readme [here][react].
 
+## Needed Functionality
+- Maze.isIndexValid (id) -> (boolean)
+- Maze.areNeighbors (Array of IDs) -> (boolean)
+- Maze.triangulate (Array of IDs) -> (Coordinates)
+- Maze.tensorSlice (Coordinates) -> (Array of IDs)
+- Cell.getNeighbors (id) -> (Record of Directions to IDs)
+- Cell.addNeighbor (id)
+- Cell.addPassage  (id)
+- Cell.hasPath () -> (boolean)
+- Cell.hasWall () -> (boolean)
+
 <!--
 ## How To Use
 1. navigate to `src/` folder in terminal.

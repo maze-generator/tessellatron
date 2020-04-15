@@ -8,7 +8,6 @@ import {
 	binaryTensorSlice,
 	isIndexValid,
 	areNeighbors,
-	getNeighbors,
 } from '../helpers/project'
 import {
 	Map,
@@ -110,18 +109,6 @@ export default class Maze {
 			this.map.size,
 			id01,
 			id02,
-		)
-	}
-
-	getNeighbors (
-		id: number,
-	): Record<string, number> {
-		// utilize helper function.
-		return getNeighbors(
-			this.compass.rose,
-			this.map.dimensions,
-			this.map.size,
-			id,
 		)
 	}
 
