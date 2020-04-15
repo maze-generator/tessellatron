@@ -3,25 +3,23 @@ import Maze from './maze'
 import {shuffle} from '../helpers/random'
 
 export default class Generator {
-	data: Array<Cell>
-	directions: Set<string>
-	antipodes: Record<string, string>
+	private maze: Maze
 	algorithm: string
 	constructor(
 		maze: Maze,
 		algorithm: string,
 	) {
-		this.data = maze.map.data
-		this.directions = maze.compass.directions
-		this.antipodes = maze.compass.antipodes
+		this.maze = maze
 		this.algorithm = algorithm
 	}
+
+	/*********DEPTH-FIRST SEARCH*****************************/
 
 	recursiveDFS (
 		id01: number,
 	): void {
 		// create cell from id.
-		const cell01: Cell = this.data[id01]
+		const cell01: Cell = this.maze.map.data[id01]
 
 		// mark self as active.
 		cell01.status = 'active'
@@ -33,17 +31,17 @@ export default class Generator {
 		const eligibleDirs: Array<string> = Object.keys(cell01.neighbors)
 		const randomDirs: Array<string> = shuffle(eligibleDirs)
 		for (const direction of randomDirs) {
-			console.log(direction)
+
 			// identify the neighbor cell.
 			const id02: number = cell01.neighbors[direction]
-			const cell02: Cell = this.data[id02]
+			const cell02: Cell = this.maze.map.data[id02]
 
 			// check for unvisited neighbors.
 			if (cell02.status === 'unvisited') {
 
 				// connect the cells
 				cell01.passages[direction] = true
-				cell02.passages[this.antipodes[direction]] = true
+				cell02.passages[this.maze.compass.antipodes[direction]] = true
 
 				// transfer 'active' state to id02.
 				cell01.status = 'passive'
@@ -56,6 +54,12 @@ export default class Generator {
 		// mark cell as completed; neighbors have been exhuasted.
 		cell01.status = 'complete'
 	}
+
+	/*********BREADTH-FIRST SEARCH***************************/
+
+	// ...
+	// ...
+
 }
 
 /*
