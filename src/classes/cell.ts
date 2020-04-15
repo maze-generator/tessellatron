@@ -36,37 +36,7 @@ export default class Cell {
 		}
 	}
 
-	public get boundaries (
-	): Record<string, boolean> {
-		// boundaries is the opposite of passages.
-		const boundaries:Record<string, boolean> = {}
-		// loop through passages and reverse values for boundaries.
-		for (const direction in this.passages) {
-			boundaries[direction] = !this.passages[direction]
-		}
-		// there you have it!
-		return boundaries
-	}
-
-	public get hasPath (
-	): boolean {
-		// a direction is either a wall (false) or path (true).
-		// check if there's any passages in the values.
-		return Object.values(this.passages).includes(true)
-		// `.values()` makes a list of booleans from passages.
-		// `.includes()` creates a boolean, which is returned.
-	}
-
-	public get hasWall (
-	): boolean {
-		// a direction is either a wall (true) or path (false).
-		// check if there's any boundaries in the values.
-		return Object.values(this.boundaries).includes(true)
-		// `.values()` makes a list of booleans from boundaries.
-		// `.includes()` creates a boolean, which is returned.
-	}
-
-	getNeighbors (
+	public getNeighbors (
 	): Record<string, number> {
 		// utilize helper function.
 		return getNeighbors(
@@ -110,35 +80,45 @@ export default class Cell {
 		this.passages[direction] = true
 		that.passages[reversed] = true
 	}
-}
 
-	/*
-	public stringJSON (
-	):string {
-		const data: Record<string, any> = {}
-		data['id'] = this.id
-		data['passages'] = this.passages
-		data['neighbors'] = {}
-		for (const direction in this.maze.compass.directions) {
-			// neighbor is a cell...usually.
-			// otherwise, it is null or defined.
-			//
-			// null means the neighbor is out-of-bounds.
-			// this occurs if the cell is a side- or corner-piece.
-			//
-			// undefined just means the neighbor isnt yet defined.
-			// this occurs before the algorithm is done running.
-			const neighbor = this.neighbors[direction]
-			if (neighbor !== undefined && neighbor !== null) {
-				data['neighbors'][direction] = neighbor['id']
-			} else if (neighbor === null) {
-				data['neighbors'][direction] = null
-			} else {
-				// neighbor is presumeably undefined.
-				// such a value isnt valid JSON, so its omitted.
-			}
+	public get boundaries (
+	): Record<string, boolean> {
+		// boundaries is the opposite of passages.
+		const boundaries:Record<string, boolean> = {}
+		// loop through passages and reverse values for boundaries.
+		for (const direction in this.passages) {
+			boundaries[direction] = !this.passages[direction]
 		}
-		// JSON stringify for an output.
-		return JSON.stringify(data)
+		// there you have it!
+		return boundaries
 	}
-	*/
+
+	public get hasPath (
+	): boolean {
+		// a direction is either a wall (false) or path (true).
+		// check if there's any passages in the values.
+		return Object.values(this.passages).includes(true)
+		// `.values()` makes a list of booleans from passages.
+		// `.includes()` creates a boolean, which is returned.
+	}
+
+	public get hasWall (
+	): boolean {
+		// a direction is either a wall (true) or path (false).
+		// check if there's any boundaries in the values.
+		return Object.values(this.boundaries).includes(true)
+		// `.values()` makes a list of booleans from boundaries.
+		// `.includes()` creates a boolean, which is returned.
+	}
+
+	public get json (
+	): string {
+		const jsObject = {
+			id: this.id,
+			status: this.status,
+			neighbors: this.neighbors,
+			passages: this.passages,
+		}
+		return JSON.stringify(jsObject)
+	}
+}

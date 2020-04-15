@@ -125,4 +125,31 @@ export default class Maze {
 		// utilize helper function.
 		return binaryTensorSlice(this.map.dimensions, coordinates)
 	}
+
+	get json (
+	): string {
+		//
+		const stringyCells: Array<string> = []
+		for (const cell of this.map.data) {
+			stringyCells.push(cell.json)
+		}
+
+		const jsObject = {
+			algorithm: this.algorithm,
+			map: {
+				dimensions: this.map.dimensions,
+				magnitudes: this.map.magnitudes,
+				size: this.map.size,
+				data: stringyCells,
+			},
+			compass: {
+				layout: this.compass.layout,
+				rose: this.compass.rose,
+				directions: [...this.compass.directions],
+				antipodes: this.compass.antipodes,
+			},
+		}
+
+		return JSON.stringify(jsObject)
+	}
 }
