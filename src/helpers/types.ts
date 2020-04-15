@@ -22,15 +22,21 @@ export interface Generator {
 export type shape = (
 	// three-sided shapes
 	|'trigon'
+	|'trilateral'
 	|'triangle'
 	// four-sided shapes
 	|'tetragon'
+	|'quadrilateral'
+	|'quadrangle'
 	|'square'
 	|'rectangle'
+	|'rhombus'
 	// six-sided shapes
 	|'hexagon'
 	// six-sided bodies
 	|'hexahedron'
+	// twelve-sided bodies
+	|'rhombic dodecahedron'
 )
 
 export type algorithm = (

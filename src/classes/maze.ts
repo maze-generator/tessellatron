@@ -112,14 +112,14 @@ export default class Maze {
 		)
 	}
 
-	triangulate (
+	getCoordinates (
 		id: number
 	): Array<number> {
 		// utilize helper function.
 		return binaryTriangulate(this.map.dimensions, id)
 	}
 
-	tensorSlice (
+	getTensorSlice (
 		coordinates: Array<number|undefined>
 	): Array<number> {
 		// utilize helper function.
