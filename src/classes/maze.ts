@@ -11,9 +11,10 @@ import {
 	getNeighbors,
 } from '../helpers/project'
 import {
-	shape,
 	Map,
 	Compass,
+	algorithm,
+	shape,
 } from '../helpers/types'
 import {
 	tetragonGyroscope
@@ -23,13 +24,17 @@ import {
 } from './generator'
 
 export default class Maze {
+	public algorithm: algorithm
 	public map: Map
 	public compass: Compass
 	constructor(
 		dimensions: Array<number>,
-		layout: shape,
-		algorithm: string,
+		layout: shape = 'square',
+		algorithm: algorithm = 'recursive breadth-first traversal',
 	) {
+
+		// `algorithm` describes the maze-generation technique.
+		this.algorithm = algorithm
 
 		/*********MAP******************************************/
 
@@ -70,17 +75,13 @@ export default class Maze {
 			antipodes,
 		}
 
-		/*********GENERATOR************************************/
-		// ...
-
 		/*********EXECUTE**************************************/
 
-		// fill data with actual cells.
-		for (let id: number = 0; id < this.map.size; id++) {
-			this.map.data[id] = new Cell(this, id)
+		// fill map data with actual cells.
+		for (let id: number = 0; id < size; id++) {
+			data[id] = new Cell(this, id)
 		}
 	}
-
 
 	generate (
 		id: number
@@ -112,7 +113,7 @@ export default class Maze {
 		)
 	}
 
-	getNeighbors(
+	getNeighbors (
 		id: number,
 	): Record<string, number> {
 		// utilize helper function.

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import './App.css'
-import Main from '../classes/main'
+import Maze from '../classes/maze'
 
 const myMaze: string = 'hello'
-console.log(new Main([10,10]))
+console.log(new Maze([10,10]))
 
 const App = () => {
 	const [words, setWords] = useState(myMaze)

@@ -14,6 +14,11 @@ export interface Compass {
 	antipodes: Record<string, string>
 }
 
+export interface Generator {
+	algorithm: algorithm
+	functions: (test:string) => (string)
+}
+
 export type shape = (
 	// three-sided shapes
 	|'trigon'
@@ -26,4 +31,13 @@ export type shape = (
 	|'hexagon'
 	// six-sided bodies
 	|'hexahedron'
+)
+
+export type algorithm = (
+	// breadth-first
+	|'recursive breadth-first traversal'
+	|'iterative breadth-first traversal'
+	// depth-first
+	|'recursive depth-first traversal'
+	|'iterative depth-first traversal'
 )
