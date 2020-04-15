@@ -11,19 +11,23 @@ import {
 	getNeighbors,
 } from '../helpers/project'
 import {
+	shape,
 	Map,
 	Compass,
 } from '../helpers/types'
 import {
 	tetragonGyroscope
 } from './gyroscope'
+import {
+	recursiveDFS
+} from './generator'
 
 export default class Maze {
 	public map: Map
 	public compass: Compass
 	constructor(
 		dimensions: Array<number>,
-		layout: string,
+		layout: shape,
 		algorithm: string,
 	) {
 
@@ -60,10 +64,14 @@ export default class Maze {
 		const antipodes: Record<string, string> = getAntipodes(rose)
 
 		this.compass = {
+			layout,
 			rose,
 			directions,
 			antipodes,
 		}
+
+		/*********GENERATOR************************************/
+		// ...
 
 		/*********EXECUTE**************************************/
 
@@ -71,6 +79,17 @@ export default class Maze {
 		for (let id: number = 0; id < this.map.size; id++) {
 			this.map.data[id] = new Cell(this, id)
 		}
+	}
+
+
+	generate (
+		id: number
+	): void {
+		recursiveDFS(
+			id,
+			this.map.data,
+			this.compass.antipodes,
+		)
 	}
 
 	isIndexValid (

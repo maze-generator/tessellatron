@@ -1,66 +1,55 @@
 import Cell from './cell'
-import Maze from './maze'
 import {shuffle} from '../helpers/random'
 
-export default class Generator {
-	private maze: Maze
-	algorithm: string
-	constructor(
-		maze: Maze,
-		algorithm: string,
-	) {
-		this.maze = maze
-		this.algorithm = algorithm
-	}
+/*********DEPTH-FIRST SEARCH*****************************/
 
-	/*********DEPTH-FIRST SEARCH*****************************/
 
-	recursiveDFS (
-		id01: number,
-	): void {
-		// create cell from id.
-		const cell01: Cell = this.maze.map.data[id01]
+export const recursiveDFS = (
+	id01: number,
+	mapData: Array<Cell>,
+	antipodes: Record<string, string>,
+): void => {
+	// create cell from id.
+	const cell01: Cell = mapData[id01]
 
-		// mark self as active.
-		cell01.status = 'active'
+	// mark self as active.
+	cell01.status = 'active'
 
-		// TODO: await command to continue.
-		// ...
+	// TODO: await command to continue.
+	// ...
 
-		// loop through neighbors in a random order.
-		const eligibleDirs: Array<string> = Object.keys(cell01.neighbors)
-		const randomDirs: Array<string> = shuffle(eligibleDirs)
-		for (const direction of randomDirs) {
+	// loop through neighbors in a random order.
+	const eligibleDirs: Array<string> = Object.keys(cell01.neighbors)
+	const randomDirs: Array<string> = shuffle(eligibleDirs)
+	for (const direction of randomDirs) {
 
-			// identify the neighbor cell.
-			const id02: number = cell01.neighbors[direction]
-			const cell02: Cell = this.maze.map.data[id02]
+		// identify the neighbor cell.
+		const id02: number = cell01.neighbors[direction]
+		const cell02: Cell = mapData[id02]
 
-			// check for unvisited neighbors.
-			if (cell02.status === 'unvisited') {
+		// check for unvisited neighbors.
+		if (cell02.status === 'unvisited') {
 
-				// connect the cells
-				cell01.passages[direction] = true
-				cell02.passages[this.maze.compass.antipodes[direction]] = true
+			// connect the cells
+			cell01.passages[direction] = true
+			cell02.passages[antipodes[direction]] = true
 
-				// transfer 'active' state to id02.
-				cell01.status = 'passive'
+			// transfer 'active' state to id02.
+			cell01.status = 'passive'
 
-				// recursively call with new neighbor.
-				this.recursiveDFS(id02)
-			}
+			// recursively call with new neighbor.
+			recursiveDFS(id02, mapData, antipodes)
 		}
-
-		// mark cell as completed; neighbors have been exhuasted.
-		cell01.status = 'complete'
 	}
+
+	// mark cell as completed; neighbors have been exhuasted.
+	cell01.status = 'complete'
+}
 
 	/*********BREADTH-FIRST SEARCH***************************/
 
 	// ...
 	// ...
-
-}
 
 /*
 
