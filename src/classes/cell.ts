@@ -1,8 +1,13 @@
 import Maze from './maze'
 import {getNeighbors} from '../helpers/project'
+import {
+	Map,
+	Compass,
+} from '../helpers/types'
 
 export default class Cell {
-	maze: Maze
+	public map: Map
+	public compass: Compass
 	public id: number
 	public status: 'unvisited'|'active'|'passive'|'complete'
 	public passages: Record<string, boolean>
@@ -15,20 +20,16 @@ export default class Cell {
 		this.id = id
 		this.status = 'unvisited'
 
-		// add class information.
-		this.maze = maze
+		// add information from parent
+		this.map = maze.map
+		this.compass = maze.compass
 
-		// initialize neighbors.
-		this.neighbors = getNeighbors(
-			this.maze.compass.rose,
-			this.maze.map.dimensions,
-			this.maze.map.size,
-			this.id,
-		)
+		// add neighbors
+		this.neighbors = this.getNeighbors()
 
 		// initialize passages.
 		this.passages = {}
-		for (const direction of this.maze.compass.directions) {
+		for (const direction of this.compass.directions) {
 			// `false` means there is no direct connection to a neighbor.
 			// this changes when something connects two cells with one another.
 			this.passages[direction] = false
@@ -47,7 +48,7 @@ export default class Cell {
 		return boundaries
 	}
 
-	public hasPath (
+	public get hasPath (
 	): boolean {
 		// a direction is either a wall (false) or path (true).
 		// check if there's any passages in the values.
@@ -56,7 +57,7 @@ export default class Cell {
 		// `.includes()` creates a boolean, which is returned.
 	}
 
-	public hasWall (
+	public get hasWall (
 	): boolean {
 		// a direction is either a wall (true) or path (false).
 		// check if there's any boundaries in the values.
@@ -65,13 +66,15 @@ export default class Cell {
 		// `.includes()` creates a boolean, which is returned.
 	}
 
-	public hasNeighbor (
-		id: number,
-	): boolean {
-		// check if this is a neighbor of that.
-		return Object.values(this.neighbors).includes(id)
-		// `.values()` makes a list of cells from neighbors.
-		// `.includes()` creates a boolean, which is returned.
+	getNeighbors (
+	): Record<string, number> {
+		// utilize helper function.
+		return getNeighbors(
+			this.compass.rose,
+			this.map.dimensions,
+			this.map.size,
+			this.id,
+		)
 	}
 
 	public addNeighbor (
@@ -80,27 +83,28 @@ export default class Cell {
 	):void {
 
 		// get instance of that cell.
-		const that = this.maze.map.data[id]
+		const that = this.map.data[id]
 
 		// `reversed` is the antipode of a direction.
 		// for example, `reversed` of 'north' is 'south'.
-		const reversed: string = this.maze.compass.antipodes[direction]
+		const reversed: string = this.compass.antipodes[direction]
 
 		// set neighbors.
 		this.neighbors[direction] = that.id
 		that.neighbors[reversed] = this.id
 	}
 
-	public connectCell (
+	public addPassage (
 		id: number,
 		direction:string,
 	): void {
+
 		// get instance of that cell.
-		const that = this.maze.map.data[id]
+		const that = this.map.data[id]
 
 		// `reversed` is the antipode of a direction.
 		// for example, `reversed` of 'north' is 'south'.
-		const reversed: string = this.maze.compass.antipodes[direction]
+		const reversed: string = this.compass.antipodes[direction]
 
 		// set passages.
 		this.passages[direction] = true
