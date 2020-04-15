@@ -190,7 +190,7 @@ export const binaryTensorSlice = (
 validate two neighbors
 ***********************************************************/
 
-export const isValidIndex = (
+export const isIndexValid = (
 	size:number,
 	id:number,
 ): boolean => {
@@ -204,7 +204,7 @@ export const areNeighbors = (
 	id02: number,
 ) => {
 	// validate both indices first.
-	if (!isValidIndex(size, id01) || !isValidIndex(size, id02)) {
+	if (!isIndexValid(size, id01) || !isIndexValid(size, id02)) {
 		return false
 	}
 

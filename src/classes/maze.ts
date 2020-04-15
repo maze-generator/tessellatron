@@ -6,7 +6,7 @@ import {
 	getAntipodes,
 	binaryTriangulate,
 	binaryTensorSlice,
-	isValidIndex,
+	isIndexValid,
 	areNeighbors,
 	getNeighbors,
 } from '../helpers/project'
@@ -68,16 +68,16 @@ export default class Maze {
 		/*********EXECUTE**************************************/
 
 		// fill data with actual cells.
-		for (let index: number = 0; index < this.map.size; index++) {
-			this.map.data[index] = new Cell(this, index)
+		for (let id: number = 0; id < this.map.size; id++) {
+			this.map.data[id] = new Cell(this, id)
 		}
 	}
 
-	isValidIndex (
+	isIndexValid (
 		id: number,
 	): boolean {
 		// utilize helper function.
-		return isValidIndex(this.map.size, id)
+		return isIndexValid(this.map.size, id)
 	}
 
 	areNeighbors (
