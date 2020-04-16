@@ -15,11 +15,14 @@ This project was bootstrapped with react.
 Check out its readme [here][react].
 
 ## Needed Functionality
+SHAPE NEEDED
 - Maze.isIndexValid (id) -> (boolean)
 - Maze.areNeighbors (Array of IDs) -> (boolean)
-- Maze.triangulate (Array of IDs) -> (Coordinates)
-- Maze.tensorSlice (Coordinates) -> (Array of IDs)
-- Cell.getNeighbors (id) -> (Record of Directions to IDs)
+- Maze.getCoordinates (Array of IDs) -> (Coordinates)
+- Maze.getTensorSlice (Coordinates) -> (Array of IDs)
+- Maze.getNeighbors (id) -> (Record of Directions to IDs)
+
+SHAPE NOT NEEDED
 - Cell.addNeighbor (id)
 - Cell.addPassage  (id)
 - Cell.hasPath () -> (boolean)
