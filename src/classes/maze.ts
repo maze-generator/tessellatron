@@ -4,9 +4,10 @@ import {
 	getMagnitudes,
 	getDirections,
 	getAntipodes,
-	binaryTriangulate,
-	binaryTensorSlice,
+	binaryGetCoordinates,
+	binaryGetTensorSlice,
 	isIndexValid,
+	getNeighbors,
 	areNeighbors,
 } from '../helpers/project'
 import {
@@ -80,7 +81,7 @@ export default class Maze {
 		this.reset()
 	}
 
-	reset (
+	public reset (
 	): void {
 		// clear map data of all contents.
 		this.map.data = []
@@ -91,7 +92,7 @@ export default class Maze {
 		}
 	}
 
-	generate (
+	public generate (
 		id: number
 	): void {
 		recursiveDFS(
@@ -101,7 +102,7 @@ export default class Maze {
 		)
 	}
 
-	isIndexValid (
+	public isIndexValid (
 		id: number,
 	): boolean {
 		// utilize helper function.
@@ -109,7 +110,7 @@ export default class Maze {
 		// TODO: dependent on layout shape.
 	}
 
-	areNeighbors (
+	public areNeighbors (
 		id01: number,
 		id02: number,
 	): boolean {
@@ -123,19 +124,32 @@ export default class Maze {
 		// TODO: dependent on layout shape.
 	}
 
-	getCoordinates (
-		id: number
-	): Array<number> {
+	public getNeighbors (
+		id: number,
+	): Record<string, number> {
 		// utilize helper function.
-		return binaryTriangulate(this.map.dimensions, id)
+		return getNeighbors(
+			this.compass.rose,
+			this.map.dimensions,
+			this.map.size,
+			id,
+		)
 		// TODO: dependent on layout shape.
 	}
 
-	getTensorSlice (
+	public getCoordinates (
+		id: number
+	): Array<number> {
+		// utilize helper function.
+		return binaryGetCoordinates(this.map.dimensions, id)
+		// TODO: binaryGetTensorSlice on layout shape.
+	}
+
+	public getTensorSlice (
 		...coordinates: Array<number|undefined>
 	): Array<number> {
 		// utilize helper function.
-		return binaryTensorSlice(this.map.dimensions, coordinates)
+		return binaryGetTensorSlice(this.map.dimensions, coordinates)
 		// TODO: dependent on layout shape.
 	}
 

@@ -1,5 +1,4 @@
 import Maze from './maze'
-import {getNeighbors} from '../helpers/project'
 import {
 	Map,
 	Compass,
@@ -25,7 +24,7 @@ export default class Cell {
 		this.compass = maze.compass
 
 		// add neighbors
-		this.neighbors = this.getNeighbors()
+		this.neighbors = maze.getNeighbors(id)
 
 		// initialize passages.
 		this.passages = {}
@@ -34,17 +33,6 @@ export default class Cell {
 			// this changes when something connects two cells with one another.
 			this.passages[direction] = false
 		}
-	}
-
-	public getNeighbors (
-	): Record<string, number> {
-		// utilize helper function.
-		return getNeighbors(
-			this.compass.rose,
-			this.map.dimensions,
-			this.map.size,
-			this.id,
-		)
 	}
 
 	public addNeighbor (
