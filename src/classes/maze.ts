@@ -132,7 +132,6 @@ export default class Maze {
 
 	get json (
 	): string {
-		//
 		const stringyCells: Array<string> = []
 		for (const cell of this.map.data) {
 			stringyCells.push(JSON.parse(cell.json))

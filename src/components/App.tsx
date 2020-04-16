@@ -3,12 +3,14 @@ import './App.css'
 import Maze from '../classes/maze'
 import Graphic from '../classes/unicode-graphic'
 
-const myMaze = new Maze([10,10])
+const myMaze = new Maze([3,2])
 const myVisual = new Graphic(myMaze)
 const results: string = myVisual.pipeMaze()
 
 console.log(myVisual.pipeMaze())
+myMaze.generate(0)
 console.log(myVisual.pipeMaze())
+console.log(myMaze.json)
 
 const App = () => {
 	const [words, setWords] = useState(results)
