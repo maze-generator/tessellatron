@@ -1,4 +1,4 @@
-import Cell from './cell'
+import Cell from '../classes/cell'
 import {shuffle} from '../helpers/random'
 
 /*********DEPTH-FIRST SEARCH*****************************/

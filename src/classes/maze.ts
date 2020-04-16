@@ -17,10 +17,10 @@ import {
 } from '../helpers/types'
 import {
 	tetragonGyroscope
-} from './gyroscope'
+} from '../helpers/gyroscope'
 import {
 	recursiveDFS
-} from './generator'
+} from '../helpers/generator'
 
 export default class Maze {
 	public algorithm: algorithm
@@ -97,6 +97,7 @@ export default class Maze {
 	): boolean {
 		// utilize helper function.
 		return isIndexValid(this.map.size, id)
+		// TODO: dependent on layout shape.
 	}
 
 	areNeighbors (
@@ -110,6 +111,7 @@ export default class Maze {
 			id01,
 			id02,
 		)
+		// TODO: dependent on layout shape.
 	}
 
 	getCoordinates (
@@ -117,6 +119,7 @@ export default class Maze {
 	): Array<number> {
 		// utilize helper function.
 		return binaryTriangulate(this.map.dimensions, id)
+		// TODO: dependent on layout shape.
 	}
 
 	getTensorSlice (
@@ -124,6 +127,7 @@ export default class Maze {
 	): Array<number> {
 		// utilize helper function.
 		return binaryTensorSlice(this.map.dimensions, coordinates)
+		// TODO: dependent on layout shape.
 	}
 
 	get json (
@@ -131,7 +135,7 @@ export default class Maze {
 		//
 		const stringyCells: Array<string> = []
 		for (const cell of this.map.data) {
-			stringyCells.push(cell.json)
+			stringyCells.push(JSON.parse(cell.json))
 		}
 
 		const jsObject = {

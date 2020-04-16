@@ -3,8 +3,10 @@ import './App.css'
 import Maze from '../classes/maze'
 
 const myMaze: string = 'hello'
-const test = new Maze([10,10])
-console.log(JSON.parse(test.json))
+const myTest = new Maze([10,10])
+console.log(JSON.parse(myTest.json))
+myTest.generate(0)
+console.log(JSON.parse(myTest.json))
 
 const App = () => {
 	const [words, setWords] = useState(myMaze)
