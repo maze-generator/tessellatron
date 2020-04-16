@@ -107,7 +107,7 @@ with coordinates, you get an index.
 with partial coordinates, you get a slice. neato!
 ***********************************************************/
 
-export const binaryTriangulate = (
+export const binaryGetCoordinates = (
 	dimensions: Array<number>,
 	cellIndex: number,
 ): Array<number> => {
@@ -139,7 +139,7 @@ export const binaryTriangulate = (
 // binarySlice takes in the map's dimensions,
 // and then the cell's coordinates.
 // it returns a slice of the desired coordinates.
-export const binaryTensorSlice = (
+export const binaryGetTensorSlice = (
 	dimensions: Array<number>,
 	coordinates: Array<number|undefined>,
 ): Array<number> => {
@@ -209,8 +209,8 @@ export const areNeighbors = (
 	}
 
 	// calculate coordinates.
-	const coordinates1:Array<number> = binaryTriangulate(dimensions, id01)
-	const coordinates2:Array<number> = binaryTriangulate(dimensions, id02)
+	const coordinates1:Array<number> = binaryGetCoordinates(dimensions, id01)
+	const coordinates2:Array<number> = binaryGetCoordinates(dimensions, id02)
 
 	// loop through each coordinate.
 	// all coordinates but one must match.
