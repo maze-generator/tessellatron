@@ -76,9 +76,18 @@ export default class Maze {
 
 		/*********EXECUTE**************************************/
 
-		// fill map data with actual cells.
-		for (let id: number = 0; id < size; id++) {
-			data[id] = new Cell(this, id)
+		// initialize map data
+		this.reset()
+	}
+
+	reset (
+	): void {
+		// clear map data of all contents.
+		this.map.data = []
+
+		// refill map data with empty cells.
+		for (let id: number = 0; id < this.map.size; id++) {
+			this.map.data[id] = new Cell(this, id)
 		}
 	}
 
@@ -123,7 +132,7 @@ export default class Maze {
 	}
 
 	getTensorSlice (
-		coordinates: Array<number|undefined>
+		...coordinates: Array<number|undefined>
 	): Array<number> {
 		// utilize helper function.
 		return binaryTensorSlice(this.map.dimensions, coordinates)
