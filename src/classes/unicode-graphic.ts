@@ -1,4 +1,3 @@
-```ts
 import Maze from './maze'
 
 export default class UnicodeGraphic {
@@ -17,7 +16,7 @@ export default class UnicodeGraphic {
 		let result = ''
 
 		// loop through maze.
-		this.maze.map.forEach((
+		this.maze.map.data.forEach((
 			cell:any,
 			index:number,
 		):void => {
@@ -28,7 +27,7 @@ export default class UnicodeGraphic {
 			const west:boolean = cell['passages']['west']
 
 			// add line break if end of line is reached
-			if (index % this.maze.dimensions[0] === 0) {
+			if (index % this.maze.map.dimensions[0] === 0) {
 				result += '\n'
 			}
 			// get the symbol to be added to the result string

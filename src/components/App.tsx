@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import './App.css'
 import Maze from '../classes/maze'
+import Graphic from '../classes/unicode-graphic'
 
-const myMaze: string = 'hello'
-const myTest = new Maze([10,10])
-console.log(JSON.parse(myTest.json))
-myTest.generate(0)
-console.log(JSON.parse(myTest.json))
+const myMaze = new Maze([10,10])
+const myVisual = new Graphic(myMaze)
+const results: string = myVisual.pipeMaze()
+
+console.log(myVisual.pipeMaze())
+console.log(myVisual.pipeMaze())
 
 const App = () => {
-	const [words, setWords] = useState(myMaze)
+	const [words, setWords] = useState(results)
 	return (
 		<>
 			<h1>Maze Generator</h1>
@@ -19,7 +21,10 @@ const App = () => {
 			<input
 				type='button'
 				onClick={() => {
-					setWords(myMaze)
+					const newMaze = new Maze([10, 10])
+					newMaze.generate(0)
+					const newVisual = new Graphic(newMaze)
+					setWords(newVisual.pipeMaze())
 				}}
 				value='Generate'
 			/>
