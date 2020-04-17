@@ -1,24 +1,31 @@
 import Cell from './cell'
+
 import {
 	getSize,
 	getMagnitudes,
 	getDirections,
 	getAntipodes,
-	binaryGetCoordinates,
-	binaryGetTensorSlice,
+} from '../helpers/project'
+
+import {
+	getCoordinates as binaryGetCoordinates,
+	getTensorSlice as binaryGetTensorSlice,
 	isIndexValid,
 	getNeighbors,
 	areNeighbors,
-} from '../helpers/project'
+} from '../helpers/project/binary'
+
 import {
 	Map,
 	Compass,
 	algorithm,
 	shape,
 } from '../helpers/types'
+
 import {
 	tetragonGyroscope
 } from '../helpers/gyroscope'
+
 import {
 	recursiveDFS
 } from '../helpers/generator'
@@ -140,9 +147,29 @@ export default class Maze {
 	public getCoordinates (
 		id: number
 	): Array<number> {
-		// utilize helper function.
-		return binaryGetCoordinates(this.map.dimensions, id)
-		// TODO: binaryGetTensorSlice on layout shape.
+
+		// layout is the cell shapes.
+		const layout:shape = this.compass.layout
+
+		// getCoordinates varies based on dimensions
+		if (layout === 'square') {
+			return binaryGetCoordinates(this.map.dimensions, id)
+		} else if (layout === 'cube') {
+			return binaryGetCoordinates(this.map.dimensions, id)
+		} else if (layout === 'tesseract') {
+			return binaryGetCoordinates(this.map.dimensions, id)
+		} else if (layout === 'triangle') {
+			return binaryGetCoordinates(this.map.dimensions, id)
+		} else if (layout === 'hexagon') {
+			return binaryGetCoordinates(this.map.dimensions, id)
+		} else if (layout === 'rhombic dodecahedron') {
+			return binaryGetCoordinates(this.map.dimensions, id)
+		} else {
+			// fallback? raise an error.
+			return binaryGetCoordinates(this.map.dimensions, id)
+		}
+
+		// TODO: getTensorSlice on layout shape.
 	}
 
 	public getTensorSlice (

@@ -1,5 +1,5 @@
 import Cell from '../classes/cell'
-import {shuffle} from '../helpers/random'
+import {shuffle} from '../helpers/main'
 
 /*********DEPTH-FIRST SEARCH*****************************/
 
