@@ -1,4 +1,4 @@
-import Maze from './maze'
+import Maze from './maze/tetragon-maze'
 
 export default class UnicodeGraphic {
 	maze:Maze

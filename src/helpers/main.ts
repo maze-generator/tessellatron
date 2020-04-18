@@ -1,6 +1,9 @@
 // which random function to use as default
 const RANDOM = Math.random
 
+// this is a mini-multiplier reducer function.
+export const multiply = (a:number, b:number):number => a * b
+
 // random shuffle helper function
 // uses fisher yates randomizer
 export const shuffle = (

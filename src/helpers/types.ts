@@ -4,6 +4,7 @@ export interface Map {
 	dimensions: Array<number>
 	magnitudes: Array<number>
 	size: number
+	degree: number
 	data: Array<Cell>
 }
 

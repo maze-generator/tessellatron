@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './App.css'
-import Maze from '../classes/maze'
+import Maze from '../classes/maze/tetragon-maze'
 import Graphic from '../classes/unicode-graphic'
 
 const myMaze = new Maze([3,2])
