@@ -27,25 +27,25 @@ a tetragon is a four-sided polygon.
 a quadrilateral is a four-angled polygon.
 they represent the same thing...a square(ish) shape!
 
-A finished map using this compass looks like this:
+A finished map looks like this:
 ┌─┬─┬─┐
 ├─┼─┼─┤
 ├─┼─┼─┤
 └─┴─┴─┘
 */
 
-export default class Maze {
-	public algorithm: algorithm
+export default class Tetragon {
+	public method: algorithm
 	public map: Map
 	public compass: Compass
 	constructor(
 		dimensions: Array<number>,
 		layout: shape = 'square',
-		algorithm: algorithm = 'recursive breadth-first traversal',
+		method: algorithm = 'iterative breadth-first traversal',
 	) {
 
-		// `algorithm` describes the maze-generation technique.
-		this.algorithm = algorithm
+		// `method` describes the maze-generation technique.
+		this.method = method
 
 		/*********MAP******************************************/
 
@@ -53,12 +53,16 @@ export default class Maze {
 		// these indicate how much an index must move
 		// to offset an associated coordinate by exactly one.
 		const magnitudes: Array<number> = []
+
 		// loop through dimensions via each index, `i`.
-		for (let i:number = 0; i < dimensions.length; i += 1) {
+		for (let i: number = 0; i < dimensions.length; i += 1) {
+
 			// collect antecedent dimensions leading up to here.
-			const previous:number[] = dimensions.slice(0, i)
+			const previous: number[] = dimensions.slice(0, i)
+
 			// calculate the product of those dimensions.
-			const product:number = previous.reduce(multiply, 1)
+			const product: number = previous.reduce(multiply, 1)
+
 			// add the product to the list of magnitudes.
 			magnitudes.push(product)
 		}
@@ -110,30 +114,22 @@ export default class Maze {
 
 		/*********EXECUTE**************************************/
 
-		// initialize map data
-		this.reset()
-	}
-
-	public reset (
-	): void {
-		// clear map data of all contents.
-		this.map.data = []
-
-		// refill map data with empty cells.
+		// fill map data with empty cells.
 		for (let id: number = 0; id < this.map.size; id++) {
 			this.map.data[id] = new Cell(this, id)
 		}
 	}
 
+
 	public generate (
 		id: number
 	): void {
 		recursiveDFS(
-			id,
 			this.map.data,
-			this.compass.antipodes,
+			id,
 		)
 	}
+
 
 	public hasIndex (
 		id: number,
@@ -141,18 +137,20 @@ export default class Maze {
 		return 0 <= id && id < this.map.size
 	}
 
+
 	public areNeighbors (
 		id01: number,
 		id02: number,
 	): boolean {
+
 		// validate both indices first.
 		if (!this.hasIndex(id01) || !this.hasIndex(id02)) {
 			return false
 		}
 
 		// calculate coordinates.
-		const coordinates1:Array<number> = this.getCoordinates(id01)
-		const coordinates2:Array<number> = this.getCoordinates(id02)
+		const coordinates1: Array<number> = this.getCoordinates(id01)
+		const coordinates2: Array<number> = this.getCoordinates(id02)
 
 		// loop through each coordinate.
 		// all coordinates but one must match.
@@ -160,13 +158,13 @@ export default class Maze {
 		for (const index in range(0, coordinates1.length)) {
 
 			// set up variables
-			const coor1:number = coordinates1[index]
-			const coor2:number = coordinates2[index]
-			const difference:number = Math.abs(coor1 - coor2)
+			const coor1: number = coordinates1[index]
+			const coor2: number = coordinates2[index]
+			const difference: number = Math.abs(coor1 - coor2)
 
 			// check if-gates
 			if (difference === 0) {
-				// do nothing
+				// do nothing; continue
 			} else if (difference === 1) {
 				counter += 1
 			} else {
@@ -182,6 +180,7 @@ export default class Maze {
 			return false
 		}
 	}
+
 
 	public getNeighbors (
 		id01: number,
@@ -206,6 +205,7 @@ export default class Maze {
 		// return list of neighbors.
 		return neighbors
 	}
+
 
 	public getCoordinates (
 		cellIndex: number
@@ -234,6 +234,7 @@ export default class Maze {
 
 		return coordinates
 	}
+
 
 	// getTensorSlice takes in cell coordinates.
 	// it returns a slice of the desired cell indices.
@@ -280,18 +281,22 @@ export default class Maze {
 				slice.push(cellIndex)
 			}
 		}
+
 		return slice
 	}
 
+
 	get json (
 	): string {
+
 		const stringyCells: Array<string> = []
 		for (const cell of this.map.data) {
 			stringyCells.push(JSON.parse(cell.json))
 		}
 
 		const jsObject = {
-			algorithm: this.algorithm,
+
+			method: this.method,
 			map: {
 				dimensions: this.map.dimensions,
 				magnitudes: this.map.magnitudes,

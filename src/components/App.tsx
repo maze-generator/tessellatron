@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './App.css'
-import Maze from '../classes/maze/tetragon-maze'
+import Maze from '../classes/maze/tetragon'
 import Graphic from '../classes/unicode-graphic'
 
 const myMaze = new Maze([3,2])
@@ -23,7 +23,7 @@ const App = () => {
 			<input
 				type='button'
 				onClick={() => {
-					const newMaze = new Maze([10, 10])
+					const newMaze = new Maze([50, 50])
 					newMaze.generate(0)
 					const newVisual = new Graphic(newMaze)
 					setWords(newVisual.pipeMaze())

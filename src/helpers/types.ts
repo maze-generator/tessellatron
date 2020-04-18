@@ -16,7 +16,7 @@ export interface Compass {
 }
 
 export interface Generator {
-	algorithm: algorithm
+	method: algorithm
 	functions: (test:string) => (string)
 }
 

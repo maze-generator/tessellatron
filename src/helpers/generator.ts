@@ -4,10 +4,10 @@ import {shuffle} from '../helpers/main'
 /*********DEPTH-FIRST SEARCH*****************************/
 
 export const recursiveDFS = (
-	id01: number,
 	mapData: Array<Cell>,
-	antipodes: Record<string, string>,
+	id01: number,
 ): void => {
+
 	// create cell from id.
 	const cell01: Cell = mapData[id01]
 
@@ -30,14 +30,13 @@ export const recursiveDFS = (
 		if (cell02.status === 'unvisited') {
 
 			// connect the cells
-			cell01.passages[direction] = true
-			cell02.passages[antipodes[direction]] = true
+			cell01.addPassage(direction, id02)
 
 			// transfer 'active' state to id02.
 			cell01.status = 'passive'
 
 			// recursively call with new neighbor.
-			recursiveDFS(id02, mapData, antipodes)
+			recursiveDFS(mapData, id02)
 		}
 	}
 

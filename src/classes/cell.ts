@@ -1,4 +1,4 @@
-import Maze from './maze/tetragon-maze'
+import Maze from './maze/tetragon'
 import {
 	Map,
 	Compass,
@@ -53,8 +53,8 @@ export default class Cell {
 	}
 
 	public addPassage (
-		id: number,
 		direction:string,
+		id: number,
 	): void {
 
 		// get instance of that cell.
