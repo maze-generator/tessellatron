@@ -18,12 +18,21 @@ import {
 } from '../../helpers/types'
 
 import {
-	tetragonGyroscope
-} from '../../helpers/gyroscope'
-
-import {
 	recursiveDFS
 } from '../../helpers/generator'
+
+
+/*
+a tetragon is a four-sided polygon.
+a quadrilateral is a four-angled polygon.
+they represent the same thing...a square(ish) shape!
+
+A finished map using this compass looks like this:
+┌─┬─┬─┐
+├─┼─┼─┤
+├─┼─┼─┤
+└─┴─┴─┘
+*/
 
 export default class Maze {
 	public algorithm: algorithm
@@ -74,10 +83,17 @@ export default class Maze {
 
 		/*********COMPASS**************************************/
 
+		// deconstruct magnitudes for each axis.
+		const [x, y]: Array<number> = magnitudes
+
 		// the `rose` describes the offset in each direction.
 		// its extremely useful for computing neighbors.
-		const rose: Record<string, number> = tetragonGyroscope(magnitudes)
-		// TODO: properly choose tetragonGyroscope using layout.
+		const rose: Record<string, number> = {
+			'west':  -x,
+			'east':  +x,
+			'north': -y,
+			'south': +y,
+		}
 
 		// `directions` are helpful in a pinch.
 		const directions: Set<string> = getDirections(rose)
@@ -194,12 +210,14 @@ export default class Maze {
 	public getCoordinates (
 		cellIndex: number
 	): Array<number> {
+
 		// coordinates will be returned once populated.
 		const coordinates: Array<number> = []
 
 		// loop through each index in the dimensions array.
 		// it maps to indices in magnitudes as well.
 		for (const dimIndex of range(0, this.map.dimensions.length)) {
+
 			// dimensions.length === magnitudes.length;
 			// their index associates one with the other.
 			const dimension: number = this.map.dimensions[dimIndex]
@@ -213,6 +231,7 @@ export default class Maze {
 			// push into array.
 			coordinates.push(result)
 		}
+
 		return coordinates
 	}
 
@@ -221,22 +240,20 @@ export default class Maze {
 	public getTensorSlice (
 		...coordinates: Array<number|undefined>
 	): Array<number> {
+
 		// slice will be returned once populated.
 		const slice: Array<number> = []
-
-		// generate size & magnitudes from dimensions array.
-		const size: number = this.map.size
-		const magnitudes: Array<number> = this.map.magnitudes
 
 		// this piece creates spacers or iterators.
 		// if we have dimensions of [5,4,3] our spacers are:
 		// [1,5,20]. The final item = total # of coordinates.
-		for (const cellIndex of range(0, size)) {
+		for (const cellIndex of range(0, this.map.size)) {
 			let validCellIndex: boolean = true
 
 			// loop through each index in the dimensions array.
 			// it maps to indices in magnitudes & coordinates too.
 			for (const dimIndex of range(0, this.map.degree)) {
+
 				// dimensions.length === magnitudes.length;
 				// dimensions.length === coordinates.length;
 				// their index associates one with the others.
@@ -251,12 +268,14 @@ export default class Maze {
 					cellIndex / magnitude % dimension
 				)
 
+				// result doesn't coorespond with given coordinate.
 				if (result !== coordinate) {
-					// result doesn't coorespond with given coordinate.
+
 					validCellIndex = false
 					break
 				}
 			}
+
 			if (validCellIndex) {
 				slice.push(cellIndex)
 			}

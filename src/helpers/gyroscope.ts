@@ -1,30 +1,4 @@
 /***********************************************************
-a tetragon is a four-sided polygon.
-a quadrilateral is a four-angled polygon.
-they represent the same thing...a square(ish) shape!
-
-A finished map using this compass looks like this:
-┌─┬─┬─┐
-├─┼─┼─┤
-├─┼─┼─┤
-└─┴─┴─┘
-***********************************************************/
-
-export const tetragonGyroscope = (
-	magnitudes:Array<number>,
-): Record<string, number> => {
-	// deconstruct magnitudes for each axis.
-	const [x, y]: Array<number> = magnitudes
-	// set a new rose of index-offsetters.
-	return {
-		'west':  -x,
-		'east':  +x,
-		'north': -y,
-		'south': +y,
-	}
-}
-
-/***********************************************************
 a hexahedron is a six-sided polyhedron.
 standard 6-sided dice are a perfect example of this.
 remember that you can stack dice in three dimensions,
