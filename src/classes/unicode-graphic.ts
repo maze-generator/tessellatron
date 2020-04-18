@@ -180,76 +180,76 @@ const getGlyph = (
 
 	// four passages
 	if (north && south && east && west) {
-		edge = ' '
-		pipe = '┼'
+		edge = '  '
+		pipe = '┼─'
 	}
 
 	// three passages
 	else if (south && east && west && !(north)) {
-		edge = '╵'
-		pipe = '┬'
+		edge = '╵ '
+		pipe = '┬─'
 	}
 	else if (north && east && west && !(south)) {
-		edge = '╷'
-		pipe = '┴'
+		edge = '╷ '
+		pipe = '┴─'
 	}
 	else if (north && south && west && !(east)) {
-		edge = '╶'
-		pipe = '┤'
+		edge = '╶─'
+		pipe = '┤ '
 	}
 	else if (north && south && east && !(west)) {
-		edge = '╴'
-		pipe = '├'
+		edge = '╴ '
+		pipe = '├─'
 	}
 
 	// two passages
 	else if (north && south && !(east || west)) {
-		edge = '─'
-		pipe = '│'
+		edge = '──'
+		pipe = '│ '
 	}
 	else if (north && east && !(south || west)) {
-		edge = '┐'
-		pipe = '└'
+		edge = '┐ '
+		pipe = '└─'
 	}
 	else if (north && west && !(south || east)) {
-		edge = '┌'
-		pipe = '┘'
+		edge = '┌─'
+		pipe = '┘ '
 	}
 	else if (south && east && !(north || west)) {
-		edge = '┘'
-		pipe = '┌'
+		edge = '┘ '
+		pipe = '┌─'
 	}
 	else if (south && west && !(north || east)) {
-		edge = '└'
-		pipe = '┐'
+		edge = '└─'
+		pipe = '┐ '
 	}
 	else if (east && west && !(north || south)) {
-		edge = '│'
-		pipe = '─'
+		edge = '│ '
+		pipe = '──'
 	}
 
 	// one passage
 	else if (north && !(south || east || west)) {
-		edge = '┬'
-		pipe = '╵'
+		edge = '┬─'
+		pipe = '╵ '
 	}
 	else if (south && !(north || east || west)) {
-		edge = '┴'
-		pipe = '╷'
+		edge = '┴─'
+		pipe = '╷ '
 	}
 	else if (east && !(north || south || west)) {
-		edge = '┤'
-		pipe = '╶'
+		edge = '┤ '
+		pipe = '╶─'
 	}
 	else if (west && !(north || south || east)) {
-		edge = '├'
-		pipe = '╴'
+		edge = '├─'
+		pipe = '╴ '
 	}
 
 	// zero passages
 	else if (!(north || south || east || west)) {
-		edge = '┼'
-		pipe = ' '
+		edge = '┼─'
+		pipe = '  '
 	}
 
 	if (type === 'edge') {
