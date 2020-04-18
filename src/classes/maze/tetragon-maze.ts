@@ -10,11 +10,6 @@ import {
 	range,
 } from '../../helpers/main'
 
-
-import {
-	isIndexValid,
-} from '../../helpers/project/binary'
-
 import {
 	Map,
 	Compass,
@@ -124,12 +119,10 @@ export default class Maze {
 		)
 	}
 
-	public isIndexValid (
+	public hasIndex (
 		id: number,
 	): boolean {
-		// utilize helper function.
-		return isIndexValid(this.map.size, id)
-		// TODO: dependent on layout shape.
+		return 0 <= id && id < this.map.size
 	}
 
 	public areNeighbors (
@@ -137,7 +130,7 @@ export default class Maze {
 		id02: number,
 	): boolean {
 		// validate both indices first.
-		if (!this.isIndexValid(id01) || !this.isIndexValid(id02)) {
+		if (!this.hasIndex(id01) || !this.hasIndex(id02)) {
 			return false
 		}
 
