@@ -1,50 +1,28 @@
 class Cell {
 	constructor (id) {
-		// cell status can be one of several things:
+		// each cell has a unique "ID".
+		// this "ID" is associated with its index in the map.
+		this.id = id
+
+		// a cell "status" can equal one of several things:
 		// -> unvisited
 		// -> active (currently being modified)
 		// -> passive (partially completed)
 		// -> complete
 		this.status = 'unvisited'
 
-		// each cell has a unique id.
-		this.id = id
-
-		// each valid direction has a cell id or null.
-		// null represents a boundary or edge.
-		// a cell can be looked up with its id.
+		// a "neighbor" is an accessible cell.
+		// "neighbors" holds direction/neighbor pairings.
+		// each valid direction holds a nearby Cell ID or null.
+		// -> a neighboring Cell can be looked up with its ID.
+		// -> a null value represents a boundary or edge.
 		this.neighbors = {}
 
-		// passages & boundaries are opposites.
-		// setting one means setting the other!
-		this._passages = {}
-		this._boundaries = {}
-
-		// antipodes are needed to know opposing directions,
-		// like north & south, or east & west.
-		this._antipodes = {}
-	}
-
-	get boundaries () {
-		return this._boundaries
-	}
-
-	set boundaries (newBounds) {
-		for (const direction of directions) {
-			this._passages[direction] = !newBounds[direction]
-		}
-		this._boundaries = newBounds
-	}
-
-	get passages () {
-		return this._passages
-	}
-
-	set passages (newPaths) {
-		for (const direction of directions) {
-			this._boundaries[direction] = !newPaths[direction]
-		}
-		this._passages = newPaths
+		// a "passage" indicates if a neighbor is accessible.
+		// "passages" holds direction/passage pairings.
+		// each valid direction holds a truthy value here.
+		// -> a passage is true, and a boundary is false.
+		this.passages = {}
 	}
 
 	get hasPath () {
