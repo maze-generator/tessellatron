@@ -35,10 +35,10 @@ class Cell {
 	}
 
 	get hasWall () {
-		// each boundary's direction has a wall or path.
-		// check if there's any boundaries in the values.
-		// a path is represented by false, and a wall is true.
-		return Object.values(this.boundaries).includes(true)
+		// each passage's direction has a wall or path.
+		// check if there's any boundary in the values.
+		// a path is represented by true, and a wall is false.
+		return Object.values(this.passages).includes(false)
 		// `.values()` takes a list of booleans from boundaries.
 		// `.includes()` will see if there are any walls.
 	}
