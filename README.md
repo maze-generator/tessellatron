@@ -1,6 +1,5 @@
 # Cell Documentation
 ## Parameters
-
 ### `Cell.id`
 Each cell has a unique ID.
 The ID matches the Cell's index or location in a map-data array, which holds all the cells.
@@ -26,24 +25,17 @@ Thus, a neighboring Cell ID is associated with a direction in which it can be ac
 If the neighboring Cell in question is out-of-bounds, then a **null**s value is used instead of a Cell ID.
 
 ### `Cell.passages`
-`Cell.passages` is a dictionary of truthy values.
+`Cell.passages` is a dictionary of truthy values that represent passages.
 The keys in this dictionary are directions, as in north, south, east, and west.
 Thus, a passage is associated with a direction.
 
-If there is a **true** value, then it represents an accessible neighbor.
-Using the direction-boolean pair, we know whether a neighbor is accessible or not.
+A **true** value indicates an accessible neighbor.
+Using the direction-passage pair, we know whether a neighbor is accessible or not.
 
-### `Cell.boundaries`
-`Cell.boundaries` is the opposite of `Cell.passages`. Instead of a true value, it will just have a false value.
+## Methods
 
-### :warning: ~~`Cell._passages`~~
-*Do not modify this property directly!*
+### `Cell.hasPath()`
+Determines if there are any **true** values in passages.
 
-It contains Private info on `Cell.passages`.
-Use `Cell.passages` instead.
-
-### :warning: ~~`Cell._boundaries`~~
-*Do not modify this property directly!*
-
-It contains Private info on `Cell.boundaries`.
-Use `Cell.boundaries` instead.
+### `Cell.hasWall()`
+Determines if there are any **false** values in passages.
