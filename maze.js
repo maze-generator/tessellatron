@@ -74,9 +74,7 @@ export default class Maze {
 		// `directions` can help with loops, etc.
 		const directions = new Set(Object.keys(rose))
 
-		/* FILL MAP DATA */
-
-		// set default container
+		// set default passages container
 		const defaultPassages = {}
 
 		// loop over directions as keys.
@@ -84,19 +82,6 @@ export default class Maze {
 		for (let direction of directions) {
 			defaultPassages[direction] = false
 		}
-
-		// create data container
-		const data = []
-
-		// fill map data with empty cells.
-		for (let id = 0; id < size; id++) {
-			data[id] = new Cell(id)
-			data[id].neighbors = this.findNeighborsOf(id)
-			data[id].passages = defaultPassages
-		}
-
-		// assign to class
-		this.map.data = data
 
 		/* ASSIGN TO CLASS */
 
@@ -114,6 +99,21 @@ export default class Maze {
 			directions,
 			antipodes,
 		}
+
+		/* FILL MAP DATA */
+
+		// create data container
+		const data = []
+
+		// fill map data with empty cells.
+		for (let id = 0; id < size; id++) {
+			data[id] = new Cell(id)
+			data[id].neighbors = this.findNeighborsOf(id)
+			data[id].passages = defaultPassages
+		}
+
+		// assign to class
+		this.map.data = data
 	}
 
 	holdsIndex (id) {
