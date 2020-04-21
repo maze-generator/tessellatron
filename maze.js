@@ -1,14 +1,13 @@
 import Cell from './cell.js'
 
-// multiply is a reducer function.
+// multiply & intesect are reducer functions.
 const multiply = (a, b) => a * b
-
 const intesect =  (a, b) => a.filter(x => b.includes(x))
 
-class Maze {
-	constructor (
-		dimensions
-	) {
+
+// main content
+export default class Maze {
+	constructor (dimensions) {
 
 		/* CALCULATE MAP INFORMATION */
 
@@ -38,51 +37,59 @@ class Maze {
 
 		// loop through dimensions via each index `id`.
 		for (let id = 0; id < dimensions.length; id += 1) {
+
 			// collect antecedent dimensions leading up to here.
 			const previous = dimensions.slice(0, id)
+
 			// calculate the product of those dimensions.
 			const product = previous.reduce(multiply, 1)
+
 			// add the product to the list of magnitudes.
 			magnitudes.push(product)
 		}
 
 		/* CALCULATE COMPASS INFORMATION */
 
-		// deconstruct `magnitudes` for each axis.
-		const [x, y] = magnitudes
 		// the `rose` describes the offset in each direction.
 		// its extremely useful for computing neighbors.
-		const rose = {
-			'west':  -x,
-			'east':  +x,
-			'north': -y,
-			'south': +y,
-		}
-
-		// `directions` is a simple set of named vectors.
-		// luckily, these are exactly the keys of the `rose`.
-		const directions = new Set([
-			'west',
-			'east',
-			'north',
-			'south',
-		])
+		const rose = {}
 
 		// `antipodes` define the opposite of each direction.
-		const antipodes = {
-			'west':  'east',
-			'east':  'west',
-			'north': 'south',
-			'south': 'north',
+		const antipodes = {}
+
+		// the app gets both from magnitudes.
+		for (const [strID, magnitude] of Object.entries(magnitudes)) {
+
+			// use positive / negative as key.
+			const positive = `pos-${strID}`
+			const negative = `neg-${strID}`
+
+			// assign values to dictionaries via keys.
+			rose[negative] = -magnitude
+			rose[positive] = +magnitude
+			antipodes[negative] = positive
+			antipodes[positive] = negative
 		}
+
+		// `directions` can help with loops, etc.
+		const directions = new Set([Object.keys(rose)])
 
 		/* FILL MAP DATA */
 
-		// initialize map data as an empty array.
-		const data = []
+		// set default container
+		const defaultPassages = {}
+
+		// loop over directions as keys.
+		// false is the default value here.
+		for (const direction of directions) {
+			defaultPassages[direction] = false
+		}
+
 		// fill map data with empty cells.
 		for (let id = 0; id < size; id++) {
-			data[id] = new this.Cell(id)
+			data[id] = new Cell(id)
+			data[id].neighbors = this.getNeighbors(id)
+			data[id].passages = {...defaultPassages}
 		}
 
 		/* ASSIGN TO CLASS */
@@ -105,10 +112,14 @@ class Maze {
 	}
 
 	holdsIndex (id) {
+
+		// a valid index has an index in the array.
 		return 0 <= id && id < this.map.size
 	}
 
+
 	holdsNeighbors (id01, id02) {
+
 		// validate both indices first.
 		if (!this.holdsIndex(id01) || !this.holdsIndex(id02)) {
 			return false
@@ -118,9 +129,13 @@ class Maze {
 		const coords01 = this.findCoordinates(id01)
 		const coords02 = this.findCoordinates(id02)
 
+		// how many times is there an off-by-one match?
+		// if these IDs are neighbors, it happens exactly once.
+		let counter = 0
+
 		// loop through each coordinate.
 		// all coordinates but one must match.
-		let counter = 0
+		// dg is shorthand for the current degree.
 		for (let dg = 0; dg < this.map.degree; dg++) {
 
 			// set up difference variable, `delta`.
@@ -145,7 +160,41 @@ class Maze {
 		}
 	}
 
+
+	connectPassage (direction, id01, id02) {
+
+		// get instances of cells.
+		const cell01 = this.map.data[id01]
+		const cell02 = this.map.data[id02]
+
+		// `reversed` is the antipode of a direction.
+		// for example, `reversed` of 'north' is 'south'.
+		const reversed = this.compass.antipodes[direction]
+
+		// set passages.
+		cell01.passages[direction] = true
+		cell02.passages[reversed] = true
+	}
+
+
+	connectNeighbor (direction, id01, id02) {
+
+		// get instances of cells.
+		const cell01 = this.map.data[id01]
+		const cell02 = this.map.data[id02]
+
+		// `reversed` is the antipode of a direction.
+		// for example, `reversed` of 'north' is 'south'.
+		const reversed = this.compass.antipodes[direction]
+
+		// set neighbors.
+		cell01.neighbors[direction] = cell02.id
+		cell02.neighbors[reversed] = cell01.id
+	}
+
+
 	findNeighborsOf (id) {
+
 		// initialize return container.
 		const neighbors= {}
 
@@ -166,33 +215,6 @@ class Maze {
 		return neighbors
 	}
 
-	connectPassage (direction, id01, id02) {
-		// get instances of cells.
-		const cell01 = this.map.data[id01]
-		const cell02 = this.map.data[id02]
-
-		// `reversed` is the antipode of a direction.
-		// for example, `reversed` of 'north' is 'south'.
-		const reversed = this.compass.antipodes[direction]
-
-		// set passages.
-		cell01.passages[direction] = true
-		cell02.passages[reversed] = true
-	}
-
-	connectNeighbor (direction, id01, id02) {
-		// get instances of cells.
-		const cell01 = this.map.data[id01]
-		const cell02 = this.map.data[id02]
-
-		// `reversed` is the antipode of a direction.
-		// for example, `reversed` of 'north' is 'south'.
-		const reversed = this.compass.antipodes[direction]
-
-		// set neighbors.
-		cell01.neighbors[direction] = cell02.id
-		cell02.neighbors[reversed] = cell01.id
-	}
 
 	findCoordinates (...indexTensor) {
 		// coordinates will be returned once populated.
@@ -230,7 +252,9 @@ class Maze {
 		}
 	}
 
+
 	findTensorSlice (...coordinates) {
+
 		// slice will be returned once populated.
 		const slice = []
 
@@ -264,6 +288,7 @@ class Maze {
 				)
 
 				if (result !== coordinate) {
+
 					// result doesn't coorespond with given coordinate.
 					validCellIndex = false
 					break
