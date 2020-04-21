@@ -1,4 +1,4 @@
-class Cell {
+export default class Cell {
 	constructor (id) {
 		// each cell has a unique "ID".
 		// this "ID" is associated with its index in the map.

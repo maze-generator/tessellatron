@@ -1,8 +1,8 @@
 import Cell from './cell.js'
 
-// multiply & intesect are reducer functions.
+// multiply & intersect are reducer functions.
 const multiply = (a, b) => a * b
-const intesect =  (a, b) => a.filter(x => b.includes(x))
+const intersect = (a, b) => a.filter(x => b.includes(x))
 
 
 // main content
@@ -72,7 +72,7 @@ export default class Maze {
 		}
 
 		// `directions` can help with loops, etc.
-		const directions = new Set([Object.keys(rose)])
+		const directions = new Set(Object.keys(rose))
 
 		/* FILL MAP DATA */
 
@@ -81,16 +81,22 @@ export default class Maze {
 
 		// loop over directions as keys.
 		// false is the default value here.
-		for (const direction of directions) {
+		for (let direction of directions) {
 			defaultPassages[direction] = false
 		}
+
+		// create data container
+		const data = []
 
 		// fill map data with empty cells.
 		for (let id = 0; id < size; id++) {
 			data[id] = new Cell(id)
-			data[id].neighbors = this.getNeighbors(id)
-			data[id].passages = {...defaultPassages}
+			data[id].neighbors = this.findNeighborsOf(id)
+			data[id].passages = defaultPassages
 		}
+
+		// assign to class
+		this.map.data = data
 
 		/* ASSIGN TO CLASS */
 
@@ -100,7 +106,6 @@ export default class Maze {
 			degree,
 			magnitudes,
 			size,
-			data,
 		}
 
 		// compass contains relative direction data.
@@ -193,13 +198,13 @@ export default class Maze {
 	}
 
 
-	findNeighborsOf (id) {
+	findNeighborsOf (id01) {
 
 		// initialize return container.
 		const neighbors= {}
 
 		// set up loop over keys and values.
-		const entries = Object.entries(rose)
+		const entries = Object.entries(this.compass.rose)
 		for (const [direction, modifier] of entries) {
 
 			// calculate potential neighbor via modifier.
@@ -248,8 +253,10 @@ export default class Maze {
 				cellCoords.push(result)
 			}
 			// ensure validity across all dimensions with helper.
-			coordinates = intesection(coordinates, cellCoords)
+			coordinates = intersect(coordinates, cellCoords)
 		}
+
+		return coordinates
 	}
 
 
