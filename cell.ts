@@ -1,4 +1,9 @@
 export default class Cell {
+	id: number
+	status: string
+	neighbors: Record<string, number|null>
+	passages: Record<string, boolean>
+
 	constructor (id) {
 		// each cell has a unique "ID".
 		// this "ID" is associated with its index in the map.
