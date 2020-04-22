@@ -1,6 +1,6 @@
 {
 	"name": "tessellatron",
-	"version": "0.0.3",
+	"version": "0.1.0",
 	"description": "Tessellatron creates graphs (represented by json structures) with tesselating spacial patterns.",
 	"main": "index.js",
 	"dependencies": {},
