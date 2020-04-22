@@ -1,4 +1,5 @@
-import Cell from './cell.js'
+import Cell from './cell'
+import {Map, Compass} from './types'
 
 // multiply & intersect are reducer functions.
 const multiply = (a, b) => a * b
@@ -7,6 +8,9 @@ const intersect = (a, b) => a.filter(x => b.includes(x))
 
 // main content
 export default class Maze {
+	map: Map
+	compass: Compass
+
 	constructor (dimensions) {
 
 		/* CALCULATE MAP INFORMATION */
@@ -85,12 +89,16 @@ export default class Maze {
 
 		/* ASSIGN TO CLASS */
 
+		// create data container
+		const data = []
+
 		// map contains location and magnitude data.
 		this.map = {
 			dimensions,
 			degree,
 			magnitudes,
 			size,
+			data,
 		}
 
 		// compass contains relative direction data.
@@ -102,8 +110,6 @@ export default class Maze {
 
 		/* FILL MAP DATA */
 
-		// create data container
-		const data = []
 
 		// fill map data with empty cells.
 		for (let id = 0; id < size; id++) {
@@ -112,8 +118,11 @@ export default class Maze {
 			data[id].passages = defaultPassages
 		}
 
-		// assign to class
-		this.map.data = data
+		console.log(data[0])
+		console.log(this.map.data[0])
+
+		// // assign to class
+		// this.map.data = data
 	}
 
 	holdsIndex (id) {
