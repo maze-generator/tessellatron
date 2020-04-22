@@ -385,7 +385,7 @@ export default class Maze {
 				const coordinate01: number|undefined = coordinates[dg]
 
 				// calculate the actual coordinate of the index.
-				const indexCoord: number = Math.floor(
+				const coordinate02: number = Math.floor(
 					id / magnitude % dimension
 				)
 
@@ -429,7 +429,6 @@ export default class Maze {
 
 		// create object for json.
 		const jsObject = {
-			method: this.method,
 			map: {
 				dimensions: this.map.dimensions,
 				magnitudes: this.map.magnitudes,
