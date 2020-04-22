@@ -201,7 +201,15 @@ export default class Maze {
 	findNeighborsOf (id01) {
 
 		// initialize return container.
-		const neighbors= {}
+		const neighbors = {}
+
+		// calculate whether the id exists.
+		const exist01 = this.holdsIndex(id01)
+
+		// if id01 does not exist... return an empty object.
+		if (!exist01) {
+			return neighbors
+		}
 
 		// set up loop over keys and values.
 		const entries = Object.entries(this.compass.rose)
@@ -209,10 +217,14 @@ export default class Maze {
 
 			// calculate potential neighbor via modifier.
 			const id02 = id01 + modifier
+			const exist02 = this.holdsIndex(id02)
 
-			// validate neighbor & add to list.
 			if (this.holdsNeighbors(id01, id02)) {
+				// validate neighbor & add to list.
 				neighbors[direction] = id01 + modifier
+			} else {
+				// neighbor is a boundary.
+				neighbors[direction] = null
 			}
 		}
 
@@ -222,41 +234,59 @@ export default class Maze {
 
 
 	findCoordinates (...indexTensor) {
-		// coordinates will be returned once populated.
-		let coordinates = []
-		for (let id; id < this.map.size; id++) {
-			coordinates.push(id)
-		}
+		const cellIndex = indexTensor[0]
+		// set up return container.
+		const containerOfCoordinates = []
 
-		// get magnitudes.
-		const magnitudes = this.map.magnitudes
-		const dimensions = this.map.dimensions
+		// loop through all given indices in the tensor.
+		for (const strID of indexTensor) {
+			const id = parseInt(strID)
 
-		for (const cellIndex of indexTensor) {
-			const cellCoords = []
+			// set up group for given index.
+			const coordinates = []
 
-			// loop through each index in the dimensions array.
-			// it maps to indices in magnitudes as well.
-			for (let dimIndex; dimIndex < this.map.degree; dimIndex++) {
+			// loop through each degree.
+			// this maps to an index in dimensions.
+			// it maps to an index in magnitudes as well.
+			for (let dg = 0; dg < this.map.degree; dg++) {
 
 				// dimensions.length === magnitudes.length;
 				// their index associates one with the other.
-				const dimension = dimensions[dimIndex]
-				const magnitude = magnitudes[dimIndex]
+				const dimension = this.map.dimensions[dg]
+				const magnitude = this.map.magnitudes[dg]
 
 				// calculate resulting coordinate.
-				const result = Math.floor(
-					cellIndex / magnitude % dimension
-				)
+				const coord = Math.floor(id / magnitude % dimension)
 
 				// push into array.
-				cellCoords.push(result)
+				coordinates.push(coord)
 			}
-			// ensure validity across all dimensions with helper.
-			coordinates = intersect(coordinates, cellCoords)
+
+			// add array of coordinates to array.
+			containerOfCoordinates.push(coordinates)
 		}
 
-		return coordinates
+		// create a reducer function.
+		const reducer = (x, y) => {
+			const z = []
+			for (let id = 0; id < x.length; id++) {
+				const id01 = x[id]
+				const id02 = y[id]
+
+				if (id01 === id02) {
+					z[id] = y[id] = x[id]
+				} else {
+					z[id] = undefined
+				}
+			}
+			return z
+		}
+
+		// utilize the reducer function.
+		const results = containerOfCoordinates.reduce(reducer)
+
+		// BECOME the reducer function!
+		return results
 	}
 
 
@@ -269,16 +299,17 @@ export default class Maze {
 		const size = this.map.size
 		const degree = this.map.degree
 		const magnitudes = this.map.magnitudes
+		const dimensions = this.map.dimensions
 
 		// this piece creates spacers or iterators.
 		// if we have dimensions of [5,4,3] our spacers are:
 		// [1,5,20]. The final item = total # of coordinates.
-		for (let cellIndex; cellIndex < size; cellIndex++) {
+		for (let cellIndex = 0; cellIndex < size; cellIndex++) {
 			let validCellIndex = true
 
 			// loop through each index in the dimensions array.
 			// it maps to indices in magnitudes & coordinates too.
-			for (let dimIndex; dimIndex < degree; dimIndex++) {
+			for (let dimIndex = 0; dimIndex < degree; dimIndex++) {
 
 				// dimensions.length === magnitudes.length;
 				// dimensions.length === coordinates.length;
@@ -294,8 +325,9 @@ export default class Maze {
 					cellIndex / magnitude % dimension
 				)
 
-				if (result !== coordinate) {
-
+				if (coordinate === undefined) {
+					// pass!
+				} else if (result !== coordinate) {
 					// result doesn't coorespond with given coordinate.
 					validCellIndex = false
 					break
