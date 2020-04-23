@@ -1,8 +1,10 @@
+### Generated Files ###
+lib/
 
 # Created by https://www.gitignore.io/api/node,macos,windows,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,macos,windows,visualstudiocode
 
-### macOS ###
+### Mac OS ###
 # General
 .DS_Store
 .AppleDouble

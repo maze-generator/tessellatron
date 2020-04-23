@@ -1,15 +1,19 @@
 {
 	"name": "tessellatron",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Tessellatron creates graphs (represented by json structures) with tesselating spacial patterns.",
-	"main": "index.js",
+	"main": "lib/index.js",
+	"files": [
+		"lib/**/*"
+	],
 	"dependencies": {},
 	"devDependencies": {
 		"ts-node": "^8.9.0",
 		"typescript": "^3.8.3"
 	},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc"
 	},
 	"repository": {
 		"type": "git",

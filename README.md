@@ -1,3 +1,9 @@
+# Tessellatron
+*Tessellatron creates graphs (represented by json structures) with tesselating spacial patterns.*
+
+## Commands
+### `npm run build`
+
 # Graph Documentation
 ## Parameters
 ### `Graph.dimensions`
