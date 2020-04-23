@@ -1,10 +1,12 @@
 export default class Cell {
 	id: number
-	status: string
+	status: 'unvisited'|'active'|'passive'|'complete'
 	neighbors: Record<string, number|null>
 	passages: Record<string, boolean>
 
-	constructor (id) {
+	constructor (
+		id: number
+	) {
 		// each cell has a unique "ID".
 		// this "ID" is associated with its index in the map.
 		this.id = id
@@ -30,7 +32,8 @@ export default class Cell {
 		this.passages = {}
 	}
 
-	get hasPath () {
+	get hasPath (
+	): boolean {
 		// each passage's direction has a wall or path.
 		// check if there's any passages in the values.
 		// a path is represented by true, and a wall is false.
@@ -39,12 +42,26 @@ export default class Cell {
 		// `.includes()` will see if there are any paths.
 	}
 
-	get hasWall () {
+	get hasWall (
+	): boolean {
 		// each passage's direction has a wall or path.
 		// check if there's any boundary in the values.
 		// a path is represented by true, and a wall is false.
 		return Object.values(this.passages).includes(false)
 		// `.values()` takes a list of booleans from boundaries.
 		// `.includes()` will see if there are any walls.
+	}
+
+	get json (
+	): string {
+
+		// create object for json.
+		const jsObject = {
+			id: this.id,
+			status: this.status,
+			neighbors: this.neighbors,
+			passages: this.passages,
+		}
+		return JSON.stringify(jsObject)
 	}
 }
