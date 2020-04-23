@@ -1,9 +1,7 @@
 import Cell from '../cell'
 
-// multiply & intersect are reducer functions.
-const multiply = (a, b) => a * b
-const intersect = (a, b) => a.filter(x => b.includes(x))
-
+// multiply is a reducer function.
+const multiply = (a: number, b: number): number => a * b
 
 /***********************************************************
 a tetragon is a four-sided polygon.
@@ -145,8 +143,8 @@ export default class HypercubeGraph {
 		}
 
 		// calculate coordinates.
-		const coordinates01: Array<number> = this.findCoordinates(id01)
-		const coordinates02: Array<number> = this.findCoordinates(id02)
+		const coordinates01: Array<number|undefined> = this.findCoordinates(id01)
+		const coordinates02: Array<number|undefined> = this.findCoordinates(id02)
 
 		// count how many times is there an off-by-one match.
 		// if these IDs are neighbors, it happens exactly once.
@@ -157,18 +155,30 @@ export default class HypercubeGraph {
 		// dg is shorthand for the current degree.
 		for (let dg: number = 0; dg < this.degree; dg++) {
 
-			// set up difference variable.
-			const difference = Math.abs(coordinates01[dg] - coordinates02[dg])
+			const coordinate01: number|undefined = coordinates01[dg]
+			const coordinate02: number|undefined = coordinates02[dg]
 
-			// check if-gates
-			if (difference === 0) {
-				// do nothing; continue
-			} else if (difference === 1) {
-				counter += 1
+			// ensure values are not undefined.
+			if (
+				coordinate01 === undefined
+				|| coordinate02 === undefined
+			) {
+				return false
 			} else {
-				return false
-			} if (counter > 1) {
-				return false
+
+				// set up difference variable.
+				const difference: number = Math.abs(coordinate01 - coordinate02)
+
+				// check if-gates
+				if (difference === 0) {
+					// do nothing; continue
+				} else if (difference === 1) {
+					counter += 1
+				} else {
+					return false
+				} if (counter > 1) {
+					return false
+				}
 			}
 
 		// guarenteed return statement
@@ -260,10 +270,10 @@ export default class HypercubeGraph {
 
 	findCoordinates (
 		...indexTensor: Array<number>
-	): Array<number> {
+	): Array<number|undefined> {
 
 		// this container will be reduced once populated.
-		const containerOfCoordinates: Array<Array<number>> = []
+		const containerOfCoordinates: Array<Array<number|undefined>> = []
 
 		// loop through all given indices in the tensor.
 		for (const id of indexTensor) {
@@ -305,7 +315,7 @@ export default class HypercubeGraph {
 		const reducer = (
 			xCoords: Array<number|undefined>,
 			yCoords: Array<number|undefined>,
-		) => {
+		): Array<number|undefined> => {
 
 			// zCoords represents the reduced array.
 			const zCoords: Array<number|undefined> = []
