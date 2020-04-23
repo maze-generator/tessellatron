@@ -1,2 +1,2 @@
-import Maze from './maze'
-export default Maze
+import Graph from './graph/hypercube'
+export default Graph
