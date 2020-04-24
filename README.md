@@ -71,6 +71,10 @@ Calculates and returns the coordinates of the given Cell IDs.
 ### `Graph.findTensorSlice()`
 Calculates valid Cell IDs based on the given coordinates.
 
+### `Graph.json`
+`Cell.json` returns a summary of the data held in the Graph, and its encapsulated Cells.
+This is a getter function, so you can access it like a parameter.
+
 # Cell Documentation
 ## Parameters
 ### `Cell.id`
@@ -106,11 +110,14 @@ A **true** value indicates an accessible neighbor.
 Using the direction-passage pair, we know whether a neighbor is accessible or not.
 
 ## Methods
-
 ### `Cell.hasPath`
 Determines if there are any **true** values in passages.
 This is a getter function, so you can access it like a parameter.
 
 ### `Cell.hasWall`
 Determines if there are any **false** values in passages.
+This is a getter function, so you can access it like a parameter.
+
+### `Cell.json`
+`Cell.json` returns a summary of the data held in the Cell.
 This is a getter function, so you can access it like a parameter.
