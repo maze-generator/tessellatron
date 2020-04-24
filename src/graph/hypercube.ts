@@ -3,16 +3,23 @@ import Cell from '../cell'
 // multiply is a reducer function.
 const multiply = (a: number, b: number): number => a * b
 
-/***********************************************************
-a tetragon is a four-sided polygon.
-a quadrilateral is a four-angled polygon.
-they represent the same thing...a square(ish) shape!
 
-A finished map looks like this:
+/***********************************************************
+This hypercube class can work with different dimensions.
+Why a "hypercube"? Because a hypercube is N-Dimensional.
+- a 0D point is a type of hypercube.
+- a 1D line is a type of hypercube.
+- a 2D square is a type of hypercube.
+- a 3D cube is a type of hypercube.
+- a 4D tesseract is a type of hypercube.
+- a ND analogue of these shapes is a type of hypercube.
+
+If each Cell is a box, a 2D HypercubeGraph looks like this:
 ┌─┬─┬─┐
 ├─┼─┼─┤
 ├─┼─┼─┤
 └─┴─┴─┘
+
 ***********************************************************/
 
 export default class HypercubeGraph {
@@ -32,7 +39,8 @@ export default class HypercubeGraph {
 
 		/* CALCULATE MAP INFORMATION */
 
-		// ! the `dimensions`...
+		// the `dimensions` represent the lengths of each edge.
+		// this includes the width, height, depth, etc.
 		this.dimensions = dimensions
 
 		// the `degree` counts how many dimensions there are.
@@ -111,7 +119,8 @@ export default class HypercubeGraph {
 
 		/* FILL MAP DATA */
 
-		// ! data...
+		// `data` is an array that holds Cells.
+		// every Cell themself can also hold information.
 		this.data = []
 
 		// fill map data with empty cells.
