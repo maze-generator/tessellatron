@@ -125,9 +125,14 @@ export default class HypercubeGraph {
 
 		// fill map data with empty cells.
 		for (let id: number = 0; id < this.size; id++) {
+			// create a new cell using the id from size.
 			this.data[id] = new Cell(id)
+
+			// populate neighbors of this cell.
 			this.data[id].neighbors = this.findNeighborsOf(id)
-			this.data[id].passages = defaultPassages
+
+			// create a shallow copy of defaultPassages.
+			this.data[id].passages = {...defaultPassages}
 		}
 	}
 
