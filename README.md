@@ -6,6 +6,12 @@
 
 # Graph Documentation
 ## Parameters
+### `Graph.layout`
+This property is defined by the class itself.
+For example, HypercubeGraph uses functions to make a graph shaped like a hypercube.
+Therefore, the layout is *"hypercube"*.
+The same can be said about hexagonal layouts.
+
 ### `Graph.dimensions`
 This property shows how long each dimension is.
 For example, a 2D-square map might be 17 cells wide and 17 cells long, represented by the array `[17,17]`.
