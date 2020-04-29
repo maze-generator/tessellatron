@@ -1,5 +1,6 @@
-import Cell from './cell'
+import Graph from './graph'
 import HypercubeGraph from './graph/hypercube'
+import Cell from './cell'
 
-export {Cell, HypercubeGraph}
-export default class Graph extends HypercubeGraph {}
+export {Cell}
+export default Graph

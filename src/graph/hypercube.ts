@@ -23,6 +23,7 @@ If each Cell is a box, a 2D HypercubeGraph looks like this:
 ***********************************************************/
 
 export default class HypercubeGraph {
+	layout: string
 	dimensions: Array<number>
 	magnitudes: Array<number>
 	degree: number
@@ -38,6 +39,9 @@ export default class HypercubeGraph {
 
 
 		/* CALCULATE MAP INFORMATION */
+
+		// the layout is a hypercube, as defined by this class.
+		this.layout = 'hypercube'
 
 		// the `dimensions` represent the lengths of each edge.
 		// this includes the width, height, depth, etc.
@@ -439,6 +443,7 @@ export default class HypercubeGraph {
 
 		// create object for json.
 		const jsObject = {
+			layout: this.layout,
 			dimensions: this.dimensions,
 			magnitudes: this.magnitudes,
 			degree: this.degree,
