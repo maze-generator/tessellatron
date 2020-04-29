@@ -2,6 +2,21 @@
 	"name": "tessellatron",
 	"version": "0.1.5",
 	"description": "Tessellatron creates graphs (represented by json structures) with tesselating spacial patterns.",
+	"keywords": [
+		"tessellate",
+		"tessellating",
+		"graph"
+	],
+	"license": "MIT",
+	"author": "noltron000",
+	"homepage": "https://github.com/noltron000-coursework/tessellatron#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/noltron000-coursework/tessellatron.git"
+	},
+	"bugs": {
+		"url": "https://github.com/noltron000-coursework/tessellatron/issues"
+	},
 	"main": "lib/index.js",
 	"files": [
 		"lib/**/*"
@@ -15,20 +30,5 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "ts-node src/index.ts",
 		"build": "tsc"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/noltron000-coursework/tessellatron.git"
-	},
-	"keywords": [
-		"tessellate",
-		"tessellating",
-		"graph"
-	],
-	"author": "noltron000",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/noltron000-coursework/tessellatron/issues"
-	},
-	"homepage": "https://github.com/noltron000-coursework/tessellatron#readme"
+	}
 }
