@@ -5,7 +5,7 @@ const multiply = (a: number, b: number): number => a * b
 
 // initialize normal directions.
 const namedVectors: Array<[string, string]> = [
-	['west', 'east'],
+	['east', 'west'],
 	['south', 'north'],
 	['down', 'up'],
 	['ana', 'kata'],
