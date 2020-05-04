@@ -3,6 +3,14 @@ import Cell from '../cell'
 // multiply is a reducer function.
 const multiply = (a: number, b: number): number => a * b
 
+// initialize normal directions.
+const namedVectors: Array<[string, string]> = [
+	['west', 'east'],
+	['south', 'north'],
+	['down', 'up'],
+	['ana', 'kata'],
+]
+
 
 /***********************************************************
 This hypercube class can work with different dimensions.
@@ -95,11 +103,20 @@ export default class HypercubeGraph {
 		this.antipodes = {}
 
 		// the app gets both from magnitudes.
-		for (const [strID, magnitude] of Object.entries(this.magnitudes)) {
+		for (let dg: number = 0; dg < this.degree; dg++) {
 
-			// use positive / negative as key.
-			const positive: string = `pos-${strID}`
-			const negative: string = `neg-${strID}`
+			// use positive / negative as default key.
+			let positive: string = `pos-${dg}`
+			let negative: string = `neg-${dg}`
+
+			// obtain normal direction
+			const namedVector: [string, string]|undefined = namedVectors[dg]
+			if (namedVector !== undefined) {
+				[positive, negative] = namedVector
+			}
+
+			// obtain magnitude
+			const magnitude: number = this.magnitudes[dg]
 
 			// assign values to dictionaries via keys.
 			this.compass[negative] = -magnitude
@@ -364,6 +381,7 @@ export default class HypercubeGraph {
 
 			// zCoords represents matching entries between two
 			// potentially similar arrays, and their differences.
+			// its analogous to an intersection of two sets.
 			return zCoords
 		}
 
