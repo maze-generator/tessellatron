@@ -1,5 +1,5 @@
 import Cell from '../cell'
-
+import {GraphType} from '../types'
 // multiply is a reducer function.
 const multiply = (a: number, b: number): number => a * b
 
@@ -30,7 +30,7 @@ If each Cell is a box, a 2D HypercubeGraph looks like this:
 
 ***********************************************************/
 
-export default class HypercubeGraph {
+export default class HypercubeGraph implements GraphType {
 	layout: string
 	dimensions: Array<number>
 	magnitudes: Array<number>
