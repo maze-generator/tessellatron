@@ -1,7 +1,7 @@
 import Cell from './cell'
 
 export interface GraphType {
-	layout: string,
+	layout: string
 	dimensions: Array<number>
 	magnitudes: Array<number>
 	degree: number
