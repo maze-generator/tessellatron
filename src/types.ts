@@ -10,6 +10,7 @@ export interface GraphType {
 	directions: Set<string>
 	antipodes: Record<string, string>
 	data: Array<Cell>
+	json: string
 
 	holdsIndex (
 		id: number,
@@ -43,7 +44,4 @@ export interface GraphType {
 	findTensorSlice (
 		...coordinates: Array<number|undefined>
 	): (Array<number>)
-
-	get json (
-	): (string)
 }
