@@ -1,6 +1,6 @@
 {
 	"name": "tessellatron",
-	"version": "0.2.1",
+	"version": "0.3.0",
 	"description": "Tessellatron creates graphs (represented by json structures) with tesselating spacial patterns.",
 	"keywords": [
 		"tessellate",
