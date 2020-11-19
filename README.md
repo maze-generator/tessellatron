@@ -1,5 +1,21 @@
-# Tessellatron
-*Tessellatron creates graphs (represented by json structures) with tesselating spacial patterns.*
+# Grid Tessellator
+*Grid Tessellator creates graphs (represented by json structures) with tesselating spacial patterns.*
+
+If you ever need a graph of uniform tesselating objects right away in JavaScript, then this project is for you.
+
+At the moment, the only tessellations you can make are with hypercubes.
+
+Why hypercubes?
+A hypercube is an N-Dimensional square-shaped object.
+Yes, a square is a hypercube, but so is a cube, a tesseract, and a line.
+Even a single point is a tesseract, but the graph for this will not be very interesting (as it will always contain one node, or none).
+
+Hypercubes of a particular dimension tesselate with other hypercubes of the same shape and dimension.
+Therefore, it is relatively easy to generate tesselating structures abiding by these rules.
+
+## To Do
+In the future, plans for triangular graphs, hexagonal graphs, and more are in the "tea leaves".
+We'll see if there is enough support for this project to add those features!
 
 ## Commands
 ### `npm run build`
@@ -13,7 +29,7 @@ Therefore, the layout is *"hypercube"*.
 The same can be said about hexagonal layouts.
 
 ### `Graph.dimensions`
-This property shows how long each dimension is.
+This property shows how long each dimension is.s
 For example, a 2D-square map might be 17 cells wide and 17 cells long, represented by the array `[17,17]`.
 
 ### `Graph.degree`
