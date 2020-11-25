@@ -2,7 +2,7 @@ import HypercubeGraph from './graph/hypercube.js'
 import Cell from './cell.js'
 
 
-export default class {
+export default class Graph {
 	constructor (
 		dimensions,
 		layout = 'hypercube',

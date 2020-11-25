@@ -4,10 +4,7 @@ import Cell from './cell.js'
 
 // export those who should never have breaking changes.
 export {
+	Graph,
 	HypercubeGraph,
 	Cell,
 }
-
-// export a omnipotent class-generator class.
-// this is expiremental, so be on your guard.
-export default Graph

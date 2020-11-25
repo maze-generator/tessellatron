@@ -30,7 +30,7 @@ If each Cell is a box, a 2D HypercubeGraph looks like this:
 
 ***********************************************************/
 
-export default class {
+export default class HypercubeGraph {
 
 	constructor (dimensions) {
 
