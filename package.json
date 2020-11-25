@@ -1,6 +1,6 @@
 {
 	"name": "tessellatron",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"description": "Tessellatron creates graphs (represented by json structures) with tesselating spacial patterns.",
 	"keywords": [
 		"tessellate",
@@ -18,9 +18,9 @@
 		"url": "https://github.com/noltron000-coursework/tessellatron/issues"
 	},
 	"type": "module",
-	"main": "./main.js",
+	"main": "src/main.js",
 	"files": [
-		"./src/*"
+		"src/*"
 	],
 	"dependencies": {},
 	"devDependencies": {},
