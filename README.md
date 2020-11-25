@@ -1,5 +1,5 @@
-# Grid Tessellator
-*Grid Tessellator creates graphs (represented by json structures) with tesselating spacial patterns.*
+# Tessellatron
+*Tessellatron creates graphs (represented by json structures) with tesselating spacial patterns.*
 
 If you ever need a graph of uniform tesselating objects right away in JavaScript, then this project is for you.
 
