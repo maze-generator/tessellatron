@@ -1,10 +1,10 @@
-import Cell from '../cell'
-import {GraphType} from '../types'
+import Cell from '../cell.js'
+
 // multiply is a reducer function.
-const multiply = (a: number, b: number): number => a * b
+const multiply = (a, b) => a * b
 
 // initialize normal directions.
-const namedVectors: Array<[string, string]> = [
+const namedVectors = [
 	['east', 'west'],
 	['south', 'north'],
 	['down', 'up'],
@@ -30,20 +30,9 @@ If each Cell is a box, a 2D HypercubeGraph looks like this:
 
 ***********************************************************/
 
-export default class HypercubeGraph implements GraphType {
-	layout: string
-	dimensions: Array<number>
-	magnitudes: Array<number>
-	degree: number
-	size: number
-	compass: Record<string, number>
-	directions: Set<string>
-	antipodes: Record<string, string>
-	data: Array<Cell>
+export default class HypercubeGraph {
 
-	constructor (
-		dimensions: Array<number>,
-	) {
+	constructor (dimensions) {
 
 
 		/* CALCULATE MAP INFORMATION */
@@ -59,7 +48,7 @@ export default class HypercubeGraph implements GraphType {
 		// for example, a square has two, and a cube has three.
 		this.degree = dimensions.length
 
-		// just multiply the dimensions together to get `size`.
+		// multiply the dimensions together to get `size` param.
 		// it represents the maximum number of cells to be held.
 		//
 		// == EDGE CASE ==
@@ -80,13 +69,13 @@ export default class HypercubeGraph implements GraphType {
 		this.magnitudes = []
 
 		// loop through dimensions via each degree `dg`.
-		for (let dg: number = 0; dg < this.degree; dg += 1) {
+		for (let dg = 0; dg < this.degree; dg += 1) {
 
 			// collect antecedent dimensions leading up to here.
-			const previous: Array<number> = dimensions.slice(0, dg)
+			const previous = dimensions.slice(0, dg)
 
 			// calculate the product of those dimensions.
-			const product: number = previous.reduce(multiply, 1)
+			const product = previous.reduce(multiply, 1)
 
 			// add the product to the list of magnitudes.
 			this.magnitudes.push(product)
@@ -103,20 +92,20 @@ export default class HypercubeGraph implements GraphType {
 		this.antipodes = {}
 
 		// the app gets both from magnitudes.
-		for (let dg: number = 0; dg < this.degree; dg++) {
+		for (let dg = 0; dg < this.degree; dg++) {
 
 			// use positive / negative as default key.
-			let positive: string = `pos-${dg}`
-			let negative: string = `neg-${dg}`
+			let positive = `pos-${dg}`
+			let negative = `neg-${dg}`
 
 			// obtain normal direction
-			const namedVector: [string, string]|undefined = namedVectors[dg]
+			const namedVector = namedVectors[dg]
 			if (namedVector !== undefined) {
 				[positive, negative] = namedVector
 			}
 
 			// obtain magnitude
-			const magnitude: number = this.magnitudes[dg]
+			const magnitude = this.magnitudes[dg]
 
 			// assign values to dictionaries via keys.
 			this.compass[negative] = -magnitude
@@ -129,7 +118,7 @@ export default class HypercubeGraph implements GraphType {
 		this.directions = new Set(Object.keys(this.compass))
 
 		// set default passages container
-		const defaultPassages: Record<string, boolean> = {}
+		const defaultPassages = {}
 
 		// loop over directions as keys.
 		// false is the default value here.
@@ -145,7 +134,7 @@ export default class HypercubeGraph implements GraphType {
 		this.data = []
 
 		// fill map data with empty cells.
-		for (let id: number = 0; id < this.size; id++) {
+		for (let id = 0; id < this.size; id++) {
 			// create a new cell using the id from size.
 			this.data[id] = new Cell(id)
 
@@ -158,19 +147,14 @@ export default class HypercubeGraph implements GraphType {
 	}
 
 
-	holdsIndex (
-		id: number,
-	): boolean {
+	holdsIndex (id) {
 
 		// a valid index has an index in the array.
 		return 0 <= id && id < this.size
 	}
 
 
-	holdsNeighbors (
-		id01: number,
-		id02: number,
-	): boolean {
+	holdsNeighbors (id01, id02) {
 
 		// validate both indices first.
 		if (!this.holdsIndex(id01) || !this.holdsIndex(id02)) {
@@ -178,8 +162,8 @@ export default class HypercubeGraph implements GraphType {
 		}
 
 		// calculate coordinates.
-		const coordinates01: Array<number|undefined> = this.findCoordinates(id01)
-		const coordinates02: Array<number|undefined> = this.findCoordinates(id02)
+		const coordinates01 = this.findCoordinates(id01)
+		const coordinates02 = this.findCoordinates(id02)
 
 		// count how many times is there an off-by-one match.
 		// if these IDs are neighbors, it happens exactly once.
@@ -188,10 +172,10 @@ export default class HypercubeGraph implements GraphType {
 		// loop through each coordinate.
 		// all coordinates but one must match.
 		// dg is shorthand for the current degree.
-		for (let dg: number = 0; dg < this.degree; dg++) {
+		for (let dg = 0; dg < this.degree; dg++) {
 
-			const coordinate01: number|undefined = coordinates01[dg]
-			const coordinate02: number|undefined = coordinates02[dg]
+			const coordinate01 = coordinates01[dg]
+			const coordinate02 = coordinates02[dg]
 
 			// ensure values are not undefined.
 			if (
@@ -202,7 +186,7 @@ export default class HypercubeGraph implements GraphType {
 			} else {
 
 				// set up difference variable.
-				const difference: number = Math.abs(coordinate01 - coordinate02)
+				const difference = Math.abs(coordinate01 - coordinate02)
 
 				// check if-gates
 				if (difference === 0) {
@@ -225,19 +209,15 @@ export default class HypercubeGraph implements GraphType {
 	}
 
 
-	connectPassage (
-		direction: string,
-		id01: number,
-		id02: number,
-	): void {
+	connectPassage (direction, id01, id02) {
 
 		// get instances of cells.
-		const cell01: Cell = this.data[id01]
-		const cell02: Cell = this.data[id02]
+		const cell01 = this.data[id01]
+		const cell02 = this.data[id02]
 
 		// `antipode` is the polar opposite of a direction.
 		// for example, `antipode` of 'north' is 'south'.
-		const antipode: string = this.antipodes[direction]
+		const antipode = this.antipodes[direction]
 
 		// set passages.
 		cell01.passages[direction] = true
@@ -245,19 +225,15 @@ export default class HypercubeGraph implements GraphType {
 	}
 
 
-	connectNeighbor (
-		direction: string,
-		id01: number,
-		id02: number,
-	): void {
+	connectNeighbor (direction, id01, id02) {
 
 		// get instances of cells.
-		const cell01: Cell = this.data[id01]
-		const cell02: Cell = this.data[id02]
+		const cell01 = this.data[id01]
+		const cell02 = this.data[id02]
 
 		// `antipode` is the polar opposite of a direction.
 		// for example, `antipode` of 'north' is 'south'.
-		const antipode: string = this.antipodes[direction]
+		const antipode = this.antipodes[direction]
 
 		// set neighbors.
 		cell01.neighbors[direction] = id02
@@ -265,15 +241,13 @@ export default class HypercubeGraph implements GraphType {
 	}
 
 
-	findNeighborsOf (
-		id01: number,
-	): Record<string, number|null> {
+	findNeighborsOf (id01) {
 
 		// initialize return container.
-		const neighbors: Record<string, number|null> = {}
+		const neighbors = {}
 
 		// calculate whether the id exists.
-		const exist01: boolean = this.holdsIndex(id01)
+		const exist01 = this.holdsIndex(id01)
 
 		// if id01 does not exist, then return an empty object.
 		if (!exist01) {
@@ -281,11 +255,11 @@ export default class HypercubeGraph implements GraphType {
 		}
 
 		// set up loop over the keys and values of rose.
-		const entries: Array<[string, number]> = Object.entries(this.compass)
+		const entries = Object.entries(this.compass)
 		for (const [direction, modifier] of entries) {
 
 			// calculate potential neighbor via modifier.
-			const id02: number = id01 + modifier
+			const id02 = id01 + modifier
 
 			// ensure both IDs are valid, and add to neighbors.
 			if (this.holdsNeighbors(id01, id02)) {
@@ -303,34 +277,32 @@ export default class HypercubeGraph implements GraphType {
 	}
 
 
-	findCoordinates (
-		...indexTensor: Array<number>
-	): Array<number|undefined> {
+	findCoordinates (...indexTensor) {
 
 		// this container will be reduced once populated.
-		const containerOfCoordinates: Array<Array<number|undefined>> = []
+		const containerOfCoordinates = []
 
 		// loop through all given indices in the tensor.
 		for (const id of indexTensor) {
 
 			// set up coordinates array for given index.
-			const coordinates: Array<number> = []
+			const coordinates = []
 
 			// loop through each degree.
 			// dg is shorthand for the current degree.
 			// this maps to an index in dimensions.
 			// it also maps to an index in magnitudes.
-			for (let dg: number = 0; dg < this.degree; dg++) {
+			for (let dg = 0; dg < this.degree; dg++) {
 
 				// dimensions.length === magnitudes.length;
 				// their index associates one with the other.
-				const dimension: number = this.dimensions[dg]
-				const magnitude: number = this.magnitudes[dg]
+				const dimension = this.dimensions[dg]
+				const magnitude = this.magnitudes[dg]
 
 				// calculate resulting coordinate
 				// for this dimension (eg longitude vs latitude)
 				// and for this index.
-				const coordinate: number = Math.floor(
+				const coordinate = Math.floor(
 					id / magnitude % dimension
 				)
 
@@ -347,26 +319,26 @@ export default class HypercubeGraph implements GraphType {
 		// the coordinates of two indices.
 		// each coordinate is kept if they match.
 		// otherwise, they are replaced with undefined.
-		const reducer = (
-			xCoords: Array<number|undefined>,
-			yCoords: Array<number|undefined>,
-		): Array<number|undefined> => {
+		const reducer = (xCoords, yCoords) => {
 
 			// zCoords represents the reduced array.
-			const zCoords: Array<number|undefined> = []
+			const zCoords = []
 
 			// loop through each dimension.
 			// remember: the number of dimensions here
 			// is equal the degree of the graph.
 			// dg is shorthand for the current degree.
-			for (let dg: number = 0; dg < this.degree; dg++) {
+			for (let dg = 0; dg < this.degree; dg++) {
 
 				// grab the coordinate of both sets of coordinates.
-				const coordinate01: number|undefined = xCoords[dg]
-				const coordinate02: number|undefined = yCoords[dg]
+				const coordinate01 = xCoords[dg]
+				const coordinate02 = yCoords[dg]
 
 				// if either coordinate is undefined, its a no-match.
-				if (coordinate01 === undefined || coordinate02 === undefined) {
+				if (
+					coordinate01 === undefined
+					|| coordinate02 === undefined
+				) {
 					zCoords[dg] = undefined
 
 				// verify if this dimension's coordinates match.
@@ -386,7 +358,7 @@ export default class HypercubeGraph implements GraphType {
 		}
 
 		// utilize the reducer function.
-		const results: Array<number|undefined> = containerOfCoordinates.reduce(reducer)
+		const results = containerOfCoordinates.reduce(reducer)
 
 		// the final zCoords from the reducer explains
 		// what coordinates match for every index given.
@@ -395,29 +367,27 @@ export default class HypercubeGraph implements GraphType {
 	}
 
 
-	findTensorSlice (
-		...coordinates: Array<number|undefined>
-	): Array<number> {
+	findTensorSlice (...coordinates) {
 
 		// slice will be returned once populated.
-		const slice: Array<number>= []
+		const slice = []
 
 		// this piece creates spacers or iterators.
 		// if we have dimensions of [5,4,3] our spacers are:
 		// [1,5,20]. The final item = total # of coordinates.
-		for (let id: number = 0; id < this.size; id++) {
-			let idIsValid: boolean = true
+		for (let id = 0; id < this.size; id++) {
+			let idIsValid = true
 
 			// dg is shorthand for the current degree.
 			// it maps to indices in dimensions, magnitudes, and coordinates.
-			for (let dg: number = 0; dg < this.degree; dg++) {
+			for (let dg = 0; dg < this.degree; dg++) {
 				// grab current variables associated with degree.
-				const dimension: number = this.dimensions[dg]
-				const magnitude: number = this.magnitudes[dg]
-				const coordinate01: number|undefined = coordinates[dg]
+				const dimension = this.dimensions[dg]
+				const magnitude = this.magnitudes[dg]
+				const coordinate01 = coordinates[dg]
 
 				// calculate the actual coordinate of the index.
-				const coordinate02: number = Math.floor(
+				const coordinate02 = Math.floor(
 					id / magnitude % dimension
 				)
 
@@ -448,11 +418,10 @@ export default class HypercubeGraph implements GraphType {
 	}
 
 
-	get json (
-	): string {
+	get json () {
 
 		// parse json of each cell, in order of id.
-		const stringyCells: Array<string> = []
+		const stringyCells = []
 		for (const cell of this.data) {
 
 			// add to cells array.
@@ -461,17 +430,17 @@ export default class HypercubeGraph implements GraphType {
 
 		// create object for json.
 		const jsObject = {
-			layout: this.layout,
-			dimensions: this.dimensions,
-			magnitudes: this.magnitudes,
-			degree: this.degree,
-			size: this.size,
-			compass: this.compass,
-			directions: [...this.directions],
-			antipodes: this.antipodes,
-			data: stringyCells,
+			'layout': this.layout,
+			'dimensions': this.dimensions,
+			'magnitudes': this.magnitudes,
+			'degree': this.degree,
+			'size': this.size,
+			'compass': this.compass,
+			'directions': [...this.directions],
+			'antipodes': this.antipodes,
+			datayCells,
 		}
 
-		return JSON.stringify(jsObject)
+		return JSON.stringify(jsObject, null, 2)
 	}
 }
