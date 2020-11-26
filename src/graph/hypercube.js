@@ -438,7 +438,7 @@ export default class HypercubeGraph {
 			'compass': this.compass,
 			'directions': [...this.directions],
 			'antipodes': this.antipodes,
-			datayCells,
+			'data': stringyCells,
 		}
 
 		return JSON.stringify(jsObject, null, 2)
