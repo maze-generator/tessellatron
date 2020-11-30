@@ -91,7 +91,12 @@ export default class HypercubeGraph {
 		// `antipodes` define the opposite of each direction.
 		this.antipodes = {}
 
-		// the app gets both from magnitudes.
+		// this special `ordinals` array relates to antipodes.
+		// its important just in case some of the dimensions are valued at 1.
+		this.ordinals = []
+
+
+		// the app gets all three from magnitudes.
 		for (let dg = 0; dg < this.degree; dg++) {
 
 			// use positive / negative as default key.
@@ -112,6 +117,7 @@ export default class HypercubeGraph {
 			this.compass[positive] = +magnitude
 			this.antipodes[negative] = positive
 			this.antipodes[positive] = negative
+			this.ordinals.push(new Set([positive, negative]))
 		}
 
 		// `directions` can help with loops, etc.
@@ -254,21 +260,35 @@ export default class HypercubeGraph {
 			return neighbors
 		}
 
-		// set up loop over the keys and values of rose.
-		const entries = Object.entries(this.compass)
-		for (const [direction, modifier] of entries) {
+		// track all modifiers used in the loop.
+		let usedModifiers = new Set()
 
-			// calculate potential neighbor via modifier.
-			const id02 = id01 + modifier
+		// set up loop over the directions via opposite-ordinals.
+		// bigger-magnitude directions come first.
+		for (const directions of [...this.ordinals].reverse()) {
+			for (const direction of directions) {
+				const modifier = this.compass[direction]
 
-			// ensure both IDs are valid, and add to neighbors.
-			if (this.holdsNeighbors(id01, id02)) {
-				neighbors[direction] = id02
+				// calculate potential neighbor via modifier.
+				const id02 = id01 + modifier
 
-			// if they are not, then the neighbor is void.
-			// id01 must be a corner- or edge-piece.
-			} else {
-				neighbors[direction] = null
+				// skip any "stale" modifiers.
+				// it happens with dimensions of length one!
+				if (usedModifiers.has(modifier)) {
+					neighbors[direction] = null
+				}
+
+				// ensure both IDs are valid, and add to neighbors.
+				else if (this.holdsNeighbors(id01, id02)) {
+					neighbors[direction] = id02
+					usedModifiers.add(modifier)
+				}
+
+				// if they are not, then the neighbor is void.
+				// id01 must be a corner- or edge-piece.
+				else {
+					neighbors[direction] = null
+				}
 			}
 		}
 
